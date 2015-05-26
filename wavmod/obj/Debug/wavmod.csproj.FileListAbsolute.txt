@@ -1,0 +1,10 @@
+M:\Folder\FluidSynth\FluidSynth\wavmod\bin\Debug\wavmod.dll
+M:\Folder\FluidSynth\FluidSynth\wavmod\bin\Debug\wavmod.pdb
+M:\Folder\FluidSynth\FluidSynth\wavmod\bin\Debug\FluidRender.dll
+M:\Folder\FluidSynth\FluidSynth\wavmod\bin\Debug\NAudio.dll
+M:\Folder\FluidSynth\FluidSynth\wavmod\bin\Debug\oto.dll
+M:\Folder\FluidSynth\FluidSynth\wavmod\bin\Debug\FluidRender.pdb
+M:\Folder\FluidSynth\FluidSynth\wavmod\bin\Debug\oto.pdb
+M:\Folder\FluidSynth\FluidSynth\wavmod\obj\Debug\wavmod.csprojResolveAssemblyReference.cache
+M:\Folder\FluidSynth\FluidSynth\wavmod\obj\Debug\wavmod.dll
+M:\Folder\FluidSynth\FluidSynth\wavmod\obj\Debug\wavmod.pdb

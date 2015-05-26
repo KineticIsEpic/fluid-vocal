@@ -1,0 +1,9 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.MainWindow"
+        Title="MainWindow" Height="496" Width="832">
+    <Grid>
+        <local:Roll HorizontalAlignment="Left" Height="100" Margin="327,148,0,0" VerticalAlignment="Top" Width="100"/>
+    </Grid>
+</Window>

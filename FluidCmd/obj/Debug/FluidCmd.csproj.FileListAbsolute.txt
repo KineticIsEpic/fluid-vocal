@@ -1,0 +1,13 @@
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidCmd.exe.config
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidCmd.exe
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidCmd.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidRender.dll
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\oto.dll
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\wavmod.dll
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\NAudio.dll
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidRender.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\oto.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\wavmod.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.csprojResolveAssemblyReference.cache
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.exe
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.pdb

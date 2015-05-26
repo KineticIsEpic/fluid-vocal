@@ -1,0 +1,5 @@
+M:\Folder\FluidSynth\FluidSynth\oto\bin\Debug\oto.dll
+M:\Folder\FluidSynth\FluidSynth\oto\bin\Debug\oto.pdb
+M:\Folder\FluidSynth\FluidSynth\oto\obj\Debug\oto.dll
+M:\Folder\FluidSynth\FluidSynth\oto\obj\Debug\oto.pdb
+M:\Folder\FluidSynth\FluidSynth\oto\obj\Debug\oto.csprojResolveAssemblyReference.cache

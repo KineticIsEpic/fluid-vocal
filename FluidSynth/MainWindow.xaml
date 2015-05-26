@@ -1,0 +1,23 @@
+﻿<Window x:Class="FluidSynth.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="422" Width="539" ResizeMode="NoResize">
+    <Grid Background="#FF3B5255">
+        <Label Content="Name" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Foreground="#FF839496"/>
+        <TextBox x:Name="NameTB" HorizontalAlignment="Left" Height="23" Margin="65,10,0,0" TextWrapping="Wrap" Text="a" VerticalAlignment="Top" Width="120" Foreground="#FF839496" Background="#FF002B36" BorderBrush="#FF568A91"/>
+        <TextBox x:Name="logTb" HorizontalAlignment="Left" Height="314" Margin="0,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="531" Foreground="#FF839496" Background="#FF002B36" FontFamily="Consolas" BorderThickness="10,1,1,1" BorderBrush="#FF073642" Text="C# UTAU Frontend&#xD;&#xA;" IsReadOnly="True"/>
+        <TextBox x:Name="outTb" HorizontalAlignment="Left" Height="23" Margin="315,10,0,0" VerticalAlignment="Top" Width="188" Foreground="#FF839496" Background="#FF002B36" BorderBrush="#FF568A91" Text="C:\Users\User\Desktop\test.wav"/>
+        <Label Content="Output Path " HorizontalAlignment="Left" Margin="208,8,0,0" VerticalAlignment="Top" Foreground="#FF839496"/>
+        <Button x:Name="BeginBtn" Content="Test XML" HorizontalAlignment="Left" Margin="399,42,0,0" VerticalAlignment="Top" Width="104" RenderTransformOrigin="0.44,0.864" BorderBrush="{x:Null}" Click="BeginBtn_Click">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                    <GradientStop Color="#FFEBEBEB"/>
+                    <GradientStop Color="#FFDDDDDD" Offset="0.05"/>
+                    <GradientStop Color="#FFA29595" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>
