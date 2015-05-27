@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+  <Details>
+    <Name>New Project</Name>
+  </Details>
+  <Tracks>
+    <Track1 Name="Main">
+      <SampleBank>M:\another folder\utau\voice\neko english</SampleBank>
+      <Renderer>M:\another folder\utau\resampler.exe</Renderer>
+      <NoteList>
+        <Note1>
+          <VbPath>
+          </VbPath>
+          <DispName>a</DispName>
+          <FileName>
+          </FileName>
+          <NotePitch>C4</NotePitch>
+          <Args>
+          </Args>
+          <Length>1000</Length>
+          <Location>0</Location>True</Note1>
+        <Note1>
+          <VbPath>
+          </VbPath>
+          <DispName>a</DispName>
+          <FileName>
+          </FileName>
+          <NotePitch>F4</NotePitch>
+          <Args>
+          </Args>
+          <Length>1000</Length>
+          <Location>0</Location>True</Note1>
+      </NoteList>
+    </Track1>
+  </Tracks>
+</Project>

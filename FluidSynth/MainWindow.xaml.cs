@@ -33,6 +33,7 @@ namespace FluidSynth {
 
         public MainWindow() {
             InitializeComponent();
+            new FluidFileWriter("ee", new Sheet());
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

@@ -27,6 +27,8 @@ namespace FluidCmd {
             Console.Out.Write(projString);
             Console.Out.Write(">");
 
+            noteSheet.Name = projString;
+
             string cmdtext = Console.In.ReadLine();
             string command = getCmdName(cmdtext);
             string args = getCmdArgs(cmdtext);
@@ -35,8 +37,15 @@ namespace FluidCmd {
                 Echo(args);
                 Cmd();
             }
+            else if (command == "xmltest") {
+                new FluidFileWriter("", noteSheet);
+            }
             else if (command == "kineticisepic") {
-                PrinteEpicText();
+                PrintEpicText();
+                Cmd();
+            }
+            else if (command == "save") {
+                SaveProj(args);
                 Cmd();
             }
             else if (command == "print") {
@@ -102,7 +111,19 @@ namespace FluidCmd {
             }
         }
 
-        public void PrinteEpicText() {
+        public void SaveProj(string args) {
+            string filePathName = "";
+
+            try {
+                filePathName = args + ".fvsp";
+
+                FluidFileWriter ffw = new FluidFileWriter(args, noteSheet);
+                ffw.SaveFile();
+            }
+            catch (Exception ex) { Console.Out.WriteLine("e: " + ex.Message); }
+        }
+
+        public void PrintEpicText() {
             System.IO.StreamReader sr = new System.IO.StreamReader("KINETICISEPIC.TXT");
             string epicText = sr.ReadToEnd();
             sr.Close();
@@ -227,6 +248,7 @@ namespace FluidCmd {
 
         public void Rename(string args) {
             projString = args;
+            noteSheet.Name = args;
         }
 
         public void Add(string args) {

@@ -22,7 +22,10 @@ namespace FluidSys {
         /// The path to the resynthesis engine used within this FluidSys.Sheet.
         /// </summary>
         public string Resampler { get; set; }
-
+        /// <summary>
+        /// The name used for this FluidSys.Sheet.
+        /// </summary>
+        public string Name { get; set; }
         /// <summary>
         /// Gets or sets a list of strings representing the coolest things ever.
         /// </summary>
