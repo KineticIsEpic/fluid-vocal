@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="445" Width="786">
+             mc:Ignorable="d" Height="580" Width="790" SizeChanged="UserControl_SizeChanged">
     <Grid>
-        <ScrollViewer>
-            <Grid Name="mainPanel" Background="#eeeeee">
-                
-            </Grid>
+        <ScrollViewer VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <StackPanel x:Name="notePanel" Height="1152" Width="958"/>
+
         </ScrollViewer>
+
     </Grid>
 </UserControl>

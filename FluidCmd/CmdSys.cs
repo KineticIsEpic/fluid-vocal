@@ -33,12 +33,14 @@ namespace FluidCmd {
             string command = getCmdName(cmdtext);
             string args = getCmdArgs(cmdtext);
 
+            // Parse commands
             if (command == "echo") {
                 Echo(args);
                 Cmd();
             }
             else if (command == "xmltest") {
-                new FluidFileWriter("", noteSheet);
+                new FluidFileWriter("cool.fvsp", noteSheet).SaveFile();
+                new FluidFileReader("cool.fvsp");
             }
             else if (command == "kineticisepic") {
                 PrintEpicText();
@@ -102,7 +104,7 @@ namespace FluidCmd {
             }
             else if (command == "exit") {
                 ClearCache();
-                return;
+                Program.Exit();
             }
             else {
                 if (command != "")
@@ -113,11 +115,12 @@ namespace FluidCmd {
 
         public void SaveProj(string args) {
             string filePathName = "";
-
             try {
-                filePathName = args + ".fvsp";
+                // Auto-add file extension
+                if (args.Substring(args.Length - 5) == ".fvsp") filePathName = args;
+                else filePathName = args + ".fvsp";
 
-                FluidFileWriter ffw = new FluidFileWriter(args, noteSheet);
+                FluidFileWriter ffw = new FluidFileWriter(filePathName, noteSheet);
                 ffw.SaveFile();
             }
             catch (Exception ex) { Console.Out.WriteLine("e: " + ex.Message); }
@@ -132,11 +135,13 @@ namespace FluidCmd {
         }
 
         public void Delete(string args) {
+            // Remove note with compensation for 0=based index
             try { noteSheet.notes.RemoveAt(int.Parse(args) - 1); }
             catch (Exception ex) { Console.Out.WriteLine("e: " + ex.Message); }
         }
 
         public void DelZero(string args) {
+            // Remove note without compensation
             try { noteSheet.notes.RemoveAt(int.Parse(args)); }
             catch (Exception ex) { Console.Out.WriteLine("e: " + ex.Message); }
         }
@@ -216,6 +221,8 @@ namespace FluidCmd {
                 rnd.Render();
 
                 Console.Out.WriteLine("Done. ");
+
+                // TODO: generate render time message
 
                 // Play back render
                 try { wvmd.PlaybackTemp(rnd.TemporaryDir, noteSheet); }
@@ -309,7 +316,7 @@ namespace FluidCmd {
                 Console.Out.WriteLine("add <phonetic>,<length>,<pitch>,<index>");
                 Console.Out.WriteLine();
                 Console.Out.WriteLine("<phonetic> = phonetic for the note e.g. da");
-                Console.Out.WriteLine("<length> = length of note in miliseconds e.g. 1000");
+                Console.Out.WriteLine("<length> = length of note in milliseconds e.g. 1000");
                 Console.Out.WriteLine("<pitch> = pitch of the note e.g C#4");
                 Console.Out.WriteLine("<index> = index to insert note, leave blank to add to end");
             }

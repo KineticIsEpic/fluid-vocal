@@ -15,7 +15,6 @@ namespace FluidSys {
     public class FluidFileWriter {
         private Sheet baseSheet;
         private XmlDocument baseXml;
-        private string textForWrite;
         string filePath;
 
         public FluidFileWriter(string path, Sheet sheet) {
@@ -81,7 +80,7 @@ namespace FluidSys {
 
             // Add notes
             foreach (var note in baseSheet.notes) {
-                XmlElement noteElement = baseXml.CreateElement(string.Empty, "Note" + (run + 1).ToString(), string.Empty);
+                XmlElement noteElement = baseXml.CreateElement(string.Empty, "Note" + (run).ToString(), string.Empty);
                 noteListE.AppendChild(noteElement);
 
                 XmlElement vbPath = baseXml.CreateElement(string.Empty, "VbPath", string.Empty);
@@ -118,7 +117,9 @@ namespace FluidSys {
                 noteElement.AppendChild(args);
                 noteElement.AppendChild(length);
                 noteElement.AppendChild(location);
-                noteElement.AppendChild(useDefVbTxt);
+                noteElement.AppendChild(useDefVb);
+
+                run++;
             }
         }
     }

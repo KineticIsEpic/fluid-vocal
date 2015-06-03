@@ -32,8 +32,8 @@ namespace wavmod {
                 fadeSamplePosition = 0;
                 fadeSampleCount = (int)((fadeDurationInMilliseconds * source.WaveFormat.SampleRate) / 1000);
                 fadeState = FadeState.FadingIn;
-            }
-        }
+            } 
+        }                   
 
         public void BeginFadeOut(double fadeDurationInMilliseconds) {
             lock (lockObject) {
@@ -67,7 +67,7 @@ namespace wavmod {
 
         private void FadeOut(float[] buffer, int offset, int sourceSamplesRead) {
             int sample = 0;
-            while (sample < sourceSamplesRead) {
+            while (sample <sourceSamplesRead) {
                 float multiplier = 1.0f - (fadeSamplePosition / (float)fadeSampleCount);
                 for (int ch = 0; ch < source.WaveFormat.Channels; ch++) {
                     buffer[offset + sample++] *= multiplier;

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+  <Details>
+    <Name>New Project</Name>
+  </Details>
+  <Tracks>
+    <Track1 Name="Main">
+      <SampleBank>
+      </SampleBank>
+      <Renderer>
+      </Renderer>
+      <NoteList />
+    </Track1>
+  </Tracks>
+</Project>

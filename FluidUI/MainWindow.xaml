@@ -4,6 +4,11 @@
         xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.MainWindow"
         Title="MainWindow" Height="496" Width="832">
     <Grid>
-        <local:Roll HorizontalAlignment="Left" Height="100" Margin="327,148,0,0" VerticalAlignment="Top" Width="100"/>
+        <Grid Height="75" VerticalAlignment="Top" Background="#FFC3C3C3" Margin="-12,0">
+            <Grid.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="0.7"/>
+            </Grid.Effect>
+        </Grid>
+        <local:Roll HorizontalAlignment="Left" Margin="109,128,0,0" VerticalAlignment="Top" Height="288" Width="594"/>
     </Grid>
 </Window>

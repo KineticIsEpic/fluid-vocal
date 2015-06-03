@@ -18,10 +18,27 @@ namespace FluidUI {
     /// Interaction logic for Roll.xaml
     /// </summary>
     public partial class Roll : UserControl {
+        int xRows = 48;
+
         public Roll() {
             InitializeComponent();
 
-            AddChild(new Rectangle());
+           for (int i = 0; i < 48; i++) {
+
+                Rectangle rect = new Rectangle();
+                rect.Height = 24;
+                rect.Width = this.Width;
+
+                if (i % 2 != 0) rect.Fill = Brushes.Gainsboro;
+                else rect.Fill = Brushes.LightGray;
+
+                notePanel.Children.Add(rect);
+            }
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e) {
+            //notePanel.Width = this.Width;
+            //notePanel.Height = this.Height;
         }
     }
 }

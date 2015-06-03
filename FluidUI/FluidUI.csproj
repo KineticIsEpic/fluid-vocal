@@ -63,6 +63,12 @@
     <Compile Include="Roll.xaml.cs">
       <DependentUpon>Roll.bak</DependentUpon>
     </Compile>
+    <Compile Include="RollElement.xaml.cs">
+      <DependentUpon>RollElement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RollNote.xaml.cs">
+      <DependentUpon>RollNote.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,6 +86,14 @@
       <Generator>MSBuild:Compile</Generator>
     </None>
     <Page Include="Roll.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RollElement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RollNote.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

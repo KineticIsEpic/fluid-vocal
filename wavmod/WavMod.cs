@@ -59,18 +59,6 @@ namespace wavmod {
 
         }
 
-        // Hard hat zone
-        public void AddFades(string output, string input, double fadeOutMilis) {
-            byte[] buffer = new byte[1024];
-            AudioFileReader afr = new AudioFileReader(input);
-            FadeInOutSampleProvider fade = new FadeInOutSampleProvider(afr);
-
-            fade.BeginFadeOut(fadeOutMilis);
-
-            var stwp = new NAudio.Wave.SampleProviders.SampleToWaveProvider(fade);
-            WaveFileWriter.CreateWaveFile("C:\\users\\user\\desktop\\render.wav", stwp);
-        }
-
         /// <summary>
         /// Quickly play back the contents of a temporary render directory, using the
         /// specified Sheet as reference.
@@ -108,9 +96,20 @@ namespace wavmod {
             // Trim each note
             foreach (string file in files) {
                 tempfile = tempdir + "\\" + run.ToString() + ".wav";
+                tempfile2 = tempdir + "\\" + run.ToString() + "0.wav";
 
                 WavFileUtils.TrimWavFile(file, tempfile, TimeSpan.FromMilliseconds(notes[run].VoiceProperties.Start),
                     TimeSpan.FromMilliseconds(notes[run].VoiceProperties.End));
+
+                //byte[] buffer = new byte[1024];
+                //AudioFileReader afr = new AudioFileReader(tempfile2);
+                //FadeInOutSampleProvider fade = new FadeInOutSampleProvider(afr);
+
+                //fade.BeginFadeOut(500);
+
+                //var stwp = new NAudio.Wave.SampleProviders.SampleToWaveProvider(fade);
+                //WaveFileWriter.CreateWaveFile(tempfile, stwp);
+
                 run++;
             }
 

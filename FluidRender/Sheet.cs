@@ -27,6 +27,10 @@ namespace FluidSys {
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// Gets or sets the tempo for this FluidSys.Sheet, in beats per minute (BPM).
+        /// </summary>
+        public int Bpm { get; set; }
+        /// <summary>
         /// Gets or sets a list of strings representing the coolest things ever.
         /// </summary>
         public List<string> rendParams = new List<string>();
