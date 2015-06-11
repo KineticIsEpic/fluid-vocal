@@ -3,8 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="24" Width="442.553">
-    <Grid x:Name="mainGrid" MouseDown="mainGrid_MouseDown">
-            
+             mc:Ignorable="d" Height="24" Width="102.553">
+    <Grid x:Name="bkgGrid" MouseDown="mainGrid_MouseDown" Background="#FF919191">
+        <Grid Margin="6,2,2,2" Background="#FFD8D8D8">
+            <TextBox x:Name="nameTxtBox" TextWrapping="Wrap" Text="a" Margin="0,0,14,0" TextChanged="nameTxtBox_TextChanged" Visibility="Hidden"/>
+            <Button Content="L" HorizontalAlignment="Right" Width="14" Click="Button_Click"/>
+        </Grid>
     </Grid>
 </UserControl>

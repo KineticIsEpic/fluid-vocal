@@ -16,7 +16,13 @@ M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FluidUI.g.resources
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FluidUI.Properties.Resources.resources
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FluidUI.csproj.GenerateResource.Cache
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\RollElement.baml
-M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\RollNote.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\RollElement.g.cs
-M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\RollNote.g.cs
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\GeneratedInternalTypeHelper.g.cs
+M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\FluidRender.dll
+M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\oto.dll
+M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\FluidRender.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\oto.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\wavmod.dll
+M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\wavmod.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\SbLib.baml
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\SbLib.g.cs

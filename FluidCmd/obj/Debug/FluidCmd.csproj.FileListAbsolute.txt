@@ -11,3 +11,5 @@ M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\wavmod.pdb
 M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.csprojResolveAssemblyReference.cache
 M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.exe
 M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.pdb
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidUI.exe
+M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidUI.pdb

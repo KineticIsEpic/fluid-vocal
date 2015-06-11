@@ -66,8 +66,8 @@
     <Compile Include="RollElement.xaml.cs">
       <DependentUpon>RollElement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RollNote.xaml.cs">
-      <DependentUpon>RollNote.xaml</DependentUpon>
+    <Compile Include="SbLib.xaml.cs">
+      <DependentUpon>SbLib.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -93,7 +93,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RollNote.xaml">
+    <Page Include="SbLib.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,6 +124,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FluidRender\FluidSys.csproj">
+      <Project>{53d68fb7-d28e-4d6e-b018-ce688652a902}</Project>
+      <Name>FluidSys</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\oto\oto.csproj">
+      <Project>{74e4edf5-f25b-44b9-a393-b734acd69a1b}</Project>
+      <Name>oto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\wavmod\wavmod.csproj">
+      <Project>{7676e8c2-deae-4457-adb0-64442b0e858c}</Project>
+      <Name>wavmod</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

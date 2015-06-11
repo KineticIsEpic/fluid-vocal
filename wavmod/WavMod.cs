@@ -101,17 +101,24 @@ namespace wavmod {
                 WavFileUtils.TrimWavFile(file, tempfile, TimeSpan.FromMilliseconds(notes[run].VoiceProperties.Start),
                     TimeSpan.FromMilliseconds(notes[run].VoiceProperties.End));
 
-                //byte[] buffer = new byte[1024];
-                //AudioFileReader afr = new AudioFileReader(tempfile2);
-                //FadeInOutSampleProvider fade = new FadeInOutSampleProvider(afr);
-
-                //fade.BeginFadeOut(500);
-
-                //var stwp = new NAudio.Wave.SampleProviders.SampleToWaveProvider(fade);
-                //WaveFileWriter.CreateWaveFile(tempfile, stwp);
-
                 run++;
             }
+
+            //foreach (string file in files) {
+            //    try {
+            //        byte[] buffer = new byte[1024];
+            //        AudioFileReader afr = new AudioFileReader(tempfile2);
+            //        FadeInOutSampleProvider fade = new FadeInOutSampleProvider(afr);
+
+            //        fade.BeginFadeOut(notes[run2].Length - 10);
+
+            //        var stwp = new NAudio.Wave.SampleProviders.SampleToWaveProvider(fade);
+            //        WaveFileWriter.CreateWaveFile(tempfile, stwp);
+
+            //        run2++;
+            //    }
+            //    catch (Exception) { }
+            //}
 
             return tempdir;
         }

@@ -4,11 +4,14 @@
         xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.MainWindow"
         Title="MainWindow" Height="496" Width="832">
     <Grid>
+        <local:Roll x:Name="pianoRoll" Margin="0,75,0,0" Height="Auto" Width="Auto"/>
         <Grid Height="75" VerticalAlignment="Top" Background="#FFC3C3C3" Margin="-12,0">
             <Grid.Effect>
                 <DropShadowEffect ShadowDepth="0" Opacity="0.7"/>
             </Grid.Effect>
+            <Button x:Name="testBtn" Content="Play " HorizontalAlignment="Left" Margin="19,10,0,0" VerticalAlignment="Top" Width="75" Click="testBtn_Click"/>
+            <Button Content="Set VB" HorizontalAlignment="Left" Margin="99,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+            <Button Content="Set render" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
         </Grid>
-        <local:Roll HorizontalAlignment="Left" Margin="109,128,0,0" VerticalAlignment="Top" Height="288" Width="594"/>
     </Grid>
 </Window>

@@ -5,10 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="580" Width="790" SizeChanged="UserControl_SizeChanged">
     <Grid>
-        <ScrollViewer VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
-            <StackPanel x:Name="notePanel" Height="1152" Width="958"/>
-
+        <ScrollViewer x:Name="fred" HorizontalAlignment="Left" Width="94" Margin="0,0,0,17">
+            <StackPanel x:Name="pianoPanel" Background="LightGray" HorizontalAlignment="Left" Height="1728" VerticalAlignment="Top" Width="76"/>
         </ScrollViewer>
-
+        <ScrollViewer x:Name="scroller" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible" Margin="76,0,0,0" ScrollChanged="scroller_ScrollChanged">
+            <Grid Height="1728" Width="2076">
+                <StackPanel x:Name="notePanel" Height="1728" Margin="0,0,0,0"/>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

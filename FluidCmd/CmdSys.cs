@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluidSys;
 using OTOmate;
+using FluidUI;
 
 namespace FluidCmd {
     class CmdSys {
@@ -21,6 +22,7 @@ namespace FluidCmd {
 
         Sheet noteSheet = new Sheet();
         OtoReader or = new OtoReader();
+        MainWindow fluidUi; 
 
         public void Cmd() {
             Console.Out.WriteLine();
@@ -40,7 +42,15 @@ namespace FluidCmd {
             }
             else if (command == "xmltest") {
                 new FluidFileWriter("cool.fvsp", noteSheet).SaveFile();
-                new FluidFileReader("cool.fvsp");
+                new FluidFileReader("cool.fvsp"); 
+            }
+            else if (command == "ui") {
+                Console.Out.Write("Launching FluidUI... ");
+                fluidUi = new MainWindow();
+                Console.Out.WriteLine("Done. ");
+                fluidUi.ShowDialog();
+                Console.Out.WriteLine("FluidUI Closed. ");
+                Cmd();
             }
             else if (command == "kineticisepic") {
                 PrintEpicText();
@@ -54,7 +64,7 @@ namespace FluidCmd {
                 PrintNotes();
                 Cmd();                
             }
-            else if (command == "renderconsole") {
+            else if (command == "showrender") {
                 ShowRenderConsole(args);
                 Cmd();
             }

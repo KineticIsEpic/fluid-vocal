@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FluidSys;
 
 namespace FluidUI {
     /// <summary>
@@ -25,6 +26,26 @@ namespace FluidUI {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+        }
+
+        private void testBtn_Click(object sender, RoutedEventArgs e) {
+            pianoRoll.Play();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            InputForm inf = new InputForm();
+            System.Windows.Forms.DialogResult dr = inf.ShowDialog("Voicebank path");
+
+            if (dr == System.Windows.Forms.DialogResult.Yes)
+                pianoRoll.Samplebank = inf.Value;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            InputForm inf = new InputForm();
+            System.Windows.Forms.DialogResult dr = inf.ShowDialog("Renderer path");
+
+            if (dr == System.Windows.Forms.DialogResult.Yes)
+                pianoRoll.RendererPath = inf.Value;
         }
     }
 }
