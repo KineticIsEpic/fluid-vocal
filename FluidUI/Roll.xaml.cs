@@ -29,6 +29,24 @@ namespace FluidUI {
     public partial class Roll : UserControl {
         private Sheet noteSheet = new Sheet();
 
+        /// <summary>
+        /// Gets or sets the global tempo for this FluidUI.Roll, in Beats Per Minute (BPM).
+        /// </summary>
+        public int Tempo {
+            get { return baseTempo; }
+            set {
+                foreach (DockPanel notePane in notePanel.Children) {
+                    foreach (RollElement note in notePane.Children) {
+                        note.BPM = baseTempo;
+                        noteSheet.notes[note.NoteIndex].Length = note.ElementNote.Length;
+                        System.Windows.Forms.MessageBox.Show(noteSheet.notes[note.NoteIndex].Length.ToString());
+                    }
+                }
+                baseTempo = value;
+                noteSheet.Bpm = baseTempo;
+            }
+        }
+
         public string RendererPath { get; set; }
         public string Samplebank {
             get { return intVb; }
@@ -41,17 +59,27 @@ namespace FluidUI {
         List<RollElement>[] notes = new List<RollElement>[72];
 
         OtoReader oRead = new OtoReader();
+        Rectangle NotePreviewRect;
 
         string intVb = "";
 
+        int baseTempo = 0;
         int xRows = 72;
         int mouseDownPos = 0;
         int allNotesLength = 0;
         int totalNotes = 0;
         int[] usedLeftSpace = new int[72];
+        int removedNoteLength = 0;
+
+        RollElement NextNote = new RollElement();
 
         public Roll() {
             InitializeComponent();
+
+            //Image Img = new Image();
+            //Img.Source = new BitmapImage(new Uri("")); //TOOD: create path that is program directory + img name
+
+            AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
 
             int whatever = 0;
             int indexer = 0;
@@ -159,6 +187,9 @@ namespace FluidUI {
             scroller.ScrollToVerticalOffset(560);
         }
 
+        /// <summary>
+        /// Render all notes in queue, then play them back.
+        /// </summary>
         public void Play() {
             try {
                 noteSheet.Bpm = 120;
@@ -169,7 +200,7 @@ namespace FluidUI {
                 WavMod wvmd = new WavMod();
                 Renderer rendSys = new Renderer(noteSheet);
 
-                //rendSys.ShowRenderWindow = true;
+                //rendSys.ShowRenderWindow = true;z
                 rendSys.Render();
 
                 wvmd.PlaybackTemp(rendSys.TemporaryDir, noteSheet);
@@ -177,12 +208,90 @@ namespace FluidUI {
             catch (Exception ex) { System.Windows.Forms.MessageBox.Show(ex.Message); }
         }
 
+        /// <summary>
+        /// Get a string with basic details about the global tempo of this FluidUI.Roll.
+        /// </summary>
+        /// <returns></returns>
+        public string GetBpmDetails() {
+            string str = "Tempo = ";
+            str += baseTempo.ToString() + "\r\nQuarter note = ";
+            str += (60000 / baseTempo).ToString() + "mSec\r\n";
+            return str;
+        }
+    
+        public void RemoveSelectedNotes() {
+            int indexer = 0;
+            int indexer2 = 0;
+            foreach (DockPanel notePane in notePanel.Children) {
+                foreach (RollElement note in notePane.Children) {
+                    if (note.IsSelected) {
+                        notePane.Children.Remove(note);
+                        allNotesLength -= (int)note.Width - (int)note.Margin.Left;
+                        removedNoteLength = (int)note.Width;
+                        totalNotes--;
+                        RemoveSelectedNotes();
+                        Roll_ElementRemoved(note);
+                        break;
+                    }
+                    indexer++;
+                }
+                indexer2++;
+            }
+        }
+
+        public void AddNote(int length, int index, string pitch, DockPanel panelToAddNote) {
+            RollElement noteToAdd = new RollElement();
+            int spaceToLeft = getAllLeftSpace(panelToAddNote);
+
+            foreach (RollElement note in panelToAddNote.Children) spaceToLeft -= ((int)note.Width + (int)note.Margin.Left);
+
+            noteToAdd.Height = 24;
+            noteToAdd.Width = length;
+            noteToAdd.Margin = new Thickness(spaceToLeft, 0, 0, 0);
+            noteToAdd.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            noteToAdd.Pitch = pitch;
+            noteToAdd.ElementPropertiesChanged += Roll_ElementPropertiesChanged;
+            noteToAdd.ElementRemoved += Roll_ElementRemoved;
+            noteToAdd.ElementSelected += Roll_ElementSelected;
+            noteToAdd.NoteIndex = index;
+            noteToAdd.BPM = baseTempo;
+
+            panelToAddNote.Children.Insert(index - countNotesNotOnLane(panelToAddNote), noteToAdd);
+
+            Note n = noteToAdd.ElementNote;
+            n.VoiceProperties = oRead.GetVoicePropFromSampleName(n.DispName);
+            noteSheet.notes.Insert(index, n);
+
+            totalNotes++; 
+        }
+
+        private int getAllLeftSpace(DockPanel nPanel) {
+            int allleftspace = 0;
+
+            foreach (DockPanel notePane in notePanel.Children) {
+                foreach (RollElement note in notePane.Children) {
+                    if (note.Parent != nPanel) allleftspace += (int)note.Width;
+                }
+            }
+            return allleftspace;
+        }
+
+        private int countNotesNotOnLane(DockPanel lane) {
+            int notesNotInLane = 0;
+
+            foreach (DockPanel notePane in notePanel.Children) {
+                foreach (RollElement note in notePane.Children) {
+                    if (lane.Children.IndexOf(note) == -1) notesNotInLane++;
+                }
+            }
+            return notesNotInLane;
+        }
+
         private void paintBarLines(int barsep, int beat) {
-            bool firstRun = true;
 
             foreach (DockPanel notePane in notePanel.Children) {
                 for (int i = 0; i < 27; i++) {
-
+                    
                     Rectangle bar = new Rectangle();
                     bar.Width = 2;
                     bar.Height = 24;
@@ -200,8 +309,13 @@ namespace FluidUI {
 
         }
 
+        private void HandleKeyDownEvent(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Delete) RemoveSelectedNotes();
+        }
+
         private void rect_MouseUp(object sender, MouseButtonEventArgs e) {
             int mouseUpPos = (int)Mouse.GetPosition((DockPanel)sender).X;
+
             int xIndex = (int)((object[])((DockPanel)sender).Tag)[0];
             int yIndex = 0;
 
@@ -210,7 +324,8 @@ namespace FluidUI {
 
                 int spaceToLeft = allNotesLength;
 
-                foreach (RollElement note in notes[xIndex]) spaceToLeft -= ((int)note.Width + (int)note.Margin.Left);
+                foreach (RollElement note in ((DockPanel)sender).Children)
+                    spaceToLeft -= ((int)note.Width + (int)note.Margin.Left);
 
                 notes[xIndex].Add(new RollElement());
 
@@ -221,7 +336,10 @@ namespace FluidUI {
                 notes[xIndex][yIndex].HorizontalAlignment = HorizontalAlignment.Left;
                 notes[xIndex][yIndex].Pitch = (string)((object[])((DockPanel)sender).Tag)[1];
                 notes[xIndex][yIndex].ElementPropertiesChanged += Roll_ElementPropertiesChanged;
+                notes[xIndex][yIndex].ElementRemoved += Roll_ElementRemoved;
+                notes[xIndex][yIndex].ElementSelected += Roll_ElementSelected;
                 notes[xIndex][yIndex].NoteIndex = totalNotes;
+                notes[xIndex][yIndex].BPM = baseTempo;
 
                 if (notes[xIndex][yIndex].Margin.Left < 0) notes[xIndex][yIndex].Margin = new Thickness(0, 0, 0, 0);
 
@@ -233,9 +351,27 @@ namespace FluidUI {
                 Note n = notes[xIndex][yIndex].ElementNote;
                 n.VoiceProperties = oRead.GetVoicePropFromSampleName(n.DispName);
                 noteSheet.notes.Insert(totalNotes, n);
-
                 totalNotes++;
+
+                //AddNote(mouseUpPos - mouseDownPos, totalNotes, (string)((object[])((DockPanel)sender).Tag)[1],
+                //    ((DockPanel)sender));
             }
+        }
+
+        void Roll_ElementSelected(RollElement sender, bool isSelected) { }
+
+        void Roll_ElementRemoved(RollElement sender) {
+            noteSheet.notes.RemoveAt(sender.NoteIndex);
+            try {
+                foreach (DockPanel notePane in notePanel.Children) {
+                    foreach (RollElement note in notePane.Children) {
+                        if (note.NoteIndex == sender.NoteIndex + 1) 
+                            note.Margin = new Thickness(note.Margin.Left - sender.Width, 0, 0, 0);                        
+                    }
+                }
+
+            }
+            catch (Exception) { }
         }
 
         void Roll_ElementPropertiesChanged(RollElement sender) {
@@ -259,5 +395,6 @@ namespace FluidUI {
         private void Label_SourceUpdated(object sender, DataTransferEventArgs e) {
             
         }
+
     }
 }

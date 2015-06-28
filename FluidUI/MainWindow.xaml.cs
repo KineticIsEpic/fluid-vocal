@@ -28,6 +28,17 @@ namespace FluidUI {
             InitializeComponent();
         }
 
+        private bool setBpmFromString(string tempobpm) {
+            try {
+                pianoRoll.Tempo = int.Parse(tempobpm);
+                return true;
+            }
+            catch (Exception ex) {
+                pianoRoll.Tempo = 120;
+                return false; 
+            }
+        }
+
         private void testBtn_Click(object sender, RoutedEventArgs e) {
             pianoRoll.Play();
         }
@@ -46,6 +57,14 @@ namespace FluidUI {
 
             if (dr == System.Windows.Forms.DialogResult.Yes)
                 pianoRoll.RendererPath = inf.Value;
+        }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e) {
+            if (setBpmFromString(((TextBox)sender).Text)) ((TextBox)sender).Background = Brushes.White;
+            else ((TextBox)sender).Background = Brushes.Red;
+
+            if (setBpmFromString(((TextBox)sender).Text)) ((TextBox)sender).Background = Brushes.White;
+            else ((TextBox)sender).Background = Brushes.Red;
         }
     }
 }

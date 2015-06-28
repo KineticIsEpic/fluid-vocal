@@ -52,6 +52,10 @@ namespace FluidCmd {
                 Console.Out.WriteLine("FluidUI Closed. ");
                 Cmd();
             }
+            else if (command == "firsttimeui") {
+                new FirstTimeSetup().Show();
+                Cmd();
+            }
             else if (command == "kineticisepic") {
                 PrintEpicText();
                 Cmd();

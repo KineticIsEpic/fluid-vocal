@@ -12,6 +12,8 @@
             <Button x:Name="testBtn" Content="Play " HorizontalAlignment="Left" Margin="19,10,0,0" VerticalAlignment="Top" Width="75" Click="testBtn_Click"/>
             <Button Content="Set VB" HorizontalAlignment="Left" Margin="99,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
             <Button Content="Set render" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+            <Label Content="BPM" HorizontalAlignment="Left" Margin="593,8,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Height="23" Margin="552,10,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="36" KeyUp="TextBox_KeyUp"/>
         </Grid>
     </Grid>
 </Window>

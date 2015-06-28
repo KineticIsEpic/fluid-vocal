@@ -60,6 +60,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FirstTimeSetup.xaml.cs">
+      <DependentUpon>FirstTimeSetup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Roll.xaml.cs">
       <DependentUpon>Roll.bak</DependentUpon>
     </Compile>
@@ -69,6 +72,10 @@
     <Compile Include="SbLib.xaml.cs">
       <DependentUpon>SbLib.xaml</DependentUpon>
     </Compile>
+    <Page Include="FirstTimeSetup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="24" Width="102.553">
-    <Grid x:Name="bkgGrid" MouseDown="mainGrid_MouseDown" Background="#FF919191">
-        <Grid Margin="6,2,2,2" Background="#FFD8D8D8">
-            <TextBox x:Name="nameTxtBox" TextWrapping="Wrap" Text="a" Margin="0,0,14,0" TextChanged="nameTxtBox_TextChanged" Visibility="Hidden"/>
-            <Button Content="L" HorizontalAlignment="Right" Width="14" Click="Button_Click"/>
+    <Grid x:Name="bkgGrid" Background="#FF919191">
+        <Grid Margin="14,2,2,2" Background="#FFD8D8D8">
+            <TextBox x:Name="nameTxtBox" TextWrapping="Wrap" Text="a" TextChanged="nameTxtBox_TextChanged" Background="#FFD6D6D6" BorderBrush="#FFBDBDBD"/>
         </Grid>
+        <Rectangle x:Name="gripper1" Fill="#FF535353" HorizontalAlignment="Left" Height="4" Margin="3,3,0,0" VerticalAlignment="Top" Width="7" AllowDrop="True"/>
+        <Rectangle x:Name="gripper2" Fill="#FF535353" HorizontalAlignment="Left" Height="4" Margin="3,10,0,0" VerticalAlignment="Top" Width="7" AllowDrop="True"/>
+        <Rectangle x:Name="gripper3" Fill="#FF535353" HorizontalAlignment="Left" Height="4" Margin="3,17,0,0" VerticalAlignment="Top" Width="7" AllowDrop="True"/>
     </Grid>
 </UserControl>

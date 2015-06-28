@@ -26,3 +26,5 @@ M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\wavmod.dll
 M:\Folder\FluidSynth\FluidSynth\FluidUI\bin\Debug\wavmod.pdb
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\SbLib.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\SbLib.g.cs
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FirstTimeSetup.baml
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FirstTimeSetup.g.cs
