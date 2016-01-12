@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
@@ -75,9 +75,6 @@ namespace FluidUI {
 
         public Roll() {
             InitializeComponent();
-
-            //Image Img = new Image();
-            //Img.Source = new BitmapImage(new Uri("")); //TOOD: create path that is program directory + img name
 
             AddHandler(Keyboard.KeyDownEvent, (KeyEventHandler)HandleKeyDownEvent);
 
@@ -395,6 +392,5 @@ namespace FluidUI {
         private void Label_SourceUpdated(object sender, DataTransferEventArgs e) {
             
         }
-
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
@@ -31,6 +31,8 @@ namespace FluidUI {
         public event ElementChangedEventArgs ElementPropertiesChanged;
         public event ElementRemovedEventArgs ElementRemoved;
         public event ElementSelectedChangedEventArgs ElementSelected;
+        public event ElementChangedEventArgs ElementMouseDown;
+        public event ElementChangedEventArgs ElementMouseUp;
 
         public Brush SelectedForegroundBrush { get; set; }
         public Brush ForegroundBrush { get; set; }
@@ -50,10 +52,14 @@ namespace FluidUI {
                     try { ElementSelected.Invoke(this, value); }
                     catch (Exception) { }
                 }
-
                 baseIsSelected = value;
             }
         }
+        /// <summary>
+        /// Gets a value indicating whether the mouse is currently over the resize element 
+        /// of this FluidUI.RollElement.
+        /// </summary>
+        public bool IsMouseOverResize { get { return resizer.IsMouseOver; } }
 
         /// <summary>
         /// Gets or sets the tempo value.
@@ -107,15 +113,20 @@ namespace FluidUI {
             SelectedBackgroundBrush = new SolidColorBrush(Color.FromArgb(255, 135, 171, 189));
             BackgroundBrush = new SolidColorBrush(Color.FromArgb(255, 145, 145, 145));
 
-            gripper1.MouseDown += gripper_Selected;
-            gripper2.MouseDown += gripper_Selected;
-            gripper2.MouseDown += gripper_Selected;
+            //gripper1.MouseDown += gripper_Selected;
+            //gripper2.MouseDown += gripper_Selected;
+            //gripper3.MouseDown += gripper_Selected;
             bkgGrid.MouseDown += gripper_Selected;
+
+            gripper1.MouseUp += gripper_MouseUp;
+            gripper2.MouseUp += gripper_MouseUp;
+            gripper3.MouseUp += gripper_MouseUp;
+            bkgGrid.MouseUp += gripper_MouseUp;
         }
 
         public double GetLength() {
             // Using quarter note as a reference for calculation
-            int qNotePx = 100;
+            int qNotePx = 120;
             int qNoteMillis = 0;
 
             // Get reference length for note based on current tempo
@@ -132,19 +143,31 @@ namespace FluidUI {
                 gripper1.Fill = SelectedForegroundBrush;
                 gripper2.Fill = SelectedForegroundBrush;
                 gripper3.Fill = SelectedForegroundBrush;
+                resizer.Fill = SelectedBackgroundBrush;
                 bkgGrid.Background = SelectedBackgroundBrush;
             }
             else {
                 gripper1.Fill = ForegroundBrush;
                 gripper2.Fill = ForegroundBrush;
                 gripper3.Fill = ForegroundBrush;
+                resizer.Fill = BackgroundBrush;
                 bkgGrid.Background = BackgroundBrush;
             }
         }
-
+        
         private void gripper_Selected(object sender, MouseButtonEventArgs e) {
-            if (!IsSelected) IsSelected = true;
-            else IsSelected = false;
+            if (e.RightButton == MouseButtonState.Pressed) {
+                if (!IsSelected) IsSelected = true;
+                else IsSelected = false; 
+            }
+
+            try { ElementMouseDown.Invoke(this); }
+            catch (Exception) { }
+        }
+
+        private void gripper_MouseUp(object sender, MouseButtonEventArgs e) {
+            try { ElementMouseUp.Invoke(this); }
+            catch (Exception ex) { }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
@@ -154,7 +177,11 @@ namespace FluidUI {
 
         private void nameTxtBox_TextChanged(object sender, TextChangedEventArgs e) {
             try { ElementPropertiesChanged.Invoke(this); }
-            catch (Exception) { }
+            catch (Exception) { } 
+        }
+
+        private void nameTxtBox_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.D && Keyboard.Modifiers == ModifierKeys.Control) {  ElementRemoved.Invoke(this); }
         }
     }
 }

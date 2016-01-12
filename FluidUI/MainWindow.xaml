@@ -4,16 +4,22 @@
         xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.MainWindow"
         Title="MainWindow" Height="496" Width="832">
     <Grid>
-        <local:Roll x:Name="pianoRoll" Margin="0,75,0,0" Height="Auto" Width="Auto"/>
-        <Grid Height="75" VerticalAlignment="Top" Background="#FFC3C3C3" Margin="-12,0">
+        <local:NoteRoll x:Name="noteRoll" Margin="0,75,0,0" Height="Auto" Width="Auto"/>
+        <Grid Height="75" VerticalAlignment="Top" Background="#FF3E3E41" Margin="-12,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0*"/>
+            </Grid.ColumnDefinitions>
             <Grid.Effect>
                 <DropShadowEffect ShadowDepth="0" Opacity="0.7"/>
             </Grid.Effect>
-            <Button x:Name="testBtn" Content="Play " HorizontalAlignment="Left" Margin="19,10,0,0" VerticalAlignment="Top" Width="75" Click="testBtn_Click"/>
-            <Button Content="Set VB" HorizontalAlignment="Left" Margin="99,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-            <Button Content="Set render" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-            <Label Content="BPM" HorizontalAlignment="Left" Margin="593,8,0,0" VerticalAlignment="Top"/>
-            <TextBox HorizontalAlignment="Left" Height="23" Margin="552,10,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="36" KeyUp="TextBox_KeyUp"/>
+            <Label Content="Set Samplebank" HorizontalAlignment="Left" Margin="22,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="121" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown"/>
+            <Label Content="Play" HorizontalAlignment="Left" Margin="277,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="71" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown_1"/>
+            <Label Content="Set Resynth Engine" HorizontalAlignment="Left" Margin="148,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="124" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown_2"/>
+            <Label Content="BPM: " HorizontalAlignment="Left" Margin="387,12,0,0" VerticalAlignment="Top" Width="32" Padding="1,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Label x:Name="BpmLabel" Content="120" HorizontalAlignment="Left" Margin="420,12,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="1.738,0.577" Foreground="White" MouseDown="BpmLabel_MouseDown" MouseUp="BpmLabel_MouseUp" Cursor="SizeNS" MouseMove="BpmLabel_MouseMove"/>
         </Grid>
+        <Label Content="FluidUI" Background="#00000000" Foreground="Black" HorizontalAlignment="Left" Width="60" Height="14" VerticalAlignment="Bottom" FontSize="8" Padding="0,0,0,4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Courier New" FontStyle="Italic"/>
+        <local:NoteMenu x:Name="rightMenu" HorizontalAlignment="Left" Margin="244,153,0,0" VerticalAlignment="Top" Height="233" Width="325" Visibility="Hidden"/>
     </Grid>
 </Window>

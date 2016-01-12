@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
@@ -86,40 +86,34 @@ namespace wavmod {
 
         private string GenEditedFiles(string[] files, List<Note> notes) {
             string tempdir = FluidSys.FluidSys.CreateTempDir();
-            string tempdir2 = FluidSys.FluidSys.CreateTempDir();
             string tempfile = "";
             string tempfile2 = "";
 
             int run = 0;
-            int run2 = 0;
 
             // Trim each note
             foreach (string file in files) {
                 tempfile = tempdir + "\\" + run.ToString() + ".wav";
                 tempfile2 = tempdir + "\\" + run.ToString() + "0.wav";
 
-                WavFileUtils.TrimWavFile(file, tempfile, TimeSpan.FromMilliseconds(notes[run].VoiceProperties.Start),
-                    TimeSpan.FromMilliseconds(notes[run].VoiceProperties.End));
+                //WavFileUtils.TrimWavFile(file, tempfile2, TimeSpan.FromMilliseconds(notes[run].VoiceProperties.Start),
+                //    TimeSpan.FromMilliseconds(notes[run].VoiceProperties.End));
+
+                var afr = new AudioFileReader(file); 
+                var fade = new DelayFadeOutSampleProvider(afr);
+
+                fade.BeginFadeIn(175);
+                fade.BeginFadeOut(afr.TotalTime.TotalMilliseconds , afr.TotalTime.TotalMilliseconds * 2);
+
+                var stwp = new NAudio.Wave.SampleProviders.SampleToWaveProvider(fade);
+                WaveFileWriter.CreateWaveFile(tempfile, stwp);
+
+                new System.Media.SoundPlayer(tempfile).Play();
+
+                //File.Delete(tempfile2);
 
                 run++;
             }
-
-            //foreach (string file in files) {
-            //    try {
-            //        byte[] buffer = new byte[1024];
-            //        AudioFileReader afr = new AudioFileReader(tempfile2);
-            //        FadeInOutSampleProvider fade = new FadeInOutSampleProvider(afr);
-
-            //        fade.BeginFadeOut(notes[run2].Length - 10);
-
-            //        var stwp = new NAudio.Wave.SampleProviders.SampleToWaveProvider(fade);
-            //        WaveFileWriter.CreateWaveFile(tempfile, stwp);
-
-            //        run2++;
-            //    }
-            //    catch (Exception) { }
-            //}
-
             return tempdir;
         }
     }

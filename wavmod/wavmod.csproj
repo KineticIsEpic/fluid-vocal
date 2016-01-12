@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DelayFadeOutSampleProvider.cs" />
     <Compile Include="FadeInOutSampleProvider.cs" />
     <Compile Include="WavFileUtils.cs" />
     <Compile Include="WavMod.cs" />

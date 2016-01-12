@@ -5,11 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="24" Width="102.553">
     <Grid x:Name="bkgGrid" Background="#FF919191">
-        <Grid Margin="14,2,2,2" Background="#FFD8D8D8">
-            <TextBox x:Name="nameTxtBox" TextWrapping="Wrap" Text="a" TextChanged="nameTxtBox_TextChanged" Background="#FFD6D6D6" BorderBrush="#FFBDBDBD"/>
+        <Grid Margin="14,2,8,2" Background="#FFD8D8D8">
+            <TextBox x:Name="nameTxtBox" TextWrapping="Wrap" Text="a" TextChanged="nameTxtBox_TextChanged" Background="#FFD6D6D6" BorderBrush="#FFBDBDBD" KeyDown="nameTxtBox_KeyDown">
+            </TextBox>
+            <Label x:Name="dataBox" Content="0" Background="White" FontSize="7" HorizontalAlignment="Right" Width="24" Foreground="Red" Visibility="Hidden"/>
         </Grid>
         <Rectangle x:Name="gripper1" Fill="#FF535353" HorizontalAlignment="Left" Height="4" Margin="3,3,0,0" VerticalAlignment="Top" Width="7" AllowDrop="True"/>
         <Rectangle x:Name="gripper2" Fill="#FF535353" HorizontalAlignment="Left" Height="4" Margin="3,10,0,0" VerticalAlignment="Top" Width="7" AllowDrop="True"/>
         <Rectangle x:Name="gripper3" Fill="#FF535353" HorizontalAlignment="Left" Height="4" Margin="3,17,0,0" VerticalAlignment="Top" Width="7" AllowDrop="True"/>
+        <Rectangle x:Name="resizer" Fill="#FF919191" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="8" Cursor="SizeWE"/>
     </Grid>
 </UserControl>

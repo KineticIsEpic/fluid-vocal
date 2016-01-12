@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="FluidUI.NoteMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Height="426.298" Width="325.298">
+    <Grid Background="#FF0C0C0C" Opacity="0.85">
+        <Canvas x:Name="envPanel" Margin="10,32,10,0" Background="#FF202021" Height="189" VerticalAlignment="Top">
+            <Grid Background="#FF171718" Height="26" VerticalAlignment="Bottom" Canvas.Top="164" Width="305">
+                <Label Content="ATT:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFCDCDCD" Margin="4,0,0,0" FontStyle="Italic"/>
+                <Label Content="SUS:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFCDCDCD" Margin="73,0,0,0" FontStyle="Italic"/>
+                <Label Content="REL:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFCDCDCD" Margin="142,0,0,0" FontStyle="Italic"/>
+            </Grid>
+            <Canvas Height="164" Width="305"/>
+            <Canvas x:Name="envBkg" Height="164" Width="305">
+                <Rectangle Height="142" Stroke="#FF34ACD8" Fill="#FF34ACD8" Canvas.Top="22" Width="2">
+                    <Rectangle.LayoutTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="-10"/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.LayoutTransform>
+                </Rectangle>
+                <Rectangle Height="2" Stroke="#FF34ACD8" Fill="#FF34ACD8" Canvas.Top="22" Width="242" Canvas.Left="26">
+                </Rectangle>
+                <Rectangle Height="142" Stroke="#FF34ACD8" Fill="#FF34ACD8" Canvas.Top="22" Width="2" Canvas.Left="266">
+                    <Rectangle.LayoutTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="10"/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.LayoutTransform>
+                </Rectangle>
+            </Canvas>
+        </Canvas>
+        <Label Content="ENV" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" Foreground="#FF919191"/>
+        <Label Content="PROP" HorizontalAlignment="Left" Margin="61,4,0,0" VerticalAlignment="Top" Foreground="#FF919191"/>
+        <Canvas HorizontalAlignment="Left" Height="12" Margin="50,12,0,0" VerticalAlignment="Top" Width="2" Background="#FF363636"/>
+    </Grid>
+</UserControl>

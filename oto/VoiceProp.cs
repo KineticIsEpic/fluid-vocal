@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 

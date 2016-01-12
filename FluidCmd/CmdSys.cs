@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
@@ -44,16 +44,26 @@ namespace FluidCmd {
                 new FluidFileWriter("cool.fvsp", noteSheet).SaveFile();
                 new FluidFileReader("cool.fvsp"); 
             }
+            else if (command == "about") {
+                Console.Out.WriteLine("Fluid Vocal Synthesis System: an open-source frontend to UTAU");
+                Console.Out.WriteLine("Created by KineticIsEpic. See LICENSE.TXT for the license. ");
+                Console.Out.WriteLine("Uses the nAudio library, created by Mark Heath and licensed under the MS Public License.");
+                Cmd();
+            }
+            else if (command == "printdetail") {
+                ShowOto(args);
+                Cmd();
+            }
             else if (command == "ui") {
-                Console.Out.Write("Launching FluidUI... ");
-                fluidUi = new MainWindow();
-                Console.Out.WriteLine("Done. ");
-                fluidUi.ShowDialog();
-                Console.Out.WriteLine("FluidUI Closed. ");
+                LaunchFluidUI();
                 Cmd();
             }
             else if (command == "firsttimeui") {
                 new FirstTimeSetup().Show();
+                Cmd();
+            }
+            else if (command == "goto") {
+                Console.Out.WriteLine("ur dum m8");
                 Cmd();
             }
             else if (command == "kineticisepic") {
@@ -125,6 +135,81 @@ namespace FluidCmd {
                     Console.Out.WriteLine("e: Invalid command or parameter \"" + command + "\".");
                 Cmd();
             }
+        }
+
+        public void ShowOto(string args) {
+            Note otoNote;
+
+            try { otoNote = noteSheet.notes[int.Parse(args)];  }
+            catch (Exception ex) {
+                Console.Out.WriteLine("e: " + ex.Message);
+                return;
+            }
+
+            try {
+                Console.Out.WriteLine(otoNote.Args.GetType());
+                Console.Out.WriteLine(otoNote.Args);                
+            } catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.DispName.GetType());
+                Console.Out.WriteLine(otoNote.DispName);
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.FileName.GetType());
+                Console.Out.WriteLine(otoNote.FileName);
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.FullPath.GetType());
+                Console.Out.WriteLine(otoNote.FullPath);
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.Length.GetType());
+                Console.Out.WriteLine(otoNote.Length.ToString());
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.Location.GetType());
+                Console.Out.WriteLine(otoNote.Location.ToString());
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.NotePitch.GetType());
+                Console.Out.WriteLine(otoNote.NotePitch);
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.UseDefaultVb.GetType());
+                Console.Out.WriteLine(otoNote.UseDefaultVb.ToString());
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.VbPath.GetType());
+                Console.Out.WriteLine(otoNote.VbPath);
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.Velocity.GetType());
+                Console.Out.WriteLine(otoNote.Velocity.ToString());
+            }
+            catch (Exception) { }
+            try {
+                Console.Out.WriteLine(otoNote.VoiceProperties.GetType());
+                Console.Out.WriteLine("    Consonant=" + otoNote.VoiceProperties.Consonant.ToString());
+                Console.Out.WriteLine("    End=" + otoNote.VoiceProperties.End.ToString());
+                Console.Out.WriteLine("    FileDir=" + otoNote.VoiceProperties.FileDir);
+            }
+            catch (Exception) { }
+        }
+
+        public void LaunchFluidUI() {
+            Console.Out.Write("Launching FluidUI... ");
+            fluidUi = new MainWindow();
+            Console.Out.WriteLine("Done. ");
+            fluidUi.ShowDialog();
+          //  Console.Out.WriteLine("FluidUI Closed. ");
         }
 
         public void SaveProj(string args) {

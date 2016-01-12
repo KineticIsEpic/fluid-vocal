@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
@@ -23,48 +23,52 @@ namespace FluidUI {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
     public partial class MainWindow : Window {
+        int mouseDownLoc;
+        public int internalRefBpm = 120;
+
+        bool mouseDownOverBPM = false;
+
         public MainWindow() {
             InitializeComponent();
         }
 
-        private bool setBpmFromString(string tempobpm) {
-            try {
-                pianoRoll.Tempo = int.Parse(tempobpm);
-                return true;
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e) {
+            InputForm inForm = new InputForm();
+            System.Windows.Forms.DialogResult dr = inForm.ShowDialog("Set Sample Bank");
+            if (dr == System.Windows.Forms.DialogResult.Yes) noteRoll.MasterSampleBank = inForm.Value;
+        }
+
+        private void Label_MouseDown_1(object sender, MouseButtonEventArgs e) {
+            noteRoll.Play();
+        }
+
+        private void Label_MouseDown_2(object sender, MouseButtonEventArgs e) {
+            InputForm inForm = new InputForm();
+            System.Windows.Forms.DialogResult dr = inForm.ShowDialog("Set Resynthesizer");
+            if (dr == System.Windows.Forms.DialogResult.Yes) {
+                if (System.IO.File.Exists(inForm.Value) && inForm.Value.IndexOf(".exe") != -1) 
+                    noteRoll.ResynthEngine = inForm.Value;
+                else System.Windows.Forms.MessageBox.Show("The path " +  inForm.Value + " is not a valid executable file.");
             }
-            catch (Exception ex) {
-                pianoRoll.Tempo = 120;
-                return false; 
+        }
+
+        private void BpmLabel_MouseDown(object sender, MouseButtonEventArgs e) {
+            mouseDownLoc = (int)Mouse.GetPosition(BpmLabel).Y;
+            mouseDownOverBPM = true;
+        }
+
+        private void BpmLabel_MouseUp(object sender, MouseButtonEventArgs e) {
+            noteRoll.GlobalBPM = internalRefBpm;
+            mouseDownOverBPM = false;
+        }
+
+        private void BpmLabel_MouseMove(object sender, MouseEventArgs e) {
+            if (mouseDownOverBPM) {
+                internalRefBpm += (mouseDownLoc - (int)Mouse.GetPosition(BpmLabel).Y) / 2;
+                BpmLabel.Content = internalRefBpm.ToString();  
             }
-        }
-
-        private void testBtn_Click(object sender, RoutedEventArgs e) {
-            pianoRoll.Play();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            InputForm inf = new InputForm();
-            System.Windows.Forms.DialogResult dr = inf.ShowDialog("Voicebank path");
-
-            if (dr == System.Windows.Forms.DialogResult.Yes)
-                pianoRoll.Samplebank = inf.Value;
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
-            InputForm inf = new InputForm();
-            System.Windows.Forms.DialogResult dr = inf.ShowDialog("Renderer path");
-
-            if (dr == System.Windows.Forms.DialogResult.Yes)
-                pianoRoll.RendererPath = inf.Value;
-        }
-
-        private void TextBox_KeyUp(object sender, KeyEventArgs e) {
-            if (setBpmFromString(((TextBox)sender).Text)) ((TextBox)sender).Background = Brushes.White;
-            else ((TextBox)sender).Background = Brushes.Red;
-
-            if (setBpmFromString(((TextBox)sender).Text)) ((TextBox)sender).Background = Brushes.White;
-            else ((TextBox)sender).Background = Brushes.Red;
         }
     }
 }

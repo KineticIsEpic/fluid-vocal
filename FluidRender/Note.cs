@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
@@ -55,11 +55,17 @@ namespace FluidSys {
         /// </summary>
         public int Location { get; set; }
         /// <summary>
+        /// Envelopes for Fluid rendering
+        /// </summary>
+        public int[] Envelope { get; set; }
+        /// <summary>
         /// Set to true to use the sample pack path indicated by the 
         /// containing FluidSys.Sheet class at render time.
         /// </summary>
         public bool UseDefaultVb { get; set; }
-
+        /// <summary>
+        /// Gets the voice properties of this FluidSys.Note.
+        /// </summary>
         public VoiceProp VoiceProperties { get; set; }
         
         /// <summary>

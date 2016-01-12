@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\
+C:\Users\User\Desktop\folder\fluid-vocal\FluidUI\obj\Debug\
 FluidUI
 none
 false
 DEBUG;TRACE
-M:\Folder\FluidSynth\FluidSynth\FluidUI\App.xaml
-5578506313
+C:\Users\User\Desktop\folder\fluid-vocal\FluidUI\App.xaml
+7292974582
 
-13601800793
-20-526691231
-FirstTimeSetup.xaml;MainWindow.xaml;Roll.xaml;RollElement.xaml;SbLib.xaml;
+15202841494
+20-1881821443
+FirstTimeSetup.xaml;MainWindow.xaml;NoteMenu.xaml;NoteRoll.xaml;Roll.xaml;RollElement.xaml;SbLib.xaml;
 
 True
 

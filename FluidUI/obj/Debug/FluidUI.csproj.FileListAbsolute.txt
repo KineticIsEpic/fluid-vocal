@@ -28,3 +28,7 @@ M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\SbLib.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\SbLib.g.cs
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FirstTimeSetup.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FirstTimeSetup.g.cs
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteRoll.baml
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteRoll.g.cs
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteMenu.baml
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteMenu.g.cs

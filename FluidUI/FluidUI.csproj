@@ -63,6 +63,12 @@
     <Compile Include="FirstTimeSetup.xaml.cs">
       <DependentUpon>FirstTimeSetup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NoteMenu.xaml.cs">
+      <DependentUpon>NoteMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NoteRoll.xaml.cs">
+      <DependentUpon>NoteRoll.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Roll.xaml.cs">
       <DependentUpon>Roll.bak</DependentUpon>
     </Compile>
@@ -92,6 +98,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Include="NoteMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NoteRoll.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Roll.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +136,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -146,7 +161,20 @@
       <Name>wavmod</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\res\01.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\01.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\01.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

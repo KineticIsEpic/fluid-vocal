@@ -3,5 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" Width="360.638"/>
+             mc:Ignorable="d" Width="661.638" Height="459" Background="#FF131313">
+    <Grid>
+        <Label Content="My Library" HorizontalAlignment="Left" Margin="24,7,0,0" VerticalAlignment="Top" Foreground="White" FontSize="14"/>
+        <TabControl Margin="0,41,0,0" Background="#FF232323" BorderBrush="{x:Null}">
+            <TabItem Header="Projects" Background="#FF363639" BorderBrush="{x:Null}" IsSelected="True">
+                <Grid/>
+            </TabItem>
+            <TabItem Header="TabItem" Background="#FF363639" BorderBrush="{x:Null}">
+                <Grid/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

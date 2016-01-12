@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="FluidUI.NoteRoll"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Height="489.433" Width="775.022"
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True">
+    <Grid>
+        <ScrollViewer x:Name="fred" HorizontalAlignment="Left" Width="94" Margin="0,0,0,17">
+            <StackPanel x:Name="pianoPanel" Background="LightGray" HorizontalAlignment="Left" Height="1728" VerticalAlignment="Top" Width="76"/>
+        </ScrollViewer>
+        <ScrollViewer x:Name="scroller" HorizontalScrollBarVisibility="Visible" Margin="76,0,0,0" ScrollChanged="scroller_ScrollChanged">
+            <Canvas x:Name="bkgCanvas" Height="1728" Width="3954" MouseDown="bkgCanvas_MouseDown" MouseUp="bkgCanvas_MouseUp" MouseMove="bkgCanvas_MouseMove">
+                <Canvas.Background>
+                    <VisualBrush TileMode="Tile" Viewport="0,0,0.5,0.5">
+                        <VisualBrush.Visual>
+                            <Image></Image>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Canvas.Background>
+            </Canvas>
+        </ScrollViewer>
+        <TextBox x:Name="dataDisp" Text="data box" Foreground="#FF0074FF" Background="Black" Height="157" VerticalAlignment="Top" TextWrapping="Wrap" Margin="0,0,18,0" HorizontalAlignment="Right" Width="139" FontFamily="Consolas" BorderBrush="{x:Null}"/>
+    </Grid>
+</UserControl>

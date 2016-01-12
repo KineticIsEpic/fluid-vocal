@@ -1,4 +1,4 @@
-﻿//Code from http://naudio.codeplex.com/discussions/362743/
+﻿//Code from http://naudio.codeplex.com/discussions/362743/ 
 
 using System;
 using System.Collections.Generic;

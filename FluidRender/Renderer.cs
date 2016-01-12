@@ -1,5 +1,5 @@
 ﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
@@ -59,8 +59,9 @@ namespace FluidSys {
                 if (item.UseDefaultVb) vbpath = sheet.Voicebank;
 
                 // Generate resampler arguments
-                string args = "\"" + sheet.Voicebank + "\\" + item.VoiceProperties.FileName + "\" \"" + tempDir +  "\\" + 
-                    run.ToString() + ".wav\" \"" + item.NotePitch + "\"" + " 100 B0 10 " + length.ToString() + " 10";
+                string args = "\"" + sheet.Voicebank + "\\" + item.VoiceProperties.FileName + "\" \"" + tempDir + "\\" +
+                    run.ToString() + ".wav\" \"" + item.NotePitch + "\"" + " 100 B0 " + item.VoiceProperties.StartString + " " +
+                    length.ToString() + " " + item.VoiceProperties.ConsonantString + " " + item.VoiceProperties.EndString;
 
                 // Setup process properties
                 p.StartInfo.FileName = sheet.Resampler;

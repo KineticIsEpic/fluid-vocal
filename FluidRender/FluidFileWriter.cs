@@ -1,10 +1,10 @@
-﻿/*====================================================*\
- *|| Copyright(c) KineticIsEpic. All Rights Reserved. ||
+/*====================================================*\
+ *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
-using System;
-using System.Collections.Generic;
+using System; 
+using System.Collections.Generic; 
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
