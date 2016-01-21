@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="426.298" Width="325.298">
-    <Grid Background="#FF0C0C0C" Opacity="0.85">
-        <Canvas x:Name="envPanel" Margin="10,32,10,0" Background="#FF202021" Height="189" VerticalAlignment="Top">
+    <Grid Background="#FF0C0C0C" Opacity="0.91">
+        <Canvas x:Name="envPanel" Margin="10,32,10,0" Background="#FF202021" Height="189" VerticalAlignment="Top" Visibility="Hidden">
             <Grid Background="#FF171718" Height="26" VerticalAlignment="Bottom" Canvas.Top="164" Width="305">
                 <Label Content="ATT:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFCDCDCD" Margin="4,0,0,0" FontStyle="Italic"/>
                 <Label Content="SUS:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFCDCDCD" Margin="73,0,0,0" FontStyle="Italic"/>
@@ -37,8 +37,27 @@
                 </Rectangle>
             </Canvas>
         </Canvas>
-        <Label Content="ENV" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" Foreground="#FF919191"/>
-        <Label Content="PROP" HorizontalAlignment="Left" Margin="61,4,0,0" VerticalAlignment="Top" Foreground="#FF919191"/>
-        <Canvas HorizontalAlignment="Left" Height="12" Margin="50,12,0,0" VerticalAlignment="Top" Width="2" Background="#FF363636"/>
+        <Label Content="PROPERTIES" HorizontalAlignment="Left" Margin="12,4,0,0" VerticalAlignment="Top" Foreground="#FFD8D8D8"/>
+        <Label Content="x" HorizontalAlignment="Left" Margin="290,4,0,0" VerticalAlignment="Top" Foreground="#FFD6D6D6" Width="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0" Height="20" FontSize="16" MouseUp="Label_MouseUp"/>
+        <Label x:Name="modSlider" Content="Modulation: 0%" HorizontalAlignment="Left" Margin="100,45,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" Width="118" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseDown="modSlider_MouseDown" MouseMove="modSlider_MouseMove" MouseLeave="modSlider_MouseLeave" MouseUp="modSlider_MouseUp" Cursor="SizeWE"/>
+        <Label x:Name="volumeSlider" Content="Volume: 0%" HorizontalAlignment="Left" Margin="0,45,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseDown="volumeSlider_MouseDown" MouseMove="volumeSlider_MouseMove" MouseUp="volumeSlider_MouseUp" MouseLeave="volumeSlider_MouseLeave" Cursor="SizeWE"/>
+        <Label Content="Flags: " HorizontalAlignment="Left" Margin="14,86,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <Label Content="Pitchcode:" HorizontalAlignment="Left" Margin="14,304,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <TextBox x:Name="flagsTxtBox" HorizontalAlignment="Left" Height="26" Margin="84,87,0,0" TextWrapping="Wrap" Text="B0" VerticalAlignment="Top" Width="225" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <TextBox x:Name="PitchTxtBox" HorizontalAlignment="Left" Height="70" Margin="14,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <Label Content="Samplebank:" HorizontalAlignment="Left" Margin="14,132,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <CheckBox x:Name="useGlobalSmpBox" Content="Use Global Sample Bank" HorizontalAlignment="Left" Margin="158,138,0,0" VerticalAlignment="Top" Width="147" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFEAEAEA" VerticalContentAlignment="Center" Height="16" RenderTransformOrigin="0.5,0.5" IsChecked="True">
+        </CheckBox>
+        <TextBox x:Name="smpBankTxtBox" HorizontalAlignment="Left" Height="26" Margin="16,163,0,0" TextWrapping="Wrap" Text="C:\program files(x86)\utau\voice\samplebank" VerticalAlignment="Top" Width="293" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <Label Content="File name:" HorizontalAlignment="Left" Margin="14,207,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <TextBox x:Name="FileNameTxtBox" HorizontalAlignment="Left" Height="26" Margin="84,209,0,0" TextWrapping="Wrap" Text="a.wav" VerticalAlignment="Top" Width="225" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <Label Content="Start:" HorizontalAlignment="Left" Margin="14,259,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <Label Content="Cons:" HorizontalAlignment="Left" Margin="115,259,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <Label Content="End:" HorizontalAlignment="Left" Margin="217,259,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <TextBox HorizontalAlignment="Left" Height="26" Margin="56,259,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="48" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <TextBox x:Name="StartTxtBox" HorizontalAlignment="Left" Height="26" Margin="56,259,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="48" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <TextBox x:Name="ConsTxtBox" HorizontalAlignment="Left" Height="26" Margin="159,259,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="48" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <TextBox x:Name="EndTxtBox" HorizontalAlignment="Left" Height="26" Margin="255,259,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="54" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <Label x:Name="velSlider" Content="Velocity: 0%" HorizontalAlignment="Left" Margin="218,45,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseDown="velSlider_MouseDown" MouseMove="velSlider_MouseMove" MouseUp="velSlider_MouseUp" MouseLeave="velSlider_MouseLeave" Cursor="SizeWE"/>
     </Grid>
 </UserControl>

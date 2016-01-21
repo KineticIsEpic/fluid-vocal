@@ -29,9 +29,12 @@ namespace FluidUI {
         private List<RollElement> uiNotes = new List<RollElement>(2048);
         private Sheet noteSheet = new Sheet();
         private RollElement tempNote;
-        private Canvas rollCaret;
+        private Rectangle rollCaret;
         private OtoReader otoRead;
+        private FluidFileWriter fileWriter;
+        private NoteMenu rightClickMenu;
         private wavmod.WavMod wavMod;
+        private Point mouseDownScrollLoc;
 
         private int MouseDownLoc = 0;
         private int baseNoteLength = 480;
@@ -47,6 +50,7 @@ namespace FluidUI {
         private bool isMovingNote = false;
         private bool isCreatingNote = false;
         private bool mouseOverNote = false;
+        private bool isInitalScroll = false;
 
         private string[] pitchNames = { "B", "A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C", "B" };
 
@@ -54,10 +58,25 @@ namespace FluidUI {
         public Brush LightPianoKeyColor { get; set; }
         public Brush DarkPianoKeyColor { get; set; }
 
+        /// <summary>
+        /// make shift note rest path
+        /// </summary>
+        public string RestPath { get; set; }
+
+        public bool IsNewProject {
+            get {
+                if (fileWriter == null) return false;
+                else return true;
+            }
+        }
+
         public int GlobalBPM {
             get { return internalBpm; }
             set {
-                foreach (RollElement note in bkgCanvas.Children) { note.BPM = value; }
+                foreach (var note in bkgCanvas.Children) {
+                    try { ((RollElement)note).BPM = value; }
+                    catch (Exception) { }
+                }
                 internalBpm = value;
                 ResetAllLogicalNotesLength();
             }
@@ -98,7 +117,7 @@ namespace FluidUI {
                 else if (value == Snapping.Eighth) dblNoteSnapping = 60;
                 else if (value == Snapping.Sixteenth) dblNoteSnapping = 30;
                 else if (value == Snapping.Thirty_Second) dblNoteSnapping = 15;
-                else dblNoteSnapping = 0;
+                else dblNoteSnapping = 1;
             }
         }
 
@@ -115,7 +134,7 @@ namespace FluidUI {
                 else if (value == Snapping.Eighth) dblRollSnapping = 60;
                 else if (value == Snapping.Sixteenth) dblRollSnapping = 30;
                 else if (value == Snapping.Thirty_Second) dblRollSnapping = 15;
-                else dblRollSnapping = 0;
+                else dblRollSnapping = 1;
             }
         }
 
@@ -135,11 +154,29 @@ namespace FluidUI {
 
             setDefaultColors();
             PaintPianoKeys();
+            paintTimeBarTicks();
 
             scroller.ScrollToVerticalOffset(560);
 
             NoteSnapping = Snapping.Sixteenth;
             RollSnapping = Snapping.Sixteenth;
+
+            rollCaret = new Rectangle();
+            rollCaret.Width = 6;
+            rollCaret.Height = 100;
+            rollCaret.Fill = Brushes.DodgerBlue;
+            rollCaret.Stroke = null;
+
+            timeBarSlider.Children.Add(rollCaret);
+
+            rightClickMenu = new NoteMenu();
+            rightClickMenu.Visibility = System.Windows.Visibility.Hidden;
+            rightClickMenu.CloseClicked += rightClickMenu_CloseClicked;
+            overlayCanvas.Children.Add(rightClickMenu);
+        }
+
+        void rightClickMenu_CloseClicked() {
+            ((RollElement)bkgCanvas.Children[rightClickMenu.WorkingNoteIndex]).IsSelected = false;
         }
 
         /// <summary>
@@ -180,7 +217,9 @@ namespace FluidUI {
             //    noteSheet.notes[index].Length.ToString() + " " + noteSheet.notes[index].NotePitch);
         }
 
-        void displayNote_ElementMouseUp(RollElement sender) { }
+        void displayNote_ElementMouseUp(RollElement sender) {
+
+        }
        
         void displayNote_ElementMouseDown(RollElement sender) {
             if (sender.IsMouseOverResize) {
@@ -191,7 +230,11 @@ namespace FluidUI {
                 Cursor = Cursors.SizeWE;
             }
             else if (Mouse.RightButton == MouseButtonState.Pressed) {
-                
+                rightClickMenu.WorkingNoteIndex = sender.NoteIndex;
+                rightClickMenu.WorkingNote = noteSheet.notes[sender.NoteIndex]; 
+                Canvas.SetLeft(rightClickMenu, Mouse.GetPosition(overlayCanvas).X);
+                Canvas.SetTop(rightClickMenu, Mouse.GetPosition(overlayCanvas).Y);
+                rightClickMenu.Visibility = System.Windows.Visibility.Visible;
             }
 
             else {
@@ -239,6 +282,7 @@ namespace FluidUI {
 
         private void displayNote_ElementPropertiesChanged(RollElement sender) {
             noteSheet.notes[sender.NoteIndex].VoiceProperties = otoRead.GetVoicePropFromSampleName(sender.NoteName);
+            noteSheet.notes[sender.NoteIndex].DispName = sender.NoteName;
         }
 
         /// <summary>
@@ -247,10 +291,39 @@ namespace FluidUI {
         public void Play() {
             Renderer rnd = new Renderer(noteSheet);
             rnd.ShowRenderWindow = true;
+            rnd.NoteRendered += rnd_NoteRendered;
+            rnd.restNotePath = RestPath;
+            rnd.UseMultiThread = true;
 
+            renderStatus.Content = "Rendering...";
             rnd.Render();
 
             wavMod.PlaybackTemp(rnd.TemporaryDir, noteSheet);
+
+            renderStatus.Content = "";
+        }
+
+        /// <summary>
+        /// Export a render
+        /// </summary>
+        /// <param name="outputPath"></param>
+        public void ExportWav(string outputPath) {
+            Renderer rnd = new Renderer(noteSheet);
+            rnd.ShowRenderWindow = true;
+            rnd.NoteRendered += rnd_NoteRendered;
+            rnd.restNotePath = RestPath;
+            rnd.UseMultiThread = false;
+
+            renderStatus.Content = "Rendering...";
+            rnd.Render();
+
+            wavMod.SaveTemp(rnd.TemporaryDir, outputPath, noteSheet);
+
+            renderStatus.Content = "";
+        }
+
+        void rnd_NoteRendered(int noteIndex) {
+            renderStatus.Content = noteIndex.ToString() + " / " + noteSheet.notes.ToString();
         }
 
         public void ResetAllLogicalNotesLength() {
@@ -267,6 +340,12 @@ namespace FluidUI {
 
                 dataDisp.Text += " New note length: " + currentNote.Length;
             }
+        }
+
+        public void Save(string filePath) {
+            if (fileWriter == null || fileWriter.FilePath != filePath && filePath != "") 
+                fileWriter = new FluidFileWriter(filePath, noteSheet);
+            fileWriter.SaveFile();
         }
 
         private string generatePitchString(int noteLoc) {
@@ -342,6 +421,39 @@ namespace FluidUI {
             }
         }
 
+        private void paintTimeBarTicks() {
+            Rectangle tick;
+
+            bool isMajorTick = true;
+
+            timeBar.Width = bkgCanvas.Width;
+            timeBar.Children.Clear();
+            timeBarSlider.Width = timeBar.Width;
+
+            for (int i = 0; i <= bkgCanvas.Width; i += 60) {
+                tick = new Rectangle();
+
+                if (isMajorTick) {
+                    tick.Fill = new SolidColorBrush(Color.FromRgb(68, 68, 68));
+                    tick.Stroke = null;
+                    tick.Width = 6;
+                    tick.Height = timeBar.Height / 4;
+                }
+                else {
+                    tick.Fill = new SolidColorBrush(Color.FromRgb(60,60,60));
+                    tick.Stroke = null;
+                    tick.Width = 4;
+                    tick.Height = timeBar.Height / 4;
+                }
+
+                tick.Margin = new Thickness(0, 0, 60 - tick.Width, 0);
+                tick.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+
+                timeBar.Children.Add(tick);
+                isMajorTick = !isMajorTick;
+            }
+        }
+
         private void highlightPianoKey(int position) {
             foreach (Label noteLabel in pianoPanel.Children) {
                 if (((string)noteLabel.Content).IndexOf("#") != -1) {
@@ -358,7 +470,7 @@ namespace FluidUI {
         }
 
         private void bkgCanvas_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (!mouseOverNote) {
+            if (!mouseOverNote && Mouse.LeftButton == MouseButtonState.Pressed) {
                 MouseDownLoc = (int)Mouse.GetPosition(bkgCanvas).X;
 
                 tempNote = new RollElement();
@@ -368,10 +480,15 @@ namespace FluidUI {
 
                 bkgCanvas.Children.Add(tempNote);
                 Canvas.SetLeft(tempNote, Mouse.GetPosition(bkgCanvas).X);
-                Canvas.SetTop(tempNote, (int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24); 
+                Canvas.SetTop(tempNote, (int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24);
+
+                isCreatingNote = true;
             }
 
-            isCreatingNote = true;
+            if (Mouse.MiddleButton == MouseButtonState.Pressed) {
+                mouseDownScrollLoc = Mouse.GetPosition(scroller);
+                isInitalScroll = true;
+            }
         }
         
         private void bkgCanvas_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -386,6 +503,12 @@ namespace FluidUI {
                 totalNotesLength += (int)((RollElement)bkgCanvas.Children[noteSheet.notes.Count - 1]).Width;
                 dataDisp.Text = "totalNotesLength=\r\n" + totalNotesLength;
                 dataDisp.Text += "\r\nmouseLoc.X=\r\n" + mouseLoc.X;
+
+                if (totalNotesLength + 500 > bkgCanvas.Width) {
+                    bkgCanvas.Width += 600;
+                    timeBar.Width += 600;
+                    timeBarSlider.Width += 600;
+                }
             }
 
             if (isMovingNote) {
@@ -445,11 +568,27 @@ namespace FluidUI {
                     "\r\nDisplay note length=" + ((RollElement)bkgCanvas.Children[currentNoteIndex]).Width;
             }
 
+            if (Mouse.MiddleButton == MouseButtonState.Pressed) {
+                //dataDisp.Text = scroller.HorizontalOffset + (mouseDownScrollLoc.X - Mouse.GetPosition(scroller).X).ToString();
+                
+                scroller.ScrollToHorizontalOffset(scroller.HorizontalOffset + (mouseDownScrollLoc.X - Mouse.GetPosition(scroller).X));
+                scroller.ScrollToVerticalOffset(scroller.VerticalOffset + (mouseDownScrollLoc.Y - Mouse.GetPosition(scroller).Y));
+                //rightClickMenu.Visibility = System.Windows.Visibility.Hidden;
+
+                mouseDownScrollLoc = Mouse.GetPosition(scroller);
+            }
+
             highlightPianoKey((int)Mouse.GetPosition(bkgCanvas).X);
         }
 
         private void scroller_ScrollChanged(object sender, ScrollChangedEventArgs e) {
             fred.ScrollToVerticalOffset(scroller.VerticalOffset);
+            timeBarScroller.ScrollToHorizontalOffset(scroller.HorizontalOffset);
+        }
+
+        private void timeBar_MouseDown(object sender, MouseButtonEventArgs e) {
+            Canvas.SetLeft(rollCaret, ((int)Mouse.GetPosition(timeBarSlider).X / (int)dblNoteSnapping * 
+                (int)dblNoteSnapping));
         }
     }
 }

@@ -278,7 +278,7 @@ namespace FluidCmd {
         public void ClearCache() {
             try {
                 System.IO.Directory.Delete(Environment.ExpandEnvironmentVariables("%LocalAppData%") +
-                    "\\FluidSynth\\RenCache", true);
+                    "\\FluidSynth\\ren", true);
 
                 Console.Out.WriteLine("Render cache cleared.");
             }

@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*====================================================*\
+ *||          Copyright(c) KineticIsEpic.             ||
+ *||          See LICENSE.TXT for details.            ||
+ *====================================================*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

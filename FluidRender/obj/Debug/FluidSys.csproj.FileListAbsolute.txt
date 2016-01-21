@@ -7,3 +7,4 @@ M:\Folder\FluidSynth\FluidSynth\FluidRender\obj\Debug\FluidRender.dll
 M:\Folder\FluidSynth\FluidSynth\FluidRender\obj\Debug\FluidRender.pdb
 M:\Folder\FluidSynth\FluidSynth\FluidRender\obj\Debug\FluidSys.InputForm.resources
 M:\Folder\FluidSynth\FluidSynth\FluidRender\obj\Debug\FluidSys.csproj.GenerateResource.Cache
+M:\Folder\FluidSynth\FluidSynth\FluidRender\bin\Debug\NAudio.dll

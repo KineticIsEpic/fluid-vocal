@@ -55,14 +55,22 @@ namespace FluidSys {
         /// </summary>
         public int Location { get; set; }
         /// <summary>
-        /// Envelopes for Fluid rendering
+        /// Gets or sets the modulation property of this FluidSys.Note.
         /// </summary>
-        public int[] Envelope { get; set; }
+        public int Modulation { get; set; }
+        /// <summary>
+        /// Gets or sets the volume property of this FluidSys.Note.
+        /// </summary>
+        public int Volume { get; set; }
         /// <summary>
         /// Set to true to use the sample pack path indicated by the 
         /// containing FluidSys.Sheet class at render time.
         /// </summary>
         public bool UseDefaultVb { get; set; }
+        /// <summary>
+        /// Gets or sets the pitch code associated with this FluidSys.Note.
+        /// </summary>
+        public string PitchCode { get; set; }
         /// <summary>
         /// Gets the voice properties of this FluidSys.Note.
         /// </summary>
@@ -78,6 +86,9 @@ namespace FluidSys {
             Location = 0;
             Length = 1024;
             Velocity = 100;
+            Volume = 100;
+            Modulation = 0;
+            Args = "B0";
         }
 
         /// <summary>
@@ -89,6 +100,9 @@ namespace FluidSys {
             Location = 0;
             Length = 1024;
             Velocity = 100;
+            Volume = 100;
+            Modulation = 0;
+            Args = "B0";
         }
     }
 }

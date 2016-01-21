@@ -7,20 +7,32 @@
              UseLayoutRounding="True"
              SnapsToDevicePixels="True">
     <Grid>
-        <ScrollViewer x:Name="fred" HorizontalAlignment="Left" Width="94" Margin="0,0,0,17">
+        <Label x:Name="renderStatus" Height="20" VerticalAlignment="Top" Background="#FF1B1B1B" HorizontalAlignment="Left" Width="77" RenderTransformOrigin="0.5,0.5" Content="" Foreground="White"/>
+        <ScrollViewer x:Name="timeBarScroller" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden" Margin="76,0,18,0" Height="47" VerticalAlignment="Top">
+            <Grid>
+                <StackPanel x:Name="timeBar" Height="50" VerticalAlignment="Top" Background="#FF1B1B1B" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="3903" Orientation="Horizontal" HorizontalAlignment="Center"/>
+                <Canvas x:Name="timeBarSlider" Height="50" VerticalAlignment="Top" Opacity="1" Background="#001B1B1B" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="3903" HorizontalAlignment="Center" MouseDown="timeBar_MouseDown"/>
+            </Grid>
+        </ScrollViewer>
+        <ScrollViewer x:Name="fred" HorizontalAlignment="Left" Width="94" Margin="0,20,0,17">
             <StackPanel x:Name="pianoPanel" Background="LightGray" HorizontalAlignment="Left" Height="1728" VerticalAlignment="Top" Width="76"/>
         </ScrollViewer>
-        <ScrollViewer x:Name="scroller" HorizontalScrollBarVisibility="Visible" Margin="76,0,0,0" ScrollChanged="scroller_ScrollChanged">
-            <Canvas x:Name="bkgCanvas" Height="1728" Width="3954" MouseDown="bkgCanvas_MouseDown" MouseUp="bkgCanvas_MouseUp" MouseMove="bkgCanvas_MouseMove">
-                <Canvas.Background>
-                    <VisualBrush TileMode="Tile" Viewport="0,0,0.5,0.5">
-                        <VisualBrush.Visual>
-                            <Image></Image>
-                        </VisualBrush.Visual>
-                    </VisualBrush>
-                </Canvas.Background>
-            </Canvas>
+        <ScrollViewer x:Name="scroller" HorizontalScrollBarVisibility="Visible" Margin="76,20,0,0" ScrollChanged="scroller_ScrollChanged">
+            <Grid>
+                <Canvas x:Name="bkgCanvas" Height="1728" Width="3954" MouseDown="bkgCanvas_MouseDown" MouseUp="bkgCanvas_MouseUp" MouseMove="bkgCanvas_MouseMove">
+                    <Canvas.Background>
+                        <VisualBrush TileMode="Tile" Viewport="0,0,0.5,0.5">
+                            <VisualBrush.Visual>
+                                <Image/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Canvas.Background>
+                </Canvas>
+                <Canvas x:Name="overlayCanvas" Height="1728" Width="3954">
+                </Canvas>
+            </Grid>
         </ScrollViewer>
-        <TextBox x:Name="dataDisp" Text="data box" Foreground="#FF0074FF" Background="Black" Height="157" VerticalAlignment="Top" TextWrapping="Wrap" Margin="0,0,18,0" HorizontalAlignment="Right" Width="139" FontFamily="Consolas" BorderBrush="{x:Null}"/>
+        <TextBox x:Name="dataDisp" Text="data box" Foreground="#FF0074FF" Background="Black" Height="157" VerticalAlignment="Top" TextWrapping="Wrap" Margin="0,0,18,0" HorizontalAlignment="Right" Width="139" FontFamily="Consolas" BorderBrush="{x:Null}" Visibility="Hidden"/>
+        <Label Height="25" VerticalAlignment="Top" Background="#FF1B1B1B" RenderTransformOrigin="0.5,0.5" Content="" Foreground="White" Margin="0,-5,0,0" HorizontalAlignment="Right" Width="18"/>
     </Grid>
 </UserControl>

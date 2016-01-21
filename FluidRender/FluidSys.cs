@@ -12,10 +12,14 @@ using System.IO;
 
 namespace FluidSys {
     public class FluidSys {
+        public static string SettingsDir {
+            get { return Environment.ExpandEnvironmentVariables("%LocalAppData%") + "\\FluidSynth\\cfg"; } 
+        }
+
         public static string CreateTempDir() {
             Random rnd = new Random();
 
-            string str = Environment.ExpandEnvironmentVariables("%LocalAppData%") + "\\FluidSynth\\RenCache\\" +
+            string str = Environment.ExpandEnvironmentVariables("%LocalAppData%") + "\\FluidSynth\\ren\\" +
                 rnd.Next().ToString() + "\\" + rnd.Next().ToString();
 
             if (!Directory.Exists(str)) Directory.CreateDirectory(str);
@@ -25,7 +29,7 @@ namespace FluidSys {
 
         public static void ClearCache() {
             Directory.Delete(Environment.ExpandEnvironmentVariables("%LocalAppData%") + 
-                "\\FluidSynth\\RenCache\\", true);
+                "\\FluidSynth\\ren\\", true);
         }
     }
 }

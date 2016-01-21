@@ -15,11 +15,15 @@ namespace FluidSys {
     public class FluidFileWriter {
         private Sheet baseSheet;
         private XmlDocument baseXml;
-        string filePath;
+
+        /// <summary>
+        /// Gets the file path used in this FluidSys.FluidfileWriter 
+        /// </summary>
+        public string FilePath { get; private set; }
 
         public FluidFileWriter(string path, Sheet sheet) {
             baseSheet = sheet;
-            filePath = path;
+            FilePath = path;
             genXml();
         }
 
@@ -27,7 +31,7 @@ namespace FluidSys {
         /// Saves the current project.
         /// </summary>
         public void SaveFile() {
-            baseXml.Save(filePath);
+            baseXml.Save(FilePath);
         }
 
         private void genXml() {

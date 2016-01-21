@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="FluidUI.FluidMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Height="434.043" Width="275" Background="Black" Opacity="0.9">
+    <Grid>
+        <Label x:Name="newItem" Content="New Project" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" AllowDrop="True" MouseUp="newItem_MouseUp"/>
+        <Label x:Name="openItem" Content="Open" HorizontalAlignment="Left" Margin="0,42,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="openItem_MouseUp"/>
+        <Label x:Name="saveItem" Content="Save" HorizontalAlignment="Left" Margin="0,74,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="saveItem_MouseUp"/>
+        <Label x:Name="saveAsItem" Content="Save As..." HorizontalAlignment="Left" Margin="0,106,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="saveAsItem_MouseUp"/>
+        <Label x:Name="importMidiItem" Content="Import MIDI" HorizontalAlignment="Left" Margin="0,138,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="importMidiItem_MouseUp"/>
+        <Label x:Name="exportItem" Content="Export..." HorizontalAlignment="Left" Margin="0,170,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="exportItem_MouseUp"/>
+        <Label x:Name="sbLibItem" Content="Samplebank Library" HorizontalAlignment="Left" Margin="0,242,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="sbLibItem_MouseUp"/>
+        <Label x:Name="prjLibItem" Content="Project Library" HorizontalAlignment="Left" Margin="0,274,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="prjLibItem_MouseUp"/>
+        <Label x:Name="prefItem" Content="Preferences" HorizontalAlignment="Left" Margin="0,341,0,0" VerticalAlignment="Top" Width="275" Height="32" Padding="16,0" Foreground="White" VerticalContentAlignment="Center" MouseUp="prefItem_MouseUp"/>
+
+    </Grid>
+</UserControl>

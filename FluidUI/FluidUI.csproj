@@ -63,6 +63,9 @@
     <Compile Include="FirstTimeSetup.xaml.cs">
       <DependentUpon>FirstTimeSetup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FluidMenu.xaml.cs">
+      <DependentUpon>FluidMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NoteMenu.xaml.cs">
       <DependentUpon>NoteMenu.xaml</DependentUpon>
     </Compile>
@@ -79,6 +82,10 @@
       <DependentUpon>SbLib.xaml</DependentUpon>
     </Compile>
     <Page Include="FirstTimeSetup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FluidMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

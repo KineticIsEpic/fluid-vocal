@@ -3,6 +3,8 @@
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
+// code from http://mark-dot-net.blogspot.com/2009/09/trimming-wav-file-using-naudio.html
+
 using NAudio.Wave;
 using System;
 

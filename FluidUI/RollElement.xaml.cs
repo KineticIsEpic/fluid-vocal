@@ -33,6 +33,7 @@ namespace FluidUI {
         public event ElementSelectedChangedEventArgs ElementSelected;
         public event ElementChangedEventArgs ElementMouseDown;
         public event ElementChangedEventArgs ElementMouseUp;
+        public event ElementChangedEventArgs ElementRightClick;
 
         public Brush SelectedForegroundBrush { get; set; }
         public Brush ForegroundBrush { get; set; }
@@ -122,6 +123,9 @@ namespace FluidUI {
             gripper2.MouseUp += gripper_MouseUp;
             gripper3.MouseUp += gripper_MouseUp;
             bkgGrid.MouseUp += gripper_MouseUp;
+
+            nameTxtBox.MouseDown += note_MouseDown;
+            
         }
 
         public double GetLength() {
@@ -154,20 +158,23 @@ namespace FluidUI {
                 bkgGrid.Background = BackgroundBrush;
             }
         }
-        
+
+        private void note_MouseDown(object sender, MouseButtonEventArgs e) { 
+            
+        }
+
         private void gripper_Selected(object sender, MouseButtonEventArgs e) {
             if (e.RightButton == MouseButtonState.Pressed) {
                 if (!IsSelected) IsSelected = true;
                 else IsSelected = false; 
             }
 
-            try { ElementMouseDown.Invoke(this); }
-            catch (Exception) { }
+            ElementMouseDown.Invoke(this); 
+          //  catch (Exception) { }
         }
 
         private void gripper_MouseUp(object sender, MouseButtonEventArgs e) {
-            try { ElementMouseUp.Invoke(this); }
-            catch (Exception ex) { }
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
@@ -182,6 +189,11 @@ namespace FluidUI {
 
         private void nameTxtBox_KeyDown(object sender, KeyEventArgs e) {
             if (e.Key == Key.D && Keyboard.Modifiers == ModifierKeys.Control) {  ElementRemoved.Invoke(this); }
+        }
+
+        private void bkgGrid_MouseUp(object sender, MouseButtonEventArgs e) {
+            try { ElementMouseUp.Invoke(this); }
+            catch (Exception ex) { }
         }
     }
 }

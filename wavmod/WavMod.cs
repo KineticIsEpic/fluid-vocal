@@ -84,6 +84,29 @@ namespace wavmod {
             new System.Media.SoundPlayer(tempdir + "\\render.wav").Play();
         }
 
+        /// <summary>
+        /// Render the project somehwere. 
+        /// </summary>
+        /// <param name="tempDir"></param>
+        /// <param name="playbackSheet"></param>
+        public void SaveTemp(string tempDir, string outDir, Sheet playbackSheet) {
+            string[] files = Directory.GetFiles(tempDir);
+            string tempdir = "";
+
+            // Generate trimmed files ready for splicing 
+            tempdir = GenEditedFiles(files, playbackSheet.notes);
+
+            // Show the output in explorer if debug mode is on
+            if (debug) {
+                Process p = new Process();
+                p.StartInfo.FileName = tempdir;
+                p.Start();
+            }
+
+            // Splice the files
+            ConcatenateWav(outDir, Directory.GetFiles(tempdir));
+        }
+        
         private string GenEditedFiles(string[] files, List<Note> notes) {
             string tempdir = FluidSys.FluidSys.CreateTempDir();
             string tempfile = "";
@@ -102,8 +125,9 @@ namespace wavmod {
                 var afr = new AudioFileReader(file); 
                 var fade = new DelayFadeOutSampleProvider(afr);
 
-                fade.BeginFadeIn(175);
-                fade.BeginFadeOut(afr.TotalTime.TotalMilliseconds , afr.TotalTime.TotalMilliseconds * 2);
+                fade.BeginFadeIn(100);
+                //fade.BeginFadeOut(afr.TotalTime.TotalMilliseconds , afr.TotalTime.TotalMilliseconds * 2);
+                //fade.BeginFadeIn(35);
 
                 var stwp = new NAudio.Wave.SampleProviders.SampleToWaveProvider(fade);
                 WaveFileWriter.CreateWaveFile(tempfile, stwp);

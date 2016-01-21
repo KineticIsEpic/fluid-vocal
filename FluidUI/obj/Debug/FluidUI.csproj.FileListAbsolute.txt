@@ -32,3 +32,5 @@ M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteRoll.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteRoll.g.cs
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteMenu.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteMenu.g.cs
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FluidMenu.baml
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FluidMenu.g.cs
