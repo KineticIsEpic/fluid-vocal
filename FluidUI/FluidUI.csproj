@@ -81,6 +81,12 @@
     <Compile Include="SbLib.xaml.cs">
       <DependentUpon>SbLib.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditorPanel.xaml.cs">
+      <DependentUpon>EditorPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EnvUI.xaml.cs">
+      <DependentUpon>EnvUI.xaml</DependentUpon>
+    </Compile>
     <Page Include="FirstTimeSetup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +128,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SbLib.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EnvUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

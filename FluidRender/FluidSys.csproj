@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigMgr.cs" />
+    <Compile Include="DebugSys.cs" />
     <Compile Include="FluidFileReader.cs" />
     <Compile Include="FluidFileWriter.cs" />
     <Compile Include="FluidSys.cs" />

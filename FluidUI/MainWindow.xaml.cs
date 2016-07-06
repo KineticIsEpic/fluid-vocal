@@ -30,7 +30,36 @@ namespace FluidUI {
         int mouseDownLoc;
         public int internalRefBpm = 120;
 
-        bool mouseDownOverBPM = false;
+        private bool mouseDownOverBPM = false;
+        private bool isEditorMode = false;
+
+        public enum EditorMode {
+            Editing, Tuning,
+        }
+
+        public EditorMode EditMode {
+            get {
+                if (isEditorMode) return EditorMode.Tuning;
+                return EditorMode.Editing;
+            }
+            set {
+                try {
+                    if (value == EditorMode.Tuning) {
+                        menuContainer.Visibility = System.Windows.Visibility.Visible;
+                        noteRoll.Margin = new Thickness(0, 75, menuContainer.Width, 0);
+                        isEditorMode = true;
+                    }
+                    else {
+                        menuContainer.Visibility = System.Windows.Visibility.Hidden;
+                        noteRoll.Margin = new Thickness(0, 75, 0, 0);
+                        isEditorMode = false;
+                    }
+
+                    noteRoll.RollEditMode = EditMode;
+                }
+                catch (Exception) { }
+            }
+        }
 
         public MainWindow() {
             InitializeComponent();
@@ -54,6 +83,12 @@ namespace FluidUI {
                 }
             }
             catch (Exception ex) { }
+
+            noteRoll.NoteSelected += noteRoll_NoteSelected;
+        }
+
+        void noteRoll_NoteSelected(Note workingNote) {
+            dockedMenu.WorkingNote = workingNote;
         }
 
         private void Label_MouseDown(object sender, MouseButtonEventArgs e) {
@@ -68,19 +103,20 @@ namespace FluidUI {
         }
 
         private void Label_MouseDown_1(object sender, MouseButtonEventArgs e) {
-            try {
-                noteRoll.Play();
-            }
-            catch (Exception ex) {
-                System.Windows.Forms.MessageBox.Show("Error occured when rendering. \r\n\r\n" + 
-                "Make sure your sample bank and resampler paths are set and valid. Also check that the " +
-                "sample bank you chose is compatible with FVSS. If this error persists, please restart FluidUI." + 
-                "\r\n\r\nDetails: " + ex.Message);
-            }
+            noteRoll.Play();
+            //try {
+                
+            //}
+            //catch (Exception ex) {
+            //    System.Windows.Forms.MessageBox.Show("Error occured when rendering. \r\n\r\n" + 
+            //    "Make sure your sample bank and resampler paths are set and valid. Also check that the " +
+            //    "sample bank you chose is compatible with FVSS. If this error persists, please restart FluidUI." + 
+            //    "\r\n\r\nDetails: " + ex.Message);
+            //}
         }
 
         private void Label_MouseDown_2(object sender, MouseButtonEventArgs e) {
-            InputForm inForm = new InputForm();
+           InputForm inForm = new InputForm();
             System.Windows.Forms.DialogResult dr = inForm.ShowDialog("Set Resynthesizer");
             if (dr == System.Windows.Forms.DialogResult.Yes) {
                 if (System.IO.File.Exists(inForm.Value) && inForm.Value.IndexOf(".exe") != -1) 
@@ -145,7 +181,7 @@ namespace FluidUI {
             //hide snapping menu
             snappingMenu.Visibility = System.Windows.Visibility.Hidden;
         }
-
+        
         private void fluidMenu_MouseLeave(object sender, MouseEventArgs e) {
             fluidMenu.Visibility = System.Windows.Visibility.Hidden;
             noteRoll.Effect = null;
@@ -223,7 +259,24 @@ namespace FluidUI {
 
             dr = sfd.ShowDialog();
 
-            if (dr == System.Windows.Forms.DialogResult.OK) noteRoll.ExportWav(sfd.FileName);
+            if (dr == System.Windows.Forms.DialogResult.OK) noteRoll.ExportWav(sfd.FileName, true);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (modeComboBox.SelectedIndex == 1) EditMode = EditorMode.Tuning;
+            else EditMode = EditorMode.Editing;
+        }
+
+        private void wavtoolButton_MouseDown(object sender, MouseButtonEventArgs e) {
+            InputForm inForm = new InputForm();
+            System.Windows.Forms.DialogResult dr = inForm.ShowDialog("Set WavTool");
+            if (dr == System.Windows.Forms.DialogResult.Yes) {
+                if (System.IO.File.Exists(inForm.Value) && inForm.Value.IndexOf(".exe") != -1)
+                    noteRoll.WavTool = inForm.Value;
+                else System.Windows.Forms.MessageBox.Show("The path " + inForm.Value + " is not a valid executable file.");
+            }
+
+            wavtoolButton.Content = noteRoll.WavTool.Substring(noteRoll.WavTool.LastIndexOf("\\") + 1);
         }
     }
 }

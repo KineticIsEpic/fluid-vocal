@@ -6,7 +6,7 @@
              mc:Ignorable="d" Height="24" Width="102.553">
     <Grid x:Name="bkgGrid" Background="#FF919191" MouseUp="bkgGrid_MouseUp">
         <Grid Margin="14,2,8,2" Background="#FFD8D8D8">
-            <TextBox x:Name="nameTxtBox" TextWrapping="Wrap" Text="a" TextChanged="nameTxtBox_TextChanged" Background="#FFD6D6D6" BorderBrush="#FFBDBDBD" KeyDown="nameTxtBox_KeyDown">
+            <TextBox x:Name="nameTxtBox" TextWrapping="Wrap" Text="a" TextChanged="nameTxtBox_TextChanged" Background="#FFD6D6D6" BorderBrush="#FFBDBDBD" KeyDown="nameTxtBox_KeyDown" Padding="1,0">
             </TextBox>
             <Label x:Name="dataBox" Content="0" Background="White" FontSize="7" HorizontalAlignment="Right" Width="24" Foreground="Red" Visibility="Hidden"/>
         </Grid>

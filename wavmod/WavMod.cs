@@ -98,13 +98,56 @@ namespace wavmod {
 
             // Show the output in explorer if debug mode is on
             if (debug) {
-                Process p = new Process();
+                Process p = new Process(); 
                 p.StartInfo.FileName = tempdir;
                 p.Start();
             }
 
             // Splice the files
             ConcatenateWav(outDir, Directory.GetFiles(tempdir));
+        }
+
+        public void ExtWavtoolInit(string tempDir, string outFile, Sheet playbackSheet, string toolPath, bool play) {
+            string[] files = Directory.GetFiles(tempDir);
+            int noteIndex = 0;
+
+            foreach (string file in files) {
+                string arguments;
+                arguments = outFile + " " + file + " 0 " + playbackSheet.notes[noteIndex].UUnitLength + "@" + playbackSheet.Bpm + "+10.0" + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[0][0] + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[1][0] + " ";
+                arguments += (playbackSheet.notes[noteIndex].Length - playbackSheet.notes[noteIndex].Envelope[2][0]) + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[0][1] + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[1][1] + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[2][1] + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[3][1] + " ";
+                arguments += playbackSheet.notes[noteIndex].Overlap + " ";
+                arguments += (playbackSheet.notes[noteIndex].Length - playbackSheet.notes[noteIndex].Envelope[3][0]) + " ";
+
+                DebugLog.WriteLine("WavMod Arguments for file: " + file);
+                DebugLog.WriteLine(arguments);
+
+                Process p = new Process();
+                p.StartInfo.FileName = toolPath;
+                p.StartInfo.Arguments = arguments;
+                //p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                p.Start();
+                p.WaitForExit();
+
+                noteIndex++;
+            }
+
+            Process p2 = new Process();
+            p2.StartInfo.FileName = "cmd.exe";
+            p2.StartInfo.Arguments = "/C copy /Y \"" + outFile + "\".whd /B + \"" + outFile + "\".dat /B \"" + outFile + "\"";
+            p2.Start();
+            p2.WaitForExit();
+
+            try { if (play) new System.Media.SoundPlayer(outFile).Play(); }
+            catch (Exception) { System.Windows.Forms.MessageBox.Show("An error occured while attempting to play the file, " + 
+                "this is most likely due to an error during the splicing process. \r\n\r\nSome things you can do \r\n" + 
+                "-Change the tempo\r\n-Adjust envelopes\r\n-Restart FVSS", "Playback Error", 
+                System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation); }
         }
         
         private string GenEditedFiles(string[] files, List<Note> notes) {

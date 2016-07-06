@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using FluidSys;
 
 namespace FluidSys {
     public delegate void RenderNoteCompleteEventArgs(int noteIndex);
@@ -70,10 +71,11 @@ namespace FluidSys {
                 string args;
 
                 // Compensate for trimming
-                int length = item.Length + item.VoiceProperties.Start + item.VoiceProperties.End;
+                int length = item.Length + item.Overlap;
+                int consonant = item.VoiceProperties.Consonant; 
 
                 // Get voicebank path
-                string vbpath = item.VbPath;
+                string vbpath = item.VbPath; 
                 if (item.UseDefaultVb) vbpath = sheet.Voicebank; 
 
                 if (item.DispName == "r") {
@@ -96,8 +98,9 @@ namespace FluidSys {
                 p.StartInfo.Arguments = args;
                 if (!ShowRenderWindow) p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-                if (debug) System.Windows.Forms.MessageBox.Show(args);
-
+                DebugLog.WriteLine("Resampler Arguments for note: " + item.DispName);
+                DebugLog.WriteLine(args);
+                
                 // Start rendering
                 try { p.Start(); }
                 catch (Exception ex) { System.Windows.Forms.MessageBox.Show(ex.Message); }

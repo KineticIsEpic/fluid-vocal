@@ -116,6 +116,19 @@ namespace OTOmate {
         }
 
         /// <summary>
+        /// Determines if the sample specified exists in the current sample bank.
+        /// </summary>
+        /// <param name="sampleName">The VoiceProp.SampleName property to search for.</param>
+        /// <returns>A bool value indicating whether the specifed sample exists. </returns>
+        public bool SampleExists(string sampleName) {
+            foreach (var item in voices) {
+                if (item.SampleName == sampleName || item.FileName == sampleName + ".wav")
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Creates a new instance of the OtoReader class based on the specified
         /// configuration file.
         /// </summary>

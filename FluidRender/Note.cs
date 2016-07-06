@@ -59,6 +59,10 @@ namespace FluidSys {
         /// </summary>
         public int Modulation { get; set; }
         /// <summary>
+        /// Gets or sets the overlap property of this FluidSys.Note.
+        /// </summary>
+        public int Overlap { get; set; }
+        /// <summary>
         /// Gets or sets the volume property of this FluidSys.Note.
         /// </summary>
         public int Volume { get; set; }
@@ -75,6 +79,14 @@ namespace FluidSys {
         /// Gets the voice properties of this FluidSys.Note.
         /// </summary>
         public VoiceProp VoiceProperties { get; set; }
+        /// <summary>
+        /// The length of this FluidSys.Note in Utau Units. 
+        /// </summary>
+        public int UUnitLength { get; set; }
+        /// <summary>
+        /// Gets or sets the envelope configuration of this FluidSys.Note.
+        /// </summary>
+        public List<int[]> Envelope = new List<int[]> { new int[2], new int[2], new int[2], new int[2] };
         
         /// <summary>
         /// Create a new instance of the FluidSys.Note class using the
@@ -103,6 +115,17 @@ namespace FluidSys {
             Volume = 100;
             Modulation = 0;
             Args = "B0";
+        }
+
+        public void GenerateDefaultEnvelope() {
+            Envelope[0][0] = 0;
+            Envelope[0][1] = 0;
+            Envelope[1][0] = 60;
+            Envelope[1][1] = 100;
+            Envelope[2][0] = Length - 60;
+            Envelope[2][1] = 100;
+            Envelope[3][0] = Length;
+            Envelope[3][1] = 0;
         }
     }
 }

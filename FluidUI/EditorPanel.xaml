@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="FluidUI.EditorPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Width="600" Height="170">
+    <Grid Background="#FF272829">
+        <StackPanel HorizontalAlignment="Left" Width="76" Background="#FF1B1B1B" Margin="0,0,0,30">
+            <Label x:Name="w" Content="Envelope" HorizontalAlignment="Left" VerticalAlignment="Top" Width="66" Foreground="White"/>
+        </StackPanel>
+        <Grid HorizontalAlignment="Left" Height="30" Margin="0,140,0,0" VerticalAlignment="Top" Width="76" Background="#FF1B1B1B">
+            <Label Content="+" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="43" Foreground="White" Padding="0" FontSize="20" Margin="4,0,0,0" ToolTip="Add an argument..." MouseDown="Label_MouseDown" Background="#FF1B1B1B"/>
+        </Grid>
+        <ScrollViewer x:Name="envScroller" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Visible" Margin="76,0,0,-18" HorizontalAlignment="Left" Width="1000">
+            <Canvas x:Name="envPanel" Height="170" VerticalAlignment="Top" Background="#FF111113" Width="3954"/>
+        </ScrollViewer>
+
+
+    </Grid>
+</UserControl>

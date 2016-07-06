@@ -7,6 +7,7 @@ using System.IO;
 
 namespace FluidSys {
     public class ConfigMgr {
+        public string DebugLogDir { get { return "debug.log"; } }
         /// <summary>
         /// Gets or sets the default sample bank.
         /// </summary>
@@ -22,6 +23,23 @@ namespace FluidSys {
             }
             set {
                 StreamWriter sw = new StreamWriter(FluidSys.SettingsDir + "\\defsmpbank");
+                sw.Write(value);
+                sw.Close();
+            }
+        }
+
+        public string DefaultWavTool {
+            get {
+                if (File.Exists(FluidSys.SettingsDir + "\\defwavtool")) {
+                    StreamReader sr = new StreamReader(FluidSys.SettingsDir + "\\defwavtool");
+                    string srDat = sr.ReadToEnd();
+                    sr.Close();
+                    return srDat;
+                }
+                else return null;
+            }
+            set {
+                StreamWriter sw = new StreamWriter(FluidSys.SettingsDir + "\\defwavtool");
                 sw.Write(value);
                 sw.Close();
             }

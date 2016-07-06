@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="FluidUI.EnvUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Height="170">
+    <Grid>
+        <Grid x:Name="DataGrid" Height="20" VerticalAlignment="Bottom" Background="#FF3A3A3C">
+            <Label x:Name="x1Label" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="76,1,0,0" Padding="0" Foreground="White" Width="19"/>
+            <Label x:Name="y1Label" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,1,0,0" Padding="0" Foreground="White" Width="19"/>
+            <Label x:Name="crossLabel" Content="Cross:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,1,0,0" Padding="0" Foreground="White" Width="35"/>
+            <TextBox x:Name="ovrTxtBox" HorizontalAlignment="Left" Margin="43,0,0,0" TextWrapping="Wrap" Text="0" Width="30" Background="#FF2E2E30" BorderBrush="{x:Null}" Padding="1,0,0,1" Foreground="White" TextChanged="TextBox_TextChanged"/>
+        </Grid>
+        <Canvas x:Name="envDrawCanvas" HorizontalAlignment="Left" Height="150" VerticalAlignment="Top" Width="300" Background="#00000000"/>
+
+    </Grid>
+</UserControl>

@@ -13,6 +13,3 @@ M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.exe
 M:\Folder\FluidSynth\FluidSynth\FluidCmd\obj\Debug\FluidCmd.pdb
 M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidUI.exe
 M:\Folder\FluidSynth\FluidSynth\FluidCmd\bin\Debug\FluidUI.pdb
-C:\Users\Admin\Desktop\fluid-vocal\FluidCmd\bin\Debug\FluidCmd.exe.config
-C:\Users\Admin\Desktop\fluid-vocal\FluidCmd\obj\Debug\FluidCmd.exe
-C:\Users\Admin\Desktop\fluid-vocal\FluidCmd\obj\Debug\FluidCmd.pdb

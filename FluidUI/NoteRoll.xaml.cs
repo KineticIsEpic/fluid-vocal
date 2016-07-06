@@ -21,10 +21,12 @@ using FluidSys;
 using OTOmate;
 
 namespace FluidUI {
+    public delegate void NoteSelectEventHandler(Note workingNote);
     /// <summary>
     /// Interaction logic for NoteRoll.xaml
     /// </summary>
     public partial class NoteRoll : UserControl {
+        public event NoteSelectEventHandler NoteSelected;
 
         private List<RollElement> uiNotes = new List<RollElement>(2048);
         private Sheet noteSheet = new Sheet();
@@ -51,12 +53,34 @@ namespace FluidUI {
         private bool isCreatingNote = false;
         private bool mouseOverNote = false;
         private bool isInitalScroll = false;
+        private bool isEditMode = false;
 
         private string[] pitchNames = { "B", "A#", "A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C", "B" };
 
         public Brush CurrentPianoKeyColor { get; set; }
         public Brush LightPianoKeyColor { get; set; }
         public Brush DarkPianoKeyColor { get; set; }
+
+        public MainWindow.EditorMode RollEditMode {
+            get {
+                if (isEditMode) return MainWindow.EditorMode.Tuning;
+                else return MainWindow.EditorMode.Editing;
+            }
+            set {
+                if (value == MainWindow.EditorMode.Tuning) {
+                    topGrid.Height = 170;
+                    topGrid.Visibility = System.Windows.Visibility.Visible;
+
+                    isEditMode = true;
+                }
+                else {
+                    topGrid.Height = 0;
+                    topGrid.Visibility = System.Windows.Visibility.Hidden;
+
+                    isEditMode = false;
+                }
+            }
+        }
 
         /// <summary>
         /// make shift note rest path
@@ -78,6 +102,7 @@ namespace FluidUI {
                     catch (Exception) { }
                 }
                 internalBpm = value;
+                noteSheet.Bpm = internalBpm;
                 ResetAllLogicalNotesLength();
             }
         }
@@ -93,6 +118,11 @@ namespace FluidUI {
                     System.Windows.Forms.MessageBox.Show("Test");
                 }
             }
+        }
+
+        public string WavTool {
+            get { return new ConfigMgr().DefaultWavTool; }
+            set { new ConfigMgr().DefaultWavTool = value; }
         }
 
         public string ResynthEngine {
@@ -140,14 +170,20 @@ namespace FluidUI {
 
         public NoteRoll() {
             InitializeComponent();
-
             ImageBrush brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri(System.AppDomain.CurrentDomain.BaseDirectory + "\\res\\01.PNG"));
-            brush.TileMode = TileMode.Tile;
-            brush.ViewportUnits = BrushMappingMode.Absolute;
-            brush.Viewport = new Rect(0, 0, brush.ImageSource.Width, brush.ImageSource.Height);
-            brush.Stretch = Stretch.None;
-            bkgCanvas.Background = brush;
+
+            // Set background image
+            try {
+                brush.ImageSource = new BitmapImage
+                    (new Uri(System.AppDomain.CurrentDomain.BaseDirectory + "\\res\\01.PNG"));
+                brush.TileMode = TileMode.Tile;
+                brush.ViewportUnits = BrushMappingMode.Absolute;
+                brush.Viewport = new Rect(0, 0, brush.ImageSource.Width, brush.ImageSource.Height);
+                brush.Stretch = Stretch.None;
+                bkgCanvas.Background = brush;
+            }
+            catch (Exception) { }
+
 
             otoRead = new OtoReader();
             wavMod = new wavmod.WavMod();
@@ -161,6 +197,7 @@ namespace FluidUI {
             NoteSnapping = Snapping.Sixteenth;
             RollSnapping = Snapping.Sixteenth;
 
+            // Set up roll caret
             rollCaret = new Rectangle();
             rollCaret.Width = 6;
             rollCaret.Height = 100;
@@ -169,10 +206,18 @@ namespace FluidUI {
 
             timeBarSlider.Children.Add(rollCaret);
 
+            // Set up right-click menu
             rightClickMenu = new NoteMenu();
             rightClickMenu.Visibility = System.Windows.Visibility.Hidden;
             rightClickMenu.CloseClicked += rightClickMenu_CloseClicked;
+            rightClickMenu.Docking += rightClickMenu_Docking;
             overlayCanvas.Children.Add(rightClickMenu);
+
+            noteSheet.Bpm = internalBpm;
+        }
+
+        void rightClickMenu_Docking(NoteMenu sender) {
+            
         }
 
         void rightClickMenu_CloseClicked() {
@@ -210,6 +255,7 @@ namespace FluidUI {
             logicalNote = displayNote.ElementNote;
             logicalNote.NotePitch = generatePitchString((int)location.Y);
             logicalNote.VoiceProperties = otoRead.GetVoicePropFromSampleName(logicalNote.DispName);
+            logicalNote.GenerateDefaultEnvelope();
 
             noteSheet.notes.Insert(index, logicalNote);
 
@@ -230,13 +276,24 @@ namespace FluidUI {
                 Cursor = Cursors.SizeWE;
             }
             else if (Mouse.RightButton == MouseButtonState.Pressed) {
-                rightClickMenu.WorkingNoteIndex = sender.NoteIndex;
-                rightClickMenu.WorkingNote = noteSheet.notes[sender.NoteIndex]; 
-                Canvas.SetLeft(rightClickMenu, Mouse.GetPosition(overlayCanvas).X);
-                Canvas.SetTop(rightClickMenu, Mouse.GetPosition(overlayCanvas).Y);
-                rightClickMenu.Visibility = System.Windows.Visibility.Visible;
+                if (RollEditMode == MainWindow.EditorMode.Editing) {
+                    // Show right-click menu and set its properties
+                    rightClickMenu.WorkingNoteIndex = sender.NoteIndex;
+                    rightClickMenu.WorkingNote = noteSheet.notes[sender.NoteIndex];
+                    Canvas.SetLeft(rightClickMenu, Mouse.GetPosition(overlayCanvas).X);
+                    Canvas.SetTop(rightClickMenu, Mouse.GetPosition(overlayCanvas).Y);
+                    rightClickMenu.Visibility = System.Windows.Visibility.Visible; 
+                }
+                else {
+                    try {
+                        foreach (RollElement rollNote in bkgCanvas.Children) {
+                            if (rollNote != sender) rollNote.IsSelected = false;
+                        }
+                        NoteSelected.Invoke(noteSheet.notes[sender.NoteIndex]); 
+                    }
+                    catch (Exception) { }
+                }
             }
-
             else {
                 isMovingNote = true;
                 currentNoteIndex = sender.NoteIndex;
@@ -281,8 +338,13 @@ namespace FluidUI {
         }
 
         private void displayNote_ElementPropertiesChanged(RollElement sender) {
+            // Set VoiceProperties and DispName
             noteSheet.notes[sender.NoteIndex].VoiceProperties = otoRead.GetVoicePropFromSampleName(sender.NoteName);
             noteSheet.notes[sender.NoteIndex].DispName = sender.NoteName;
+ 
+            // Set the RollElement background to red if the sample doesn't exist
+            if (!otoRead.SampleExists(sender.NoteName)) sender.IsInvalidtext = true;
+            else sender.IsInvalidtext = false;
         }
 
         /// <summary>
@@ -298,7 +360,7 @@ namespace FluidUI {
             renderStatus.Content = "Rendering...";
             rnd.Render();
 
-            wavMod.PlaybackTemp(rnd.TemporaryDir, noteSheet);
+            wavMod.ExtWavtoolInit(rnd.TemporaryDir, FluidSys.FluidSys.CreateTempDir() + "\\out.wav", noteSheet, WavTool, true);
 
             renderStatus.Content = "";
         }
@@ -307,7 +369,7 @@ namespace FluidUI {
         /// Export a render
         /// </summary>
         /// <param name="outputPath"></param>
-        public void ExportWav(string outputPath) {
+        public void ExportWav(string outputPath, bool external) {
             Renderer rnd = new Renderer(noteSheet);
             rnd.ShowRenderWindow = true;
             rnd.NoteRendered += rnd_NoteRendered;
@@ -317,9 +379,16 @@ namespace FluidUI {
             renderStatus.Content = "Rendering...";
             rnd.Render();
 
-            wavMod.SaveTemp(rnd.TemporaryDir, outputPath, noteSheet);
+            if (external) wavMod.ExtWavtoolInit(rnd.TemporaryDir, outputPath, noteSheet, WavTool, false);
+            else wavMod.SaveTemp(rnd.TemporaryDir, outputPath, noteSheet);
 
-            renderStatus.Content = "";
+            try {
+                System.IO.File.Delete(outputPath + ".whd");
+                System.IO.File.Delete(outputPath + ".dat");
+            }
+            catch (Exception) { }
+
+            renderStatus.Content = "";   
         }
 
         void rnd_NoteRendered(int noteIndex) {
@@ -508,6 +577,7 @@ namespace FluidUI {
                     bkgCanvas.Width += 600;
                     timeBar.Width += 600;
                     timeBarSlider.Width += 600;
+                    envelopePanel.envPanel.Width += 600;
                 }
             }
 
@@ -530,6 +600,8 @@ namespace FluidUI {
                 totalNotesLength -= (mouseDownNoteSize - (int)((RollElement)bkgCanvas.Children[currentNoteIndex]).Width);
 
                 dataDisp.Text += " Total Notes Length after operation: " + totalNotesLength.ToString();
+
+
             }
 
             bkgCanvas.Children.Remove(tempNote);
@@ -539,6 +611,8 @@ namespace FluidUI {
             isMovingNote = false;
 
             Cursor = Cursors.Arrow;
+
+            envelopePanel.UpdateView(noteSheet, internalBpm);
         }
 
         private void bkgCanvas_MouseMove(object sender, MouseEventArgs e) {
@@ -561,8 +635,16 @@ namespace FluidUI {
                     ((RollElement)bkgCanvas.Children[currentNoteIndex]).Width = ((int)Mouse.GetPosition(bkgCanvas).X
                         - MouseDownLoc) / (int)dblNoteSnapping * (int)dblNoteSnapping; 
                 }
+                noteSheet.notes[currentNoteIndex].Envelope[2][0] += 
+                    ((RollElement)bkgCanvas.Children[currentNoteIndex]).ElementNote.Length - noteSheet.notes[currentNoteIndex].Length;
+                noteSheet.notes[currentNoteIndex].Envelope[3][0] +=
+                    ((RollElement)bkgCanvas.Children[currentNoteIndex]).ElementNote.Length - noteSheet.notes[currentNoteIndex].Length;
+
                 noteSheet.notes[currentNoteIndex].Length =
                     ((RollElement)bkgCanvas.Children[currentNoteIndex]).ElementNote.Length;
+
+                noteSheet.notes[currentNoteIndex].UUnitLength =
+                    ((RollElement)bkgCanvas.Children[currentNoteIndex]).ElementNote.UUnitLength;
 
                 dataDisp.Text = "Logical note length=" + noteSheet.notes[currentNoteIndex].Length +
                     "\r\nDisplay note length=" + ((RollElement)bkgCanvas.Children[currentNoteIndex]).Width;
@@ -584,11 +666,16 @@ namespace FluidUI {
         private void scroller_ScrollChanged(object sender, ScrollChangedEventArgs e) {
             fred.ScrollToVerticalOffset(scroller.VerticalOffset);
             timeBarScroller.ScrollToHorizontalOffset(scroller.HorizontalOffset);
+            envelopePanel.envScroller.ScrollToHorizontalOffset(scroller.HorizontalOffset);
         }
 
         private void timeBar_MouseDown(object sender, MouseButtonEventArgs e) {
             Canvas.SetLeft(rollCaret, ((int)Mouse.GetPosition(timeBarSlider).X / (int)dblNoteSnapping * 
                 (int)dblNoteSnapping));
+        }
+
+        private void bkgCanvas_SizeChanged(object sender, SizeChangedEventArgs e) {
+            
         }
     }
 }

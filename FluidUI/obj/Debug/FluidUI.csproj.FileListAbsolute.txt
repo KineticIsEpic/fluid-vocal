@@ -34,3 +34,7 @@ M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteMenu.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\NoteMenu.g.cs
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FluidMenu.baml
 M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\FluidMenu.g.cs
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\EditorPanel.baml
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\EnvUI.baml
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\EditorPanel.g.cs
+M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\EnvUI.g.cs

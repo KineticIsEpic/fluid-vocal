@@ -33,12 +33,13 @@ namespace FluidUI {
         public event ElementSelectedChangedEventArgs ElementSelected;
         public event ElementChangedEventArgs ElementMouseDown;
         public event ElementChangedEventArgs ElementMouseUp;
-        public event ElementChangedEventArgs ElementRightClick;
 
         public Brush SelectedForegroundBrush { get; set; }
         public Brush ForegroundBrush { get; set; }
         public Brush SelectedBackgroundBrush { get; set; }
         public Brush BackgroundBrush { get; set; }
+        public Brush TextBkgBrush { get; set; }
+        public Brush InvalidTextBkgBrush { get; set; }
 
         /// <summary>
         /// Determines if the control is selected. 
@@ -61,6 +62,19 @@ namespace FluidUI {
         /// of this FluidUI.RollElement.
         /// </summary>
         public bool IsMouseOverResize { get { return resizer.IsMouseOver; } }
+        /// <summary>
+        /// Sets whether the nameTxtBox.Background is TextBkgBrush or InvalidTextBkgBrush. 
+        /// </summary>
+        public bool IsInvalidtext {
+            get {
+                if (nameTxtBox.Background == InvalidTextBkgBrush) return true;
+                return false;
+            }
+            set {
+                if (value) nameTxtBox.Background = InvalidTextBkgBrush;
+                else nameTxtBox.Background = TextBkgBrush;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tempo value.
@@ -97,7 +111,7 @@ namespace FluidUI {
                 n.Length = (int)GetLength();
                 n.NotePitch = Pitch;
                 n.DispName = nameTxtBox.Text;
-
+                n.UUnitLength = (int)this.Width * 4;
                 return n;
             }
         }
@@ -113,6 +127,9 @@ namespace FluidUI {
             ForegroundBrush = new SolidColorBrush(Color.FromArgb(255, 83, 83, 85));
             SelectedBackgroundBrush = new SolidColorBrush(Color.FromArgb(255, 135, 171, 189));
             BackgroundBrush = new SolidColorBrush(Color.FromArgb(255, 145, 145, 145));
+            TextBkgBrush = new SolidColorBrush(Color.FromArgb(255, 214, 214, 214));
+            InvalidTextBkgBrush = new SolidColorBrush(Color.FromArgb(255, 190, 57, 43));
+
 
             //gripper1.MouseDown += gripper_Selected;
             //gripper2.MouseDown += gripper_Selected;

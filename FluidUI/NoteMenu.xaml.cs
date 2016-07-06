@@ -20,11 +20,13 @@ using System.Windows.Shapes;
 
 namespace FluidUI {
     public delegate void NoteMenuItemHandler();
+    public delegate void DockingEventHandler(NoteMenu sender);
     /// <summary>
     /// Interaction logic for NoteMenu.xaml
     /// </summary>
     public partial class NoteMenu : UserControl {
         public event NoteMenuItemHandler CloseClicked;
+        public event DockingEventHandler Docking;
 
         private int mouseDownVolumePos;
         private int mouseDownModPos;
@@ -38,6 +40,19 @@ namespace FluidUI {
         private bool mouseDownOverVel;
 
         public int WorkingNoteIndex { get; set; }
+
+        public bool IsDocked {
+            get {
+                if (dockItem.IsVisible) return true;
+                else return false;
+            }
+            set {
+                if (value) {
+                    dockItem.Visibility = System.Windows.Visibility.Hidden;
+                    closeItem.Visibility = System.Windows.Visibility.Hidden;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the current note this FluidUI.NoteMenu is associated with. 
@@ -193,6 +208,11 @@ namespace FluidUI {
 
         private void PitchTxtBox_TextChanged(object sender, TextChangedEventArgs e) {
             intNote.PitchCode = PitchTxtBox.Text;
+        }
+
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e) {
+            try { Docking.Invoke(this); } 
+            catch (Exception) { }
         }
     }
 }

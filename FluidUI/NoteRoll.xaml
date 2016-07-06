@@ -1,38 +1,43 @@
-﻿<UserControl x:Class="FluidUI.NoteRoll"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.NoteRoll" 
              mc:Ignorable="d" Height="489.433" Width="775.022"
              UseLayoutRounding="True"
              SnapsToDevicePixels="True">
-    <Grid>
-        <Label x:Name="renderStatus" Height="20" VerticalAlignment="Top" Background="#FF1B1B1B" HorizontalAlignment="Left" Width="77" RenderTransformOrigin="0.5,0.5" Content="" Foreground="White"/>
-        <ScrollViewer x:Name="timeBarScroller" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden" Margin="76,0,18,0" Height="47" VerticalAlignment="Top">
-            <Grid>
-                <StackPanel x:Name="timeBar" Height="50" VerticalAlignment="Top" Background="#FF1B1B1B" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="3903" Orientation="Horizontal" HorizontalAlignment="Center"/>
-                <Canvas x:Name="timeBarSlider" Height="50" VerticalAlignment="Top" Opacity="1" Background="#001B1B1B" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="3903" HorizontalAlignment="Center" MouseDown="timeBar_MouseDown"/>
-            </Grid>
-        </ScrollViewer>
-        <ScrollViewer x:Name="fred" HorizontalAlignment="Left" Width="94" Margin="0,20,0,17">
-            <StackPanel x:Name="pianoPanel" Background="LightGray" HorizontalAlignment="Left" Height="1728" VerticalAlignment="Top" Width="76"/>
-        </ScrollViewer>
-        <ScrollViewer x:Name="scroller" HorizontalScrollBarVisibility="Visible" Margin="76,20,0,0" ScrollChanged="scroller_ScrollChanged">
-            <Grid>
-                <Canvas x:Name="bkgCanvas" Height="1728" Width="3954" MouseDown="bkgCanvas_MouseDown" MouseUp="bkgCanvas_MouseUp" MouseMove="bkgCanvas_MouseMove">
-                    <Canvas.Background>
-                        <VisualBrush TileMode="Tile" Viewport="0,0,0.5,0.5">
-                            <VisualBrush.Visual>
-                                <Image/>
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Canvas.Background>
-                </Canvas>
-                <Canvas x:Name="overlayCanvas" Height="1728" Width="3954">
-                </Canvas>
-            </Grid>
-        </ScrollViewer>
-        <TextBox x:Name="dataDisp" Text="data box" Foreground="#FF0074FF" Background="Black" Height="157" VerticalAlignment="Top" TextWrapping="Wrap" Margin="0,0,18,0" HorizontalAlignment="Right" Width="139" FontFamily="Consolas" BorderBrush="{x:Null}" Visibility="Hidden"/>
-        <Label Height="25" VerticalAlignment="Top" Background="#FF1B1B1B" RenderTransformOrigin="0.5,0.5" Content="" Foreground="White" Margin="0,-5,0,0" HorizontalAlignment="Right" Width="18"/>
-    </Grid>
+    <DockPanel>
+        <Grid x:Name="topGrid" DockPanel.Dock="Top" Height="0" Visibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <local:EditorPanel x:Name="envelopePanel" Height="Auto" Width="Auto"/>
+        </Grid>
+        <Grid x:Name="bottomGrid" DockPanel.Dock="Bottom">
+            <Label x:Name="renderStatus" Height="20" VerticalAlignment="Top" Background="#FF1B1B1B" HorizontalAlignment="Left" Width="77" RenderTransformOrigin="0.5,0.5" Content="" Foreground="White"/>
+            <ScrollViewer x:Name="timeBarScroller" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden" Margin="76,0,18,0" Height="47" VerticalAlignment="Top">
+                <Grid>
+                    <StackPanel x:Name="timeBar" Height="50" VerticalAlignment="Top" Background="#FF1B1B1B" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="3903" Orientation="Horizontal" HorizontalAlignment="Center"/>
+                    <Canvas x:Name="timeBarSlider" Height="50" VerticalAlignment="Top" Opacity="1" Background="#001B1B1B" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="3903" HorizontalAlignment="Center" MouseDown="timeBar_MouseDown"/>
+                </Grid>
+            </ScrollViewer>
+            <ScrollViewer x:Name="fred" HorizontalAlignment="Left" Width="94" Margin="0,20,0,17">
+                <StackPanel x:Name="pianoPanel" Background="LightGray" HorizontalAlignment="Left" Height="1728" VerticalAlignment="Top" Width="76"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="scroller" HorizontalScrollBarVisibility="Visible" Margin="76,20,0,0" ScrollChanged="scroller_ScrollChanged">
+                <Grid>
+                    <Canvas x:Name="bkgCanvas" Height="1728" Width="3954" MouseDown="bkgCanvas_MouseDown" MouseUp="bkgCanvas_MouseUp" MouseMove="bkgCanvas_MouseMove" Margin="0,2,0,-2" SizeChanged="bkgCanvas_SizeChanged">
+                        <Canvas.Background>
+                            <VisualBrush TileMode="Tile" Viewport="0,0,0.5,0.5">
+                                <VisualBrush.Visual>
+                                    <Image/>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Canvas.Background>
+                    </Canvas>
+                    <Canvas x:Name="overlayCanvas" Height="1728" Width="3954"/>
+                </Grid>
+            </ScrollViewer>
+            <TextBox x:Name="dataDisp" Text="data box" Foreground="#FF0074FF" Background="Black" Height="157" VerticalAlignment="Top" TextWrapping="Wrap" Margin="0,47,18,0" HorizontalAlignment="Right" Width="139" FontFamily="Consolas" BorderBrush="{x:Null}"/>
+            <Label Height="21" VerticalAlignment="Top" Background="#FF1B1B1B" RenderTransformOrigin="0.5,0.5" Content="" Foreground="White" HorizontalAlignment="Right" Width="18"/>
+        </Grid>
+    </DockPanel>
 </UserControl>
