@@ -13,10 +13,21 @@ namespace FluidCmd {
     class Program {
         [STAThread]
         static void Main(string[] args) {
-            Console.Out.WriteLine("Fluid Vocal Synthesis System, testing build 9.2");
-            Console.Out.WriteLine("Copyright (c) 2016 KineticIsEpic. Type \"about\" for details.");
+            Console.Out.WriteLine("Fluid Vocal Synthesis System, testing build OVER 9000 BOI");
+            Console.Out.WriteLine("Copyright (c) 2017 KineticIsEpic. ");
 
-            new CmdSys().Cmd();
+            FluidUI.MainWindow mw = new FluidUI.MainWindow();
+            mw.ShowDialog();
+
+            try {
+                System.IO.Directory.Delete(Environment.ExpandEnvironmentVariables("%LocalAppData%") +
+                    "\\FluidSynth\\ren", true);
+
+                Console.Out.WriteLine("Render cache cleared.");
+            }
+            catch (Exception ex) { Console.Out.WriteLine("e: " + ex.Message); }
+
+            Program.Exit();
         }
         public static void Exit() { return; }
     }

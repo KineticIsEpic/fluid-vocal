@@ -31,7 +31,7 @@ namespace FluidSys {
         /// </summary>
         public int Bpm { get; set; }
         /// <summary>
-        /// Gets or sets a list of strings representing the coolest things ever.
+        /// Gets or sets a list of strings representing global render parameters. 
         /// </summary>
         public List<string> rendParams = new List<string>();
         /// <summary>

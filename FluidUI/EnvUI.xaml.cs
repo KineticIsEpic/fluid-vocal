@@ -43,14 +43,24 @@ namespace FluidUI
         }
 
         public void InitPoints() {
-            createPoint((int)convertEnvPoint(WorkingNote.Envelope[0]).X, (int)convertEnvPoint(WorkingNote.Envelope[0]).Y);
-            createPoint((int)convertEnvPoint(WorkingNote.Envelope[1]).X, (int)convertEnvPoint(WorkingNote.Envelope[1]).Y);
-            createPoint((int)convertEnvPoint(WorkingNote.Envelope[2]).X + (int)getLengthInPx(Tempo, WorkingNote.Overlap),
-                (int)convertEnvPoint(WorkingNote.Envelope[2]).Y);
-            createPoint((int)convertEnvPoint(WorkingNote.Envelope[3]).X + (int)getLengthInPx(Tempo, WorkingNote.Overlap),
-                (int)convertEnvPoint(WorkingNote.Envelope[3]).Y);
+            //createPoint((int)convertEnvPoint(WorkingNote.Envelope[0]).X, (int)convertEnvPoint(WorkingNote.Envelope[0]).Y);
+            //createPoint((int)convertEnvPoint(WorkingNote.Envelope[1]).X, (int)convertEnvPoint(WorkingNote.Envelope[1]).Y);
+            //createPoint((int)convertEnvPoint(WorkingNote.Envelope[2]).X + (int)getLengthInPx(Tempo, WorkingNote.Overlap),
+            //    (int)convertEnvPoint(WorkingNote.Envelope[2]).Y);
+            //createPoint((int)convertEnvPoint(WorkingNote.Envelope[3]).X + (int)getLengthInPx(Tempo, WorkingNote.Overlap),
+            //    (int)convertEnvPoint(WorkingNote.Envelope[3]).Y);
 
             //System.Windows.Forms.MessageBox.Show(Canvas.GetBottom(envPoints[1]).ToString());
+
+            // remove old components
+            envDrawCanvas.Children.Clear();
+            envPoints.Clear();
+            linkingLines.Clear();
+
+            createPoint(WorkingNote.Envelope[0][0], WorkingNote.Envelope[0][1] + 28);
+            createPoint(WorkingNote.Envelope[1][0], WorkingNote.Envelope[1][1] + 28);
+            createPoint((int)Width - WorkingNote.Envelope[2][0], WorkingNote.Envelope[2][1] + 28);
+            createPoint((int)Width - WorkingNote.Envelope[3][0], WorkingNote.Envelope[3][1] + 28);
 
             createLine(0, 1);
             createLine(1, 2);
@@ -180,8 +190,8 @@ namespace FluidUI
         }
 
         void EnvUI_MouseUp(object sender, MouseButtonEventArgs e) {
-            if (movingPoint == 0 || movingPoint == 3) Canvas.SetBottom(envPoints[movingPoint], 0);
-            redrawLines();
+            //if (movingPoint == 0 || movingPoint == 3) Canvas.SetBottom(envPoints[movingPoint], 0);
+            //redrawLines();
             movingPoint = -1;
         }
 
@@ -190,19 +200,27 @@ namespace FluidUI
                 Ellipse point = envPoints[movingPoint];             
 
                 // Move point
-                Canvas.SetLeft(point, (Mouse.GetPosition(this).X - pointMovingMouseLoc.X + pointMovingMouseLoc.X) - 4);
+                Canvas.SetLeft(point, Mouse.GetPosition(this).X - 4);
                 Canvas.SetBottom(point, envDrawCanvas.Height -
                         ((Mouse.GetPosition(this).Y - pointMovingMouseLoc.Y + pointMovingMouseLoc.Y) + 4));
+
+                // Move point back to 0, if it goes too far
+                if (Canvas.GetBottom(point) < 28) Canvas.SetBottom(point, 28);
+                if (Canvas.GetBottom(point) > 128) Canvas.SetBottom(point, 128);
 
                 redrawLines();
 
                 // Set Values 
-                WorkingNote.Envelope[movingPoint][0] = (int)convertXEnvPoints((int)Canvas.GetLeft(envPoints[movingPoint]));
-                WorkingNote.Envelope[movingPoint][1] = convertYEnvPoints((int)Canvas.GetBottom(envPoints[movingPoint])) + 4;
+                if (movingPoint < 2) WorkingNote.Envelope[movingPoint][0] = (int)Canvas.GetLeft(point);                   
+                else WorkingNote.Envelope[movingPoint][0] = (int)Width - (int)Canvas.GetLeft(point);
+                WorkingNote.Envelope[movingPoint][1] = (int)Canvas.GetBottom(point) - 28; 
 
-                if (movingPoint > 1) {
-                    WorkingNote.Envelope[movingPoint][0] -= (int)getLengthInPx(Tempo, WorkingNote.Overlap);
-                }
+                //WorkingNote.Envelope[movingPoint][0] = (int)convertXEnvPoints((int)Canvas.GetLeft(envPoints[movingPoint]));
+                //WorkingNote.Envelope[movingPoint][1] = convertYEnvPoints((int)Canvas.GetBottom(envPoints[movingPoint])) + 4;
+
+                //if (movingPoint > 1) {
+                //    WorkingNote.Envelope[movingPoint][0] -= (int)getLengthInPx(Tempo, WorkingNote.Overlap);
+                //}
 
                 // Set info display to match data
                 x1Label.Content = WorkingNote.Envelope[movingPoint][0];

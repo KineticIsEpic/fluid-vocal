@@ -49,6 +49,7 @@ namespace FluidSys {
             sheet.notes = st.notes;
             sheet.Resampler = st.Resampler;
             sheet.Voicebank = st.Voicebank;
+            sheet.Bpm = st.Bpm;
 
             RenderThreads = 6;
 
@@ -66,13 +67,22 @@ namespace FluidSys {
 
             foreach (var item in sheet.notes) {
                 Process p = new Process();
+
+                // HOW CADENCII (presumably legacy Utau) resampler arguments work:
+                // - Everything up to the Modulation command as normal
+                // - The next line is <fistpith>Q<bpm>, ex. 0.00Q120
+                // - after that, each pitch value in format X.XX, each in its own argument. 
                 
                 // Render arguments
                 string args;
 
                 // Compensate for trimming
-                int length = item.Length + item.Overlap;
-                int consonant = item.VoiceProperties.Consonant; 
+                int length = item.Length + ((int)(item.VoiceProperties.Preutterance + 25) / 50 * 50 + 50);
+                int consonant = (int)item.VoiceProperties.Consonant;
+
+                // Create file names that sort properly alphabetically 
+                string zeros = "0000";
+                string runName = zeros.Substring(run.ToString().Length) + run.ToString();
 
                 // Get voicebank path
                 string vbpath = item.VbPath; 
@@ -81,16 +91,24 @@ namespace FluidSys {
                 if (item.DispName == "r") {
                     // Makeshift rest system, to be replaced with WavMOD
                     args = "\"" + restNotePath + "\\" + "rest.wav" + "\" \"" + tempDir + "\\" +
-                        run.ToString() + ".wav\" \"" + "C2" + "\"" + " 0 B0 " + "0" + " " +
+                        runName + ".wav\" \"" + "C2" + "\"" + " 0 B0 " + "0" + " " +
                         length.ToString() + " 0 0 1 0";
                 }
                 else {
                     // Generate resampler arguments
-                    args = "\"" + vbpath + "\\" + item.VoiceProperties.FileName + "\" \"" + tempDir + "\\" +
-                        run.ToString() + ".wav\" \"" + item.NotePitch + "\" " + item.Velocity.ToString() + " \"" + item.Args + "\" " + 
-                        item.VoiceProperties.StartString + " " + length.ToString() + " " + item.VoiceProperties.ConsonantString
-                        + " " + item.VoiceProperties.EndString + " " + item.Volume.ToString() + " " + item.Modulation.ToString() + 
-                        " " + item.PitchCode;
+                    args = "\"" + vbpath + "\\" + item.VoiceProperties.FileName + "\" \"" //in
+                        + tempDir + "\\" + runName + ".wav\" \"" //out
+                        + item.NotePitch + "\" " //pitch
+                        + item.Velocity.ToString() //vel
+                        + " \"" + item.Args + "\" " //flag
+                        + item.VoiceProperties.StartString + " " //offset
+                        + length.ToString() + " " //length_require
+                        + item.VoiceProperties.ConsonantString + " " //fixed_length
+                        + item.VoiceProperties.EndString + " " //end
+                        + item.Volume.ToString() + " " //vol
+                        + item.Modulation.ToString() + " " //mod
+                        + "0Q" + sheet.Bpm.ToString() + " " //tempo thing
+                        + item.PitchCode; 
                 }
 
                 // Setup process properties

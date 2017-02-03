@@ -60,11 +60,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutControl.xaml.cs">
+      <DependentUpon>AboutControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FirstTimeSetup.xaml.cs">
       <DependentUpon>FirstTimeSetup.xaml</DependentUpon>
     </Compile>
     <Compile Include="FluidMenu.xaml.cs">
       <DependentUpon>FluidMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IconButton.xaml.cs">
+      <DependentUpon>IconButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewRoll.xaml.cs">
+      <DependentUpon>NewRoll.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewUI.xaml.cs">
+      <DependentUpon>NewUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="NoteMenu.xaml.cs">
       <DependentUpon>NoteMenu.xaml</DependentUpon>
@@ -87,11 +99,19 @@
     <Compile Include="EnvUI.xaml.cs">
       <DependentUpon>EnvUI.xaml</DependentUpon>
     </Compile>
+    <Page Include="AboutControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FirstTimeSetup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FluidMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IconButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,6 +131,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Include="NewRoll.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NoteMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -189,7 +217,16 @@
     <None Include="res\01.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\01.PNG" />
+    <Resource Include="res\fchar.png" />
+    <Resource Include="res\flogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\pause.png" />
+    <Resource Include="res\pause_h.png" />
+    <Resource Include="res\play.png" />
+    <Resource Include="res\play_h.png" />
+    <Resource Include="res\stop.png" />
+    <Resource Include="res\stop_h.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

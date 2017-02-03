@@ -7,7 +7,10 @@ using System.IO;
 
 namespace FluidSys {
     public class ConfigMgr {
-        public string DebugLogDir { get { return "debug.log"; } }
+        /// <summary>
+        /// Debug log directory
+        /// </summary>
+        public string DebugLogDir { get { return "debug.log"; } } //TODO
         /// <summary>
         /// Gets or sets the default sample bank.
         /// </summary>
@@ -43,6 +46,10 @@ namespace FluidSys {
                 sw.Write(value);
                 sw.Close();
             }
+        }
+
+        public string VersionNum {
+            get { return "0.01"; }
         }
 
         public List<string> SampleBanks { get; private set; } //TODO

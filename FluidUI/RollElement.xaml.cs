@@ -99,6 +99,13 @@ namespace FluidUI {
         /// Gets or sets the zero-based index of the note.
         /// </summary>
         public int NoteIndex { get; set; }
+        /// <summary>
+        /// Gets or sets the zoom factor (needed to correct note size).
+        /// </summary>
+        public double ZoomFactor { get; set; }
+        /// <summary>
+        /// used for zooming
+        /// </summary>
 
         private bool baseIsSelected = false;
 
@@ -111,13 +118,14 @@ namespace FluidUI {
                 n.Length = (int)GetLength();
                 n.NotePitch = Pitch;
                 n.DispName = nameTxtBox.Text;
-                n.UUnitLength = (int)this.Width * 4;
+                n.UUnitLength = (int)(this.Width / ZoomFactor) * 4;
                 return n;
             }
         }
 
         public RollElement() {
             InitializeComponent();
+            ZoomFactor = 1;
             LengthFactor = 4;
             Pitch = "C#4";
             NoteIndex = 0;
@@ -154,7 +162,7 @@ namespace FluidUI {
             try { qNoteMillis = 60000 / BPM; }
             catch (Exception) { return -1; }
 
-            double NoteLengthFactor = this.Width / qNotePx; 
+            double NoteLengthFactor = this.Width / ZoomFactor / qNotePx; 
 
             return qNoteMillis * NoteLengthFactor;
         }
@@ -209,7 +217,7 @@ namespace FluidUI {
         }
 
         private void bkgGrid_MouseUp(object sender, MouseButtonEventArgs e) {
-            try { ElementMouseUp.Invoke(this); }
+            try { if (e.ChangedButton == MouseButton.Right) ElementMouseUp.Invoke(this); }
             catch (Exception ex) { }
         }
     }

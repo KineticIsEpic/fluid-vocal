@@ -64,10 +64,18 @@ namespace OTOmate {
                 }
 
                 // Generate VoiceProp classes from seperated lines
-                foreach (var item in otoLines) {
+                foreach (var otoItem in otoLines) {
                     vp = new VoiceProp();
 
+                    // needed because of newline fix
+                    string item = otoItem;
+
                     try {
+                        // remove newlines that get left behind 
+                        for (int chr = 0; chr < item.Length; chr++) {
+                            if (item[chr] == '\r' || item[chr] == '\n') item = item.Remove(chr, 1);
+                        }
+
                         // Get indexes from line
                         int index1 = item.IndexOf('=');
                         int index2 = item.IndexOf(",", index1 + 1);
@@ -86,7 +94,7 @@ namespace OTOmate {
                         vp.OverlapString = item.Substring(index6 + 1);
                         vp.FileDir = fileLoc.Substring(0, fileLoc.LastIndexOf("\\")) + "\\";
 
-                        // Removes /n from FileName property
+                        // Removes \n from FileName property
                         if (vp.FileName.Contains("\n")) vp.FileName = vp.FileName.Substring(1);
 
                         // Add vp to voices
@@ -155,6 +163,8 @@ namespace OTOmate {
         /// of powers, the most energized of energy, the most colossal of masses. Please, my
         /// friend, use this power with caution and wisdom, as any misuse could spell disaster
         /// for the human race.
+        /// 
+        /// Why did I write this?
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>

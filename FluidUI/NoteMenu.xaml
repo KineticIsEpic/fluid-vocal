@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="FluidUI.NoteMenu"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="426.298" Width="325.298">
-    <Grid Background="#FF0C0C0C" Opacity="0.91">
+             xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.NoteMenu" 
+             mc:Ignorable="d" Height="449.298" Width="325.298" Background="#FF252526">
+    <Grid Background="#FF141416">
         <Canvas x:Name="envPanel" Margin="10,32,10,0" Background="#FF202021" Height="189" VerticalAlignment="Top" Visibility="Hidden">
             <Grid Background="#FF171718" Height="26" VerticalAlignment="Bottom" Canvas.Top="164" Width="305">
                 <Label Content="ATT:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFCDCDCD" Margin="4,0,0,0" FontStyle="Italic"/>
@@ -23,8 +24,7 @@
                         </TransformGroup>
                     </Rectangle.LayoutTransform>
                 </Rectangle>
-                <Rectangle Height="2" Stroke="#FF34ACD8" Fill="#FF34ACD8" Canvas.Top="22" Width="242" Canvas.Left="26">
-                </Rectangle>
+                <Rectangle Height="2" Stroke="#FF34ACD8" Fill="#FF34ACD8" Canvas.Top="22" Width="242" Canvas.Left="26"/>
                 <Rectangle Height="142" Stroke="#FF34ACD8" Fill="#FF34ACD8" Canvas.Top="22" Width="2" Canvas.Left="266">
                     <Rectangle.LayoutTransform>
                         <TransformGroup>
@@ -42,12 +42,11 @@
         <Label x:Name="modSlider" Content="Modulation: 0%" HorizontalAlignment="Left" Margin="100,45,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" Width="118" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseDown="modSlider_MouseDown" MouseMove="modSlider_MouseMove" MouseLeave="modSlider_MouseLeave" MouseUp="modSlider_MouseUp" Cursor="SizeWE"/>
         <Label x:Name="volumeSlider" Content="Volume: 0%" HorizontalAlignment="Left" Margin="0,45,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseDown="volumeSlider_MouseDown" MouseMove="volumeSlider_MouseMove" MouseUp="volumeSlider_MouseUp" MouseLeave="volumeSlider_MouseLeave" Cursor="SizeWE"/>
         <Label Content="Flags: " HorizontalAlignment="Left" Margin="14,86,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
-        <Label Content="Pitchcode:" HorizontalAlignment="Left" Margin="14,304,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
+        <Label Content="Pitchcode:" HorizontalAlignment="Left" Margin="14,304,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" Visibility="Hidden"/>
         <TextBox x:Name="flagsTxtBox" HorizontalAlignment="Left" Height="26" Margin="84,87,0,0" TextWrapping="Wrap" Text="B0" VerticalAlignment="Top" Width="225" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
-        <TextBox x:Name="PitchTxtBox" HorizontalAlignment="Left" Height="70" Margin="14,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
+        <TextBox x:Name="PitchTxtBox" HorizontalAlignment="Left" Height="70" Margin="14,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0" Visibility="Hidden"/>
         <Label Content="Samplebank:" HorizontalAlignment="Left" Margin="14,132,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
-        <CheckBox x:Name="useGlobalSmpBox" Content="Use Global Sample Bank" HorizontalAlignment="Left" Margin="158,138,0,0" VerticalAlignment="Top" Width="147" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFEAEAEA" VerticalContentAlignment="Center" Height="16" RenderTransformOrigin="0.5,0.5" IsChecked="True">
-        </CheckBox>
+        <CheckBox x:Name="useGlobalSmpBox" Content="Use Global Sample Bank" HorizontalAlignment="Left" Margin="158,138,0,0" VerticalAlignment="Top" Width="147" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFEAEAEA" VerticalContentAlignment="Center" Height="16" RenderTransformOrigin="0.5,0.5" IsChecked="True" Click="useGlobalSmpBox_Click"/>
         <TextBox x:Name="smpBankTxtBox" HorizontalAlignment="Left" Height="26" Margin="16,163,0,0" TextWrapping="Wrap" Text="C:\program files(x86)\utau\voice\samplebank" VerticalAlignment="Top" Width="293" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
         <Label Content="File name:" HorizontalAlignment="Left" Margin="14,207,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA"/>
         <TextBox x:Name="FileNameTxtBox" HorizontalAlignment="Left" Height="26" Margin="84,209,0,0" TextWrapping="Wrap" Text="a.wav" VerticalAlignment="Top" Width="225" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
@@ -59,6 +58,7 @@
         <TextBox x:Name="ConsTxtBox" HorizontalAlignment="Left" Height="26" Margin="159,259,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="48" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
         <TextBox x:Name="EndTxtBox" HorizontalAlignment="Left" Height="26" Margin="255,259,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="54" Background="Black" BorderBrush="{x:Null}" Foreground="White" Padding="5,2,1,0"/>
         <Label x:Name="velSlider" Content="Velocity: 0%" HorizontalAlignment="Left" Margin="218,45,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" Width="100" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseDown="velSlider_MouseDown" MouseMove="velSlider_MouseMove" MouseUp="velSlider_MouseUp" MouseLeave="velSlider_MouseLeave" Cursor="SizeWE"/>
-        <Label x:Name="dockItem" Content="Dock" HorizontalAlignment="Left" Margin="237,4,0,0" VerticalAlignment="Top" Foreground="#FFC7C7C7" MouseDown="Label_MouseDown"/>
+        <Label x:Name="dockItem" Content="Dock" HorizontalAlignment="Left" Margin="237,4,0,0" VerticalAlignment="Top" Foreground="#FFC7C7C7" MouseDown="Label_MouseDown" Visibility="Hidden"/>
+        <local:EnvUI x:Name="env" HorizontalAlignment="Left" Margin="10,297,0,0" VerticalAlignment="Top" Height="142" Width="305"/>
     </Grid>
 </UserControl>

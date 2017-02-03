@@ -99,6 +99,10 @@
       <Project>{53d68fb7-d28e-4d6e-b018-ce688652a902}</Project>
       <Name>FluidSys</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FluidUI\FluidUI.csproj">
+      <Project>{3dad33ef-7230-4942-bf00-81399f406b2c}</Project>
+      <Name>FluidUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\oto\oto.csproj">
       <Project>{74e4edf5-f25b-44b9-a393-b734acd69a1b}</Project>
       <Name>oto</Name>

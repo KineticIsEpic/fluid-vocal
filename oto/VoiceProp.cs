@@ -29,41 +29,41 @@ namespace OTOmate {
             }
         }
 
-        public int Start {
+        public double Start {
             get {
-                try { return int.Parse(StartString); }
+                try { return double.Parse(StartString); }
                 catch (Exception) { return 0; }
             }
             set { StartString = value.ToString(); }
         }
 
-        public int Consonant {
+        public double Consonant {
             get {
-                try { return int.Parse(ConsonantString); }
+                try { return double.Parse(ConsonantString); }
                 catch (Exception) { return 0; }
             }
             set { ConsonantString = value.ToString(); }
         }
 
-        public int End {
+        public double End {
             get {
-                try { return int.Parse(EndString); }
+                try { return double.Parse(EndString); }
                 catch (Exception) { return 0; }
             }
             set { EndString = value.ToString(); }
         }
 
-        public int Preutterance {
+        public double Preutterance {
             get {
-                try { return int.Parse(PreutteranceString); }
+                try { return double.Parse(PreutteranceString); }
                 catch (Exception) { return 0; }
             }
             set { PreutteranceString = value.ToString(); }
         }
 
-        public int Overlap {
+        public double Overlap {
             get {
-                try { return int.Parse(OverlapString); }
+                try { return double.Parse(OverlapString); }
                 catch (Exception) { return 0; }
             }
             set { OverlapString = value.ToString(); }

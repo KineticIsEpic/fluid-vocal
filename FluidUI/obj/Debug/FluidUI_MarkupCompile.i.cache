@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-M:\Folder\FluidSynth\FluidSynth\FluidUI\obj\Debug\
+H:\FVSS\FluidUI\obj\Debug\
 FluidUI
 none
 false
 DEBUG;TRACE
-M:\Folder\FluidSynth\FluidSynth\FluidUI\App.xaml
-101940097757
+H:\FVSS\FluidUI\App.xaml
+14-1440939371
 
-18-27246142
-20-526691231
-FirstTimeSetup.xaml;FluidMenu.xaml;MainWindow.xaml;NoteMenu.xaml;NoteRoll.xaml;Roll.xaml;RollElement.xaml;SbLib.xaml;EditorPanel.xaml;EnvUI.xaml;
+22-183695543
+1963032814
+AboutControl.xaml;FirstTimeSetup.xaml;FluidMenu.xaml;IconButton.xaml;MainWindow.xaml;NewRoll.xaml;NewUI.xaml;NoteMenu.xaml;NoteRoll.xaml;Roll.xaml;RollElement.xaml;SbLib.xaml;EditorPanel.xaml;EnvUI.xaml;
 
 True
 

@@ -120,11 +120,11 @@ namespace FluidSys {
         public void GenerateDefaultEnvelope() {
             Envelope[0][0] = 0;
             Envelope[0][1] = 0;
-            Envelope[1][0] = 60;
+            Envelope[1][0] = 5;
             Envelope[1][1] = 100;
-            Envelope[2][0] = Length - 60;
+            Envelope[2][0] = 35;
             Envelope[2][1] = 100;
-            Envelope[3][0] = Length;
+            Envelope[3][0] = 0;
             Envelope[3][1] = 0;
         }
     }

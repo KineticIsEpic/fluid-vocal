@@ -101,6 +101,9 @@ namespace FluidUI {
             ConsTxtBox.TextChanged += ConsTxtBox_TextChanged;
             EndTxtBox.TextChanged += EndTxtBox_TextChanged;
             PitchTxtBox.TextChanged += PitchTxtBox_TextChanged;
+
+            env.WorkingNote = intNote;
+            env.InitPoints();
         }
 
         private void volumeSlider_MouseDown(object sender, MouseButtonEventArgs e) {
@@ -187,7 +190,13 @@ namespace FluidUI {
         }
 
         private void smpBankTxtBox_TextChanged(object sender, TextChangedEventArgs e) {
-            intNote.VbPath = smpBankTxtBox.Text;
+            if (!intNote.UseDefaultVb) {
+                intNote.VbPath = smpBankTxtBox.Text;
+
+                // update VoiceProperties
+                OTOmate.OtoReader reader = OTOmate.OtoReader.FromFile(intNote.VbPath);
+                intNote.VoiceProperties = reader.GetVoicePropFromSampleName(intNote.DispName);
+            }
         }
 
         private void FileNameTxtBox_TextChanged(object sender, TextChangedEventArgs e) {
@@ -213,6 +222,10 @@ namespace FluidUI {
         private void Label_MouseDown(object sender, MouseButtonEventArgs e) {
             try { Docking.Invoke(this); } 
             catch (Exception) { }
+        }
+
+        private void useGlobalSmpBox_Click(object sender, RoutedEventArgs e) {
+            intNote.UseDefaultVb = !intNote.UseDefaultVb; 
         }
     }
 }

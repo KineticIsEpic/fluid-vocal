@@ -26,6 +26,7 @@ namespace FluidUI {
     public partial class MainWindow : Window {
 
         ConfigMgr cfg = new ConfigMgr();
+        Window aboutWindow = new Window();
 
         int mouseDownLoc;
         public int internalRefBpm = 120;
@@ -61,6 +62,7 @@ namespace FluidUI {
             }
         }
 
+
         public MainWindow() {
             InitializeComponent();
 
@@ -85,6 +87,31 @@ namespace FluidUI {
             catch (Exception ex) { }
 
             noteRoll.NoteSelected += noteRoll_NoteSelected;
+            noteRoll.DefNoteSize = NoteRoll.Snapping.Quarter;
+
+            fluidMenu.prefEvent += FluidMenu_prefEvent;
+
+            initIconButtons();
+        }
+
+        private void initIconButtons() {
+            pauseBtn.SetIcon(0);
+            playBtn.SetIcon(2);
+            stopBtn.SetIcon(5);
+            snapBtn.SetIcon(4);
+            pauseBtn.IconScale = playBtn.IconScale = stopBtn.IconScale = snapBtn.IconScale = 0.8;
+        }
+
+        private void FluidMenu_prefEvent() {
+            aboutWindow = new Window();
+            AboutControl aboutbox = new AboutControl();
+            aboutWindow.Content = aboutbox;
+            aboutWindow.Opacity = 0.9;
+            aboutWindow.ResizeMode = ResizeMode.NoResize;
+            aboutWindow.SizeToContent = SizeToContent.WidthAndHeight;
+            aboutWindow.WindowStyle = WindowStyle.None;
+            aboutWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            aboutWindow.ShowDialog();
         }
 
         void noteRoll_NoteSelected(Note workingNote) {
@@ -100,6 +127,7 @@ namespace FluidUI {
 
             // Write setting to disk
             cfg.DefaultSamplebank = noteRoll.MasterSampleBank;
+            projCfgMenu.Visibility = Visibility.Hidden;
         }
 
         private void Label_MouseDown_1(object sender, MouseButtonEventArgs e) {
@@ -130,6 +158,8 @@ namespace FluidUI {
             System.IO.StreamWriter sw = new System.IO.StreamWriter(FluidSys.FluidSys.SettingsDir + "\\resynthengine", false);
             sw.Write(inForm.Value);
             sw.Close();
+
+            projCfgMenu.Visibility = Visibility.Hidden;
         }
 
         private void BpmLabel_MouseDown(object sender, MouseButtonEventArgs e) {
@@ -213,7 +243,7 @@ namespace FluidUI {
         }
 
         private void snappingLabel_MouseDown(object sender, MouseButtonEventArgs e) {
-            // Show Snapping menu. I'm using MouseDown to open the menu and MouseUp for the menu items
+           // Show Snapping menu. I'm using MouseDown to open the menu and MouseUp for the menu items
             // so you can use the menu in one click (click down on snapping button, move mouse over item,
             // release mouse to activate item).
             snappingMenu.Visibility = System.Windows.Visibility.Visible;
@@ -277,6 +307,31 @@ namespace FluidUI {
             }
 
             wavtoolButton.Content = noteRoll.WavTool.Substring(noteRoll.WavTool.LastIndexOf("\\") + 1);
+            projCfgMenu.Visibility = Visibility.Hidden;
+        }
+
+        private void pencilLabel_MouseDown(object sender, MouseButtonEventArgs e) {
+            noteRoll.editorTool = NoteRoll.EditorTool.Pencil;
+        }
+
+        private void brushLabel_MouseDown(object sender, MouseButtonEventArgs e) {
+            noteRoll.editorTool = NoteRoll.EditorTool.Brush;
+        }
+
+        private void projCfgMenu_MouseLeave(object sender, MouseEventArgs e) {
+            projCfgMenu.Visibility = Visibility.Hidden;
+        }
+
+        private void Label_MouseDown_3(object sender, MouseButtonEventArgs e) {
+            projCfgMenu.Visibility = Visibility.Visible;
+        }
+
+        private void zoominbtn_MouseDown(object sender, MouseButtonEventArgs e) {
+            noteRoll.ZoomIn();
+        }
+
+        private void zoomoutbtn_MouseDown(object sender, MouseButtonEventArgs e) {
+            noteRoll.ZoomOut();
         }
     }
 }

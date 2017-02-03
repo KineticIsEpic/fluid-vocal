@@ -112,17 +112,27 @@ namespace wavmod {
             int noteIndex = 0;
 
             foreach (string file in files) {
+                // create overlap string
+                string ovldoodad = "+";
+                double ovlint = playbackSheet.notes[noteIndex].VoiceProperties.Preutterance;
+
+                try { ovlint -= playbackSheet.notes[noteIndex + 1].VoiceProperties.Overlap; }
+                catch (Exception) { }
+
+                if (ovlint < 0) ovldoodad = ovlint.ToString();
+                else ovldoodad += ovlint.ToString();
+
                 string arguments;
-                arguments = outFile + " " + file + " 0 " + playbackSheet.notes[noteIndex].UUnitLength + "@" + playbackSheet.Bpm + "+10.0" + " ";
+                arguments = outFile + " " + file + " 0 " + playbackSheet.notes[noteIndex].UUnitLength + "@" + playbackSheet.Bpm + ovldoodad + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[0][0] + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[1][0] + " ";
-                arguments += (playbackSheet.notes[noteIndex].Length - playbackSheet.notes[noteIndex].Envelope[2][0]) + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[2][0] + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[0][1] + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[1][1] + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[2][1] + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[3][1] + " ";
-                arguments += playbackSheet.notes[noteIndex].Overlap + " ";
-                arguments += (playbackSheet.notes[noteIndex].Length - playbackSheet.notes[noteIndex].Envelope[3][0]) + " ";
+                arguments += playbackSheet.notes[noteIndex].VoiceProperties.Overlap + " ";
+                arguments += playbackSheet.notes[noteIndex].Envelope[3][0] + " ";
 
                 DebugLog.WriteLine("WavMod Arguments for file: " + file);
                 DebugLog.WriteLine(arguments);

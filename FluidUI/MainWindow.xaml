@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.MainWindow"
         Title="Project name here - FVSS" Height="715.725" Width="1249">
-    <Grid x:Name="mainGrid">
-        <local:NoteRoll x:Name="noteRoll" Margin="0,75,0,0" Height="Auto" Width="Auto" Visibility="Visible" RenderTransformOrigin="1,1"/>
-        <Grid Height="75" VerticalAlignment="Top" Background="#FF3E3E41" Margin="-12,0">
+    <Grid x:Name="mainGrid" Background="Black">
+        <local:NoteRoll x:Name="noteRoll" Margin="0,52,0,0" Height="Auto" Width="Auto" Visibility="Visible" RenderTransformOrigin="1,1"/>
+        <Grid Height="52" VerticalAlignment="Top" Background="#FF232323" Margin="-12,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="337*"/>
                 <ColumnDefinition Width="87*"/>
@@ -14,13 +14,10 @@
             <Grid.Effect>
                 <DropShadowEffect ShadowDepth="0" Opacity="0.7"/>
             </Grid.Effect>
-            <Label x:Name="samplebankButton" Content="Set Samplebank" HorizontalAlignment="Left" Margin="51,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="121" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown" Foreground="White"/>
-            <Label Content="Play" HorizontalAlignment="Left" Margin="401,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="71" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown_1" FontSize="14" Foreground="White"/>
-            <Label x:Name="engineButton" Content="Set Resynth Engine" HorizontalAlignment="Left" Margin="272,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="124" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown_2" Foreground="White"/>
-            <Label Content="BPM: " HorizontalAlignment="Left" Margin="517,12,0,0" VerticalAlignment="Top" Width="32" Padding="1,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-            <Label x:Name="BpmLabel" Content="120" HorizontalAlignment="Left" Margin="550,0,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="1.738,0.577" Foreground="White" MouseDown="BpmLabel_MouseDown" MouseUp="BpmLabel_MouseUp" Cursor="SizeNS" MouseMove="BpmLabel_MouseMove" MouseLeave="BpmLabel_MouseLeave" VerticalContentAlignment="Center" Height="50"/>
-            <Label x:Name="snappingLabel" Content="Snapping" HorizontalAlignment="Left" Margin="614,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="82" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="snappingLabel_MouseDown"/>
-            <Canvas HorizontalAlignment="Left" Height="28" Margin="-30,10,0,0" VerticalAlignment="Top" Width="66" Background="#FF3E3E41" MouseDown="fluidMenuButton_Click">
+            <Label Content="" HorizontalAlignment="Left" Margin="177,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="71" HorizontalContentAlignment="Center" Height="28" FontSize="14" Foreground="White"/>
+            <Label Content="BPM: " HorizontalAlignment="Left" Margin="183,11,0,0" VerticalAlignment="Top" Width="32" Padding="1,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="#FFCDCDCD"/>
+            <Label x:Name="BpmLabel" Content="120" HorizontalAlignment="Left" Margin="215,-1,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="1.738,0.577" Foreground="White" MouseDown="BpmLabel_MouseDown" MouseUp="BpmLabel_MouseUp" Cursor="SizeNS" MouseMove="BpmLabel_MouseMove" MouseLeave="BpmLabel_MouseLeave" VerticalContentAlignment="Center" Height="50"/>
+            <Canvas HorizontalAlignment="Left" Height="28" Margin="-30,10,0,0" VerticalAlignment="Top" Width="66" Background="#FF303134" MouseDown="fluidMenuButton_Click">
                 <Rectangle Fill="#FFF4F4F5" Height="4" Canvas.Left="35" Width="24" Canvas.Top="4" MouseDown="fluidMenuButton_Click"/>
                 <Rectangle Fill="#FFF4F4F5" Height="4" Canvas.Left="35" Width="24" Canvas.Top="12"/>
                 <Rectangle Fill="#FFF4F4F5" Height="4" Canvas.Left="35" Width="24" Canvas.Top="20"/>
@@ -29,11 +26,21 @@
                 <ComboBoxItem Background="Black" Content="Edit Mode" Foreground="White" IsSelected="True"/>
                 <ComboBoxItem Background="Black" Content="Tuning Mode" Foreground="White"/>
             </ComboBox>
-            <Label x:Name="wavtoolButton" Content="Set WavTool" HorizontalAlignment="Left" Margin="177,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="90" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="wavtoolButton_MouseDown" Foreground="White"/>
+            <Label x:Name="pencilLabel" Content="Pencil" HorizontalAlignment="Left" Margin="726,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="pencilLabel_MouseDown"/>
+            <Label x:Name="brushLabel" Content="Brush" HorizontalAlignment="Left" Margin="780,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="brushLabel_MouseDown"/>
+            <Label x:Name="knifeLabel" Content="Knife" HorizontalAlignment="Left" Margin="834,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="snappingLabel_MouseDown"/>
+            <Label Content="Project Settings" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="111" HorizontalContentAlignment="Center" Height="28" Foreground="White" Margin="54,10,0,0" MouseDown="Label_MouseDown_3"/>
+            <local:IconButton x:Name="stopBtn" HorizontalAlignment="Left" Height="28" Margin="290,10,0,0" VerticalAlignment="Top" Width="28"/>
+            <local:IconButton x:Name="playBtn" HorizontalAlignment="Left" Height="28" Margin="327,10,0,0" VerticalAlignment="Top" Width="28" MouseDown="Label_MouseDown_1"/>
+            <local:IconButton x:Name="pauseBtn" HorizontalAlignment="Left" Height="28" Margin="364,10,0,0" VerticalAlignment="Top" Width="28"/>
+            <local:IconButton x:Name="snapBtn" HorizontalAlignment="Left" Height="28" Margin="430,10,0,0" VerticalAlignment="Top" Width="28" MouseDown="snappingLabel_MouseDown"/>
+            <Label x:Name="zoomoutbtn" Content="Out" HorizontalAlignment="Left" Margin="567,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="zoomoutbtn_MouseDown"/>
+            <Label x:Name="zoominbtn" Content="In" HorizontalAlignment="Left" Margin="620,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="zoominbtn_MouseDown"/>
+
         </Grid>
         <Label Content="FluidUI" Background="#00000000" Foreground="Black" HorizontalAlignment="Left" Width="60" Height="14" VerticalAlignment="Bottom" FontSize="8" Padding="0,0,0,4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Courier New" FontStyle="Italic"/>
         <local:NoteMenu x:Name="rightMenu" HorizontalAlignment="Left" Margin="244,153,0,0" VerticalAlignment="Top" Height="233" Width="325" Visibility="Hidden"/>
-        <local:FluidMenu x:Name="fluidMenu" HorizontalAlignment="Left" Margin="0,75,0,0" Height="Auto" Width="207" Opacity="0.92" Visibility="Hidden" MouseLeave="fluidMenu_MouseLeave" newEvent="fluidMenu_newEvent" saveEvent="fluidMenu_saveEvent" saveAsEvent="fluidMenu_saveAsEvent" exportEvent="fluidMenu_exportEvent"/>
+        <local:FluidMenu x:Name="fluidMenu" HorizontalAlignment="Left" Margin="0,52,0,0" Visibility="Hidden" Height="Auto" Width="207" Opacity="0.92" MouseLeave="fluidMenu_MouseLeave" newEvent="fluidMenu_newEvent" saveEvent="fluidMenu_saveEvent" saveAsEvent="fluidMenu_saveAsEvent" exportEvent="fluidMenu_exportEvent"/>
         <Canvas x:Name="snappingMenu" HorizontalAlignment="Left" Height="141" Margin="602,41,0,0" VerticalAlignment="Top" Width="120" Background="Black" Opacity="0.94" MouseLeave="Canvas_MouseLeave" Visibility="Hidden">
             <Label x:Name="_4snapping" Content="1/4 Snapping" Canvas.Left="15" Canvas.Top="7" Width="122" Foreground="White" VerticalContentAlignment="Center" Padding="10,0,0,0" Height="25" MouseUp="_4snapping_MouseUp"/>
             <Label x:Name="_8snapping" Content="1/8 Snapping" Canvas.Left="15" Canvas.Top="32" Width="122" Foreground="White" VerticalContentAlignment="Center" Padding="10,0,0,0"  Height="25" MouseUp="_8snapping_MouseUp"/>
@@ -49,5 +56,10 @@
         <Grid x:Name="menuContainer" Background="#FF0C0C0C" HorizontalAlignment="Right" Width="332" Margin="0,75,0,0" Visibility="Hidden">
             <local:NoteMenu x:Name="dockedMenu" Margin="-3,0,0,-35" Width="325" HorizontalAlignment="Right" VerticalAlignment="Top" IsDocked="True"/>
         </Grid>
+        <Canvas x:Name="projCfgMenu" HorizontalAlignment="Left" Height="113" Margin="43,41,0,0" VerticalAlignment="Top" Width="146" Background="#FF111112" Visibility="Hidden" MouseLeave="projCfgMenu_MouseLeave">
+            <Label x:Name="samplebankButton" Content="Set Samplebank" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="{x:Null}" Width="124" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown" Foreground="White" Canvas.Left="10" Canvas.Top="10"/>
+            <Label x:Name="wavtoolButton" Content="Set WavTool" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="{x:Null}" Width="124" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="wavtoolButton_MouseDown" Foreground="White" Canvas.Left="10" Canvas.Top="76"/>
+            <Label x:Name="engineButton" Content="Set Resynth Engine" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="Black" Width="124" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="28" MouseDown="Label_MouseDown_2" Foreground="White" Canvas.Left="10" Canvas.Top="43"/>
+        </Canvas>
     </Grid>
 </Window>

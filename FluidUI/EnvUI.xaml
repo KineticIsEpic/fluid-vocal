@@ -7,10 +7,10 @@
              d:DesignHeight="300" d:DesignWidth="300" Height="170">
     <Grid>
         <Grid x:Name="DataGrid" Height="20" VerticalAlignment="Bottom" Background="#FF3A3A3C">
-            <Label x:Name="x1Label" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="76,1,0,0" Padding="0" Foreground="White" Width="19"/>
-            <Label x:Name="y1Label" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,1,0,0" Padding="0" Foreground="White" Width="19"/>
-            <Label x:Name="crossLabel" Content="Cross:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,1,0,0" Padding="0" Foreground="White" Width="35"/>
-            <TextBox x:Name="ovrTxtBox" HorizontalAlignment="Left" Margin="43,0,0,0" TextWrapping="Wrap" Text="0" Width="30" Background="#FF2E2E30" BorderBrush="{x:Null}" Padding="1,0,0,1" Foreground="White" TextChanged="TextBox_TextChanged"/>
+            <Label x:Name="x1Label" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="76,1,0,0" Padding="0" Foreground="White" Width="59"/>
+            <Label x:Name="y1Label" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="142,1,0,0" Padding="0" Foreground="White" Width="58"/>
+            <Label x:Name="crossLabel" Content="Cross:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,1,0,0" Padding="0" Foreground="White" Width="35" Visibility="Hidden"/>
+            <TextBox x:Name="ovrTxtBox" HorizontalAlignment="Left" Margin="43,0,0,0" TextWrapping="Wrap" Text="0" Width="30" Background="#FF2E2E30" BorderBrush="{x:Null}" Padding="1,0,0,1" Foreground="White" TextChanged="TextBox_TextChanged" Visibility="Hidden"/>
         </Grid>
         <Canvas x:Name="envDrawCanvas" HorizontalAlignment="Left" Height="150" VerticalAlignment="Top" Width="300" Background="#00000000"/>
 
