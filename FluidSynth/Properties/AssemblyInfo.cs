@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FluidSynth")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("© 2015-2017 KineticIsEpic")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

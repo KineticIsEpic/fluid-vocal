@@ -56,7 +56,7 @@ namespace FluidUI {
                         isEditorMode = false;
                     }
 
-                    noteRoll.RollEditMode = EditMode;
+                    //noteRoll.RollEditMode = EditMode;
                 }
                 catch (Exception) { }
             }
@@ -95,10 +95,10 @@ namespace FluidUI {
         }
 
         private void initIconButtons() {
-            pauseBtn.SetIcon(0);
-            playBtn.SetIcon(2);
-            stopBtn.SetIcon(5);
-            snapBtn.SetIcon(4);
+            pauseBtn.SetIcon(5);
+            playBtn.SetIcon(7);
+            stopBtn.SetIcon(10);
+            snapBtn.SetIcon(8);
             pauseBtn.IconScale = playBtn.IconScale = stopBtn.IconScale = snapBtn.IconScale = 0.8;
         }
 
@@ -332,6 +332,17 @@ namespace FluidUI {
 
         private void zoomoutbtn_MouseDown(object sender, MouseButtonEventArgs e) {
             noteRoll.ZoomOut();
+        }
+
+        private void undoLabel_MouseDown(object sender, MouseButtonEventArgs e) {
+            noteRoll.Undo();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e) {
+            // ctrl shortcuts
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Z) {
+                noteRoll.Undo();
+            }
         }
     }
 }

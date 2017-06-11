@@ -1,0 +1,40 @@
+moresampler evidently needs a temp.bat file to run
+ "Moresampler will halt when being called as wavtool because it can't find temp.bat. Moresampler actually parses temp.bat to know if it has reached the last note to be synthesized (and only then it will start to merge all pieces of .llsm.tmp files)." -Kanru Hua
+ 
+http://ch.nicovideo.jp/delta_kimigatame/blomaga/ar429837 talks about the args and whatnot
+
+
+
+Preutterance conversation:
+
+It triggers that correction factor when (preutterance of previous note - overlap) > length of last note/2
+Khento 9:53 PM - Khento: I'm trying to decypher the rest
+KNΞMΛTCS 9:54 PM - KNΞMΛTCS: i'm going to have to find a japanese speaker arent i
+Khento 9:55 PM - Khento: The correction factor is (length of previous note/2) / (preutterance of previous note - overlap)
+KNΞMΛTCS 9:55 PM - KNΞMΛTCS: ooh
+Khento 9:56 PM - Khento: The preutterance of the previous note after the correction is (preutterance of previous note) * that correction factor
+Khento 9:56 PM - Khento: the overlap of the previous note after the correction is (overlap of previous note) * that correction factor
+Khento 9:57 PM - Khento: sorry, not of the previous note, of the actual note
+KNΞMΛTCS 9:57 PM - KNΞMΛTCS: for both of those or just the second rule
+Khento 9:57 PM - Khento: both
+KNΞMΛTCS 9:58 PM - KNΞMΛTCS: sweet, that makes it easy! *starts coding*
+Khento 9:58 PM - Khento: The STP after correction is (preutterance of previous note before correction) - (preutterance of previous note after correction)
+Khento 9:58 PM - Khento: aaargh, I got it wrong again, The STP after correction is (preutterance before correction) - (preutterance after correction)
+
+
+ 10:03 PM - Khento: Ok, here is what I understood:
+Khento 10:04 PM - Khento: If (preutterance - overlap) > (length of preceding note/2)
+Khento 10:04 PM - Khento: Correction factor = (length of preceding note/2) / (preutterance - overlap)
+Khento 10:04 PM - Khento: Corrected Preutterance = (uncorrected preutterance) * Correction factor
+Khento 10:04 PM - Khento: Corrected Overlap = (uncorrected overlap) * Correction factor
+Khento 10:04 PM - Khento: Corrected STP = (uncorrected preutterance) - *(corrected preutterance)
+
+if (lastnote.pre > lastnote.length * 2) {
+    corrfactor = (lastnote.length / 2) / preutterance - overlap)
+	oldpre = preutterance;
+	
+	preutterance = preutterance * corrfactor;
+	overlap = overlap * corrfactor;
+	
+	STP = oldpre - preutterance;
+}

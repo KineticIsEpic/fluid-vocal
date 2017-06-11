@@ -66,6 +66,8 @@ namespace FluidSys {
         /// Gets or sets the volume property of this FluidSys.Note.
         /// </summary>
         public int Volume { get; set; }
+        //TODO: make an XML comment that says "Gets or sets the portamento length"
+        public int PortaLength { get; set; }
         /// <summary>
         /// Set to true to use the sample pack path indicated by the 
         /// containing FluidSys.Sheet class at render time.
@@ -87,7 +89,14 @@ namespace FluidSys {
         /// Gets or sets the envelope configuration of this FluidSys.Note.
         /// </summary>
         public List<int[]> Envelope = new List<int[]> { new int[2], new int[2], new int[2], new int[2] };
-        
+        /// <summary>
+        /// Screen position
+        /// </summary>
+        public double ScreenPosY { get; set; }
+        /// <summary>
+        /// Used for auto-making rests
+        /// </summary>
+        public int RestLength = 0;
         /// <summary>
         /// Create a new instance of the FluidSys.Note class using the
         /// specified VoiceProp.
@@ -100,6 +109,7 @@ namespace FluidSys {
             Velocity = 100;
             Volume = 100;
             Modulation = 0;
+            PortaLength = 18;
             Args = "B0";
         }
 

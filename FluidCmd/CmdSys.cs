@@ -22,7 +22,7 @@ namespace FluidCmd {
 
         Sheet noteSheet = new Sheet();
         OtoReader or = new OtoReader();
-        MainWindow fluidUi; 
+        NewUI fluidUi; 
 
         public void Cmd() {
             Console.Out.WriteLine();
@@ -206,7 +206,15 @@ namespace FluidCmd {
 
         public void LaunchFluidUI() {
             Console.Out.Write("Launching FluidUI... ");
-            fluidUi = new MainWindow();
+            try {
+                fluidUi = new NewUI();
+            }
+            catch (Exception ex) {
+                Console.Out.WriteLine("She's dead, Jim.");
+                Console.Out.WriteLine("The gory details:");
+                Console.Out.WriteLine(ex.Message);
+                Console.Out.WriteLine(ex.StackTrace);
+            }
             Console.Out.WriteLine("Done. ");
             fluidUi.ShowDialog();
           //  Console.Out.WriteLine("FluidUI Closed. ");

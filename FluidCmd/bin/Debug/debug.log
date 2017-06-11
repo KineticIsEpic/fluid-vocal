@@ -1,16 +1,16 @@
-2/2/2017 9:37:54 PM: Resampler Arguments for note: a
-2/2/2017 9:37:54 PM: "C:\users\user\downloads\teto eng\vb\" "C:\Users\User\AppData\Local\FluidSynth\ren\1253937931\802281943\0000.wav" "C4" 100 "B0"  550   100 0 0Q120 
-2/2/2017 9:38:58 PM: Resampler Arguments for note: a
-2/2/2017 9:38:58 PM: "C:\users\user\downloads\teto eng\vb\" "C:\Users\User\AppData\Local\FluidSynth\ren\1842474571\682437326\0000.wav" "C4" 100 "B0"  550   100 0 0Q120 
-2/2/2017 9:39:02 PM: Resampler Arguments for note: la
-2/2/2017 9:39:02 PM: "C:\users\user\downloads\teto eng\vb\_lau+_lau+_l-.wav" "C:\Users\User\AppData\Local\FluidSynth\ren\1982176725\10839730\0000.wav" "C4" 100 "B0" 649.335 600 123.332 -366.668 100 0 0Q120 
-2/2/2017 9:39:02 PM: WavMod Arguments for file: C:\Users\User\AppData\Local\FluidSynth\ren\1982176725\10839730\0000.wav
-2/2/2017 9:39:02 PM: C:\Users\User\AppData\Local\FluidSynth\ren\1324045472\1877607513\out.wav C:\Users\User\AppData\Local\FluidSynth\ren\1982176725\10839730\0000.wav 0 480@120+73.333 0 5 35 0 100 100 0 33 0 
-2/2/2017 9:39:03 PM: Resampler Arguments for note: la
-2/2/2017 9:39:03 PM: "C:\users\user\downloads\teto eng\vb\_lau+_lau+_l-.wav" "C:\Users\User\AppData\Local\FluidSynth\ren\1721928710\1310249226\0000.wav" "C4" 100 "B0" 649.335 600 123.332 -366.668 100 0 0Q120 
-2/2/2017 9:39:03 PM: WavMod Arguments for file: C:\Users\User\AppData\Local\FluidSynth\ren\1721928710\1310249226\0000.wav
-2/2/2017 9:39:03 PM: C:\Users\User\AppData\Local\FluidSynth\ren\644641420\823424012\out.wav C:\Users\User\AppData\Local\FluidSynth\ren\1721928710\1310249226\0000.wav 0 480@120+73.333 0 5 35 0 100 100 0 33 0 
-2/2/2017 9:39:04 PM: Resampler Arguments for note: la
-2/2/2017 9:39:04 PM: "C:\users\user\downloads\teto eng\vb\_lau+_lau+_l-.wav" "C:\Users\User\AppData\Local\FluidSynth\ren\2119811948\742890939\0000.wav" "C4" 100 "B0" 649.335 600 123.332 -366.668 100 0 0Q120 
-2/2/2017 9:39:04 PM: WavMod Arguments for file: C:\Users\User\AppData\Local\FluidSynth\ren\2119811948\742890939\0000.wav
-2/2/2017 9:39:04 PM: C:\Users\User\AppData\Local\FluidSynth\ren\1393896549\1541808715\out.wav C:\Users\User\AppData\Local\FluidSynth\ren\2119811948\742890939\0000.wav 0 480@120+73.333 0 5 35 0 100 100 0 33 0 
+5/21/2017 11:43:49 AM: Resampler Arguments for note: i
+5/21/2017 11:43:49 AM: "O:\teto eng\vb\_i_hi_i_i_i-.wav" "C:\Users\user\AppData\Local\FluidSynth\ren\1772584144\1062840381\0000.wav" "F#4" 100 "" 866.661 265 50.0 -2016.351 100 0 !181 
+5/21/2017 11:43:49 AM: Resampler Arguments for note: i f
+5/21/2017 11:43:49 AM: "O:\teto eng\vb\_fi_fi_f-.wav" "C:\Users\user\AppData\Local\FluidSynth\ren\1772584144\1062840381\0001.wav" "F#4" 100 "" 361.668 515 283.001 -319.668 100 0 !181 //////////////////////
+5/21/2017 11:43:50 AM: WavMod Arguments for file: C:\Users\user\AppData\Local\FluidSynth\ren\1772584144\1062840381\0000.wav
+5/21/2017 11:43:50 AM: C:\Users\user\AppData\Local\FluidSynth\ren\1758402278\1263023172\out.wav C:\Users\user\AppData\Local\FluidSynth\ren\1772584144\1062840381\0000.wav 0 240@181-62 0 5 35 0 100 100 0 40 0 
+5/21/2017 11:43:50 AM: WavMod Arguments for file: C:\Users\user\AppData\Local\FluidSynth\ren\1772584144\1062840381\0001.wav
+5/21/2017 11:43:50 AM: C:\Users\user\AppData\Local\FluidSynth\ren\1758402278\1263023172\out.wav C:\Users\user\AppData\Local\FluidSynth\ren\1772584144\1062840381\0001.wav 0 240@181+122.999016007872 0 5 35 0 100 100 0 83.332 0 
+5/21/2017 11:44:08 AM: Resampler Arguments for note: i
+5/21/2017 11:44:08 AM: "O:\teto eng\vb\_i_hi_i_i_i-.wav" "C:\Users\user\AppData\Local\FluidSynth\ren\1548581784\1530843643\0000.wav" "F#4" 100 "" 866.661 265 50.0 -2016.351 100 0 !181 
+5/21/2017 11:44:08 AM: Resampler Arguments for note: i f
+5/21/2017 11:44:08 AM: "O:\teto eng\vb\_fi_fi_f-.wav" "C:\Users\user\AppData\Local\FluidSynth\ren\1548581784\1530843643\0001.wav" "F#4" 100 "" 361.668 515 283.001 -319.668 100 0 !181 //////////////////////
+5/21/2017 11:44:09 AM: WavMod Arguments for file: C:\Users\user\AppData\Local\FluidSynth\ren\1548581784\1530843643\0000.wav
+5/21/2017 11:44:09 AM: C:\Users\user\AppData\Local\FluidSynth\ren\1093971082\751449447\out.wav C:\Users\user\AppData\Local\FluidSynth\ren\1548581784\1530843643\0000.wav 0 240@181-62 0 5 35 0 100 100 0 40 0 
+5/21/2017 11:44:09 AM: WavMod Arguments for file: C:\Users\user\AppData\Local\FluidSynth\ren\1548581784\1530843643\0001.wav
+5/21/2017 11:44:09 AM: C:\Users\user\AppData\Local\FluidSynth\ren\1093971082\751449447\out.wav C:\Users\user\AppData\Local\FluidSynth\ren\1548581784\1530843643\0001.wav 0 240@181+122.999016007872 0 5 35 0 100 100 0 83.332 0 

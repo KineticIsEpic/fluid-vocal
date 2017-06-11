@@ -60,6 +60,8 @@
     <Compile Include="Renderer.cs" />
     <Compile Include="SampleBank.cs" />
     <Compile Include="Sheet.cs" />
+    <Compile Include="UnitConverter.cs" />
+    <Compile Include="USTReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\oto\oto.csproj">

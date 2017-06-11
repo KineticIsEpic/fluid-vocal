@@ -19,73 +19,89 @@ namespace FluidUI {
     /// </summary>
     public partial class EditorPanel : UserControl {
 
+        List<Line> fillLines = new List<Line>();
+        List<Rectangle> points = new List<Rectangle>();
+
+        Point downLoc = new Point();
+
         int Bpm = 0;
+        int maxPos = 0;
 
         public EditorPanel() {
             InitializeComponent();
-        }
 
-        public void UpdateView(FluidSys.Sheet noteSheet, int tempo) {
-            envPanel.Children.Clear();
-            Bpm = tempo;
-
-            envScroller.Margin = new Thickness(76, 0, 0, -18);
-
-            foreach (FluidSys.Note note in noteSheet.notes) {
-                EnvUI envelope = new EnvUI();
-                envelope.Width = getLengthInPx(tempo, note.Length);
-                envelope.Height = 170;
-                envelope.WorkingNote = note;
-                envelope.Tempo = tempo;
-                envelope.InitPoints();
-                envelope.Crossover = note.Overlap;
-                envelope.SizeChangeHelper = (int)getTotalEnvelopesLength();
-            
-                // Compensate for preutterance
-                Canvas.SetLeft(envelope, getTotalEnvelopesLength() - getLengthInPx(Bpm, note.Overlap));
-                Canvas.SetTop(envelope, 0);
-
-                envelope.SizeChanged += envelope_SizeChanged;
-                envPanel.Children.Add(envelope);
+            for (int i = 0; i < Width / 2; i++) {
+                addpoint(new Point(i * 4, Height / 2));
             }
         }
+
+        public void UpdateView(FluidSys.Sheet noteSheet, int tempo) { }
 
         void envelope_SizeChanged(object sender, SizeChangedEventArgs e) {  }
 
         private void Label_MouseDown(object sender, MouseButtonEventArgs e) {  }
 
-        private double getTotalEnvelopesLength() {
-            double totallength = 0;
-
-            foreach (EnvUI envelope in envPanel.Children) {
-                totallength += envelope.Width - getLengthInPx(Bpm, envelope.WorkingNote.Overlap);
-            }
-            return totallength;
+        private void envPanel_MouseMove(object sender, MouseEventArgs e) {
         }
 
-        private double getTotalEnvelopesLength(int index) {
-            double totallength = 0;
-            int counter = 0;
+        private Rectangle pointundermouse() {
+            int ptndx = 0;
 
-            foreach (EnvUI envelope in envPanel.Children) {
-                totallength += envelope.Width;
-                counter++;
-                
-                if (counter >= index) return totallength;
-            }
-            return totallength; 
+            while (Canvas.GetLeft((Rectangle)envPanel.Children[ptndx])
+                < Mouse.GetPosition(envPanel).X && ptndx + 1
+                < envPanel.Children.Count)
+                    ptndx++;
+
+            return (Rectangle)envPanel.Children[ptndx];
         }
 
-        private double getLengthInPx(int BPM, int lengthMs) {
-            // Using quarter note as a reference for calculation
-            int qNotePx = 120; 
-            int qNoteMillis = 0;
+        private void addpoint(Point pos) {
+            Rectangle rect = new Rectangle();
+            rect.Fill = new SolidColorBrush(Colors.DodgerBlue);
+            rect.Width = rect.Height = 3;
+            envPanel.Children.Add(rect);
+            Canvas.SetTop(rect, pos.Y);
+            Canvas.SetLeft(rect, pos.X);
+            Canvas.SetZIndex(rect, 1);
+            points.Add(rect);
 
-            // Get reference length for note based on current tempo
-            try { qNoteMillis = 60000 / BPM; }
-            catch (Exception) { return -1; }
+            Rectangle clickarea = new Rectangle();
+            clickarea.Fill = new SolidColorBrush(Color.FromRgb(40,40,42));
+            clickarea.Height = envPanel.Height;
+            clickarea.Width = 3;
+            envPanel.Children.Add(clickarea);
+            Canvas.SetTop(clickarea, 0);
+            Canvas.SetLeft(clickarea, pos.X);
+            Canvas.SetZIndex(clickarea, 0);
+            clickarea.Tag = rect;
+            clickarea.MouseMove += Clickarea_MouseMove;
+            clickarea.MouseDown += Clickarea_MouseDown;
+        }
 
-            return lengthMs * qNotePx / qNoteMillis;
+        private void Clickarea_MouseDown(object sender, MouseButtonEventArgs e) {
+            downLoc = Mouse.GetPosition(envPanel);
+        }
+
+        private void Clickarea_MouseMove(object sender, MouseEventArgs e) {
+            if (Mouse.LeftButton == MouseButtonState.Pressed) {
+                Canvas.SetTop(((Rectangle)((Rectangle)sender).Tag), Mouse.GetPosition(this).Y);
+                ((Rectangle)((Rectangle)sender).Tag).Tag = true;
+
+                for (int i = points.IndexOf(((Rectangle)((Rectangle)sender).Tag)) - 1; i > 0; i--) {
+                    try { if ((bool)points[i].Tag == true) break; }
+                    catch (Exception) { }
+                    if (Canvas.GetLeft(points[i]) < downLoc.X) break;
+
+                    Canvas.SetTop(points[i], Mouse.GetPosition(envPanel).Y);
+                } 
+            }
+            
+        }
+
+        private void envPanel_MouseDown(object sender, MouseButtonEventArgs e) { }
+
+        private void envPanel_MouseUp(object sender, MouseButtonEventArgs e) {
+            foreach (Rectangle point in points) point.Tag = false;
         }
     }
 }

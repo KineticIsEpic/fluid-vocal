@@ -5,16 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using NAudio;
 using NAudio.Wave;
 using FluidSys;
-using System.Timers;
 using System.Diagnostics;
-using System.Threading;
 
 namespace wavmod {
     public class WavMod {
@@ -111,19 +105,35 @@ namespace wavmod {
             string[] files = Directory.GetFiles(tempDir);
             int noteIndex = 0;
 
+            foreach (Note nt in playbackSheet.notes) {
+                if (noteIndex > 0) GenAdjTime(nt, playbackSheet.notes[noteIndex - 1]);
+                else {
+                    nt.VoiceProperties.Adj_Overlap = nt.Overlap;
+                    nt.VoiceProperties.Adj_Preutterance = nt.VoiceProperties.Preutterance;
+                }
+
+                noteIndex++;
+            }
+
+            noteIndex = 0;
+
             foreach (string file in files) {
                 // create overlap string
                 string ovldoodad = "+";
-                double ovlint = playbackSheet.notes[noteIndex].VoiceProperties.Preutterance;
+                double ovlint = playbackSheet.notes[noteIndex].VoiceProperties.Adj_Preutterance;
 
-                try { ovlint -= playbackSheet.notes[noteIndex + 1].VoiceProperties.Overlap; }
+                try {
+                    ovlint -= playbackSheet.notes[noteIndex + 1].VoiceProperties.Adj_Preutterance;
+                    ovlint += playbackSheet.notes[noteIndex + 1].VoiceProperties.Adj_Overlap;
+                }
                 catch (Exception) { }
 
                 if (ovlint < 0) ovldoodad = ovlint.ToString();
                 else ovldoodad += ovlint.ToString();
 
                 string arguments;
-                arguments = outFile + " " + file + " 0 " + playbackSheet.notes[noteIndex].UUnitLength + "@" + playbackSheet.Bpm + ovldoodad + " ";
+                arguments = outFile + " " + file + " 0 " + playbackSheet.notes[noteIndex].UUnitLength 
+                    + "@" + playbackSheet.Bpm + ovldoodad + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[0][0] + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[1][0] + " ";
                 arguments += playbackSheet.notes[noteIndex].Envelope[2][0] + " ";
@@ -158,6 +168,27 @@ namespace wavmod {
                 "this is most likely due to an error during the splicing process. \r\n\r\nSome things you can do \r\n" + 
                 "-Change the tempo\r\n-Adjust envelopes\r\n-Restart FVSS", "Playback Error", 
                 System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation); }
+        }
+
+        private void GenAdjTime(Note current, Note prev) {
+            if (current.VoiceProperties.Preutterance 
+                - current.VoiceProperties.Overlap > prev.Length / 2) {
+
+                double factor = (prev.Length / 2) /
+                    (current.VoiceProperties.Preutterance - current.VoiceProperties.Overlap);
+
+                current.VoiceProperties.Adj_Preutterance =
+                    current.VoiceProperties.Preutterance * factor;
+
+                current.VoiceProperties.Adj_Overlap =
+                    current.VoiceProperties.Overlap * factor;            
+            }
+            else {
+                current.VoiceProperties.Adj_Preutterance =
+                    current.VoiceProperties.Preutterance;
+                current.VoiceProperties.Adj_Overlap =
+                    current.VoiceProperties.Overlap;
+            }
         }
         
         private string GenEditedFiles(string[] files, List<Note> notes) {

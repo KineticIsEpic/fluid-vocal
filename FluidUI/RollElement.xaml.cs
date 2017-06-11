@@ -23,6 +23,7 @@ namespace FluidUI {
     public delegate void ElementChangedEventArgs(RollElement sender);
     public delegate void ElementRemovedEventArgs(RollElement sender);
     public delegate void ElementSelectedChangedEventArgs(RollElement sender, bool isSelected);
+    public delegate void ElementEditingStateEventArgs(bool state);
 
     /// <summary>
     /// Interaction logic for RollElement.xaml
@@ -33,7 +34,9 @@ namespace FluidUI {
         public event ElementSelectedChangedEventArgs ElementSelected;
         public event ElementChangedEventArgs ElementMouseDown;
         public event ElementChangedEventArgs ElementMouseUp;
+        public event ElementEditingStateEventArgs ElementEditingStateChanged;
 
+        // element colors
         public Brush SelectedForegroundBrush { get; set; }
         public Brush ForegroundBrush { get; set; }
         public Brush SelectedBackgroundBrush { get; set; }
@@ -190,12 +193,12 @@ namespace FluidUI {
 
         private void gripper_Selected(object sender, MouseButtonEventArgs e) {
             if (e.RightButton == MouseButtonState.Pressed) {
-                if (!IsSelected) IsSelected = true;
-                else IsSelected = false; 
+                //if (!IsSelected) IsSelected = true;
+                //else IsSelected = false; 
             }
 
-            ElementMouseDown.Invoke(this); 
-          //  catch (Exception) { }
+            try { ElementMouseDown.Invoke(this); }
+            catch (Exception) { }
         }
 
         private void gripper_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -218,7 +221,17 @@ namespace FluidUI {
 
         private void bkgGrid_MouseUp(object sender, MouseButtonEventArgs e) {
             try { if (e.ChangedButton == MouseButton.Right) ElementMouseUp.Invoke(this); }
-            catch (Exception ex) { }
+            catch (Exception) { }
+        }
+
+        private void nameTxtBox_GotFocus(object sender, RoutedEventArgs e) {
+            try { ElementEditingStateChanged.Invoke(true); }
+            catch (Exception) { }
+        }
+
+        private void nameTxtBox_LostFocus(object sender, RoutedEventArgs e) {
+            try { ElementEditingStateChanged.Invoke(false); }
+            catch (Exception) { }
         }
     }
 }

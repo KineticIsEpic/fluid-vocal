@@ -24,7 +24,7 @@
             </ScrollViewer>
             <ScrollViewer x:Name="scroller" HorizontalScrollBarVisibility="Visible" Margin="76,20,0,0" ScrollChanged="scroller_ScrollChanged">
                 <Grid>
-                    <Canvas x:Name="bkgCanvas" Height="1728" Width="3954" MouseDown="bkgCanvas_MouseDown" MouseUp="bkgCanvas_MouseUp" MouseMove="bkgCanvas_MouseMove" Margin="0,2,0,-2" SizeChanged="bkgCanvas_SizeChanged">
+                    <Canvas x:Name="bkgCanvas" Height="1728" Width="3954" MouseLeave="bkgCanvas_MouseLeave" MouseDown="bkgCanvas_MouseDown" MouseUp="bkgCanvas_MouseUp" MouseMove="bkgCanvas_MouseMove" Margin="0,2,0,-2" SizeChanged="bkgCanvas_SizeChanged">
                         <Canvas.Background>
                             <VisualBrush TileMode="Tile" Viewport="0,0,0.5,0.5">
                                 <VisualBrush.Visual>
@@ -33,7 +33,7 @@
                             </VisualBrush>
                         </Canvas.Background>
                     </Canvas>
-                    <Canvas x:Name="overlayCanvas" Height="1728" Width="3954"/>
+                    <Canvas x:Name="overlayCanvas" Height="1728" Width="3954" MouseDown="overlayCanvas_MouseDown"/>
                 </Grid>
             </ScrollViewer>
             <TextBox x:Name="dataDisp" Text="data box" Foreground="#FF0074FF" Background="Black" Height="157" VerticalAlignment="Top" TextWrapping="Wrap" Margin="0,47,18,0" HorizontalAlignment="Right" Width="139" FontFamily="Consolas" BorderBrush="{x:Null}"/>

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FluidLaunch")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("© 2015-2017 KineticIsEpic")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

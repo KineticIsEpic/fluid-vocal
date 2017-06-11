@@ -1,21 +1,15 @@
-﻿/*===================================================*\
+﻿/*====================================================*\
  *||          Copyright(c) KineticIsEpic.             ||
  *||          See LICENSE.TXT for details.            ||
  *====================================================*/
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FluidSys;
 using OTOmate;
@@ -23,20 +17,51 @@ using OTOmate;
 namespace FluidUI {
     public delegate void NoteSelectEventHandler(Note workingNote);
     /// <summary>
-    /// Interaction logic for NoteRoll.xaml
+    /// HOW EVERYTHING WORKS:
+    /// Notes are 2 objects: the RollElement on the roll, and the Note object
+    /// that stores the important bits about the note. All the Note objects 
+    /// are stored inside the NoteSheet, which also stores bits of info about
+    /// the track (voicebank, tempo...). 
+    /// 
+    /// Adding a note is initiated by clicking and dragging, as detected 
+    /// within bkgCanvas_MouseDown. The code there adds a temporary RollElement
+    /// to the canvas and sets isCreatingNote to true, which enables code
+    /// in bkgCanvas_MouseMove which makes the temporary note follow the user's
+    /// mouse. Releasing the mouse (bkgCanvas_MouseUp) runs more code which 
+    /// removes the temporary note and adds the real note by calling AddNote.
+    /// 
+    /// Most other roll operations work in a simiar manner; their code is
+    /// also distributred between the three methods. I think the rest is all
+    /// nicely commented.
+    /// 
+    /// Undo (still not working as I'm writing this) is supposed to work by 
+    /// storing old versions of the bkgCanvas.Children and noteSheet 
+    /// variables, then indexing through them. The notes don't stay where 
+    /// they should - all empty space between them goes away.
+    /// 
+    /// The RollEditMode BS isn't used anymore. The original idea involved
+    /// 2 distinct editing modes, one for edting notes and another for "tuning"
+    /// voice parameters. This idea has been abandoned for a simpler approach.
+    /// I should rip it out but can't be bothered to.
     /// </summary>
     public partial class NoteRoll : UserControl {
         public event NoteSelectEventHandler NoteSelected;
 
-        private List<RollElement> uiNotes = new List<RollElement>(2048);
+        //TODO: explain what all these variables do (and clean out unnecessary ones)
+        private List<List<RollElement>> undoElements = new List<List<RollElement>>(11);
+        private List<Sheet> undoSheets = new List<Sheet>(11);
+        private List<List<int>> undoDists = new List<List<int>>(11);
+
         private Sheet noteSheet = new Sheet();
         private RollElement tempNote;
         private Rectangle rollCaret;
+        private Rectangle selectionBox; 
         private OtoReader otoRead;
         private FluidFileWriter fileWriter;
         private NoteMenu rightClickMenu;
         private wavmod.WavMod wavMod;
         private Point mouseDownScrollLoc;
+        private Point mouseDownSelLoc;
 
         private int MouseDownLoc = 0;
         private int baseNoteLength = 480;
@@ -44,7 +69,7 @@ namespace FluidUI {
         private int currentNoteIndex = 0;
         private int mouseDownNoteSize = 0;
         private int internalBpm = 120;
-        private int currentNoteDist;
+        private int undoIndex = 0;
 
         private double dblNoteSnapping = 0;
         private double dblRollSnapping = 0;
@@ -55,8 +80,12 @@ namespace FluidUI {
         private bool isMovingNote = false;
         private bool isCreatingNote = false;
         private bool mouseOverNote = false;
-        private bool isInitalScroll = false;
+        private bool isScrolling = false;
         private bool isEditMode = false;
+        private bool isSelecting = false;
+        private bool isSelection = false;
+        private bool hasUndone = false;
+        private bool tempSelect = false; //workaround for horizontal move bugfix
 
         private Snapping tempNS = Snapping.Quarter;
         private Snapping tempRS = Snapping.Quarter;
@@ -68,6 +97,8 @@ namespace FluidUI {
         public Brush CurrentPianoKeyColor { get; set; }
         public Brush LightPianoKeyColor { get; set; }
         public Brush DarkPianoKeyColor { get; set; }
+
+        public int undoLimit = 10;
 
         /// <summary>
         /// Was going to be used for the 2-mode editor (one view for adding notes and one for tuning),
@@ -87,7 +118,7 @@ namespace FluidUI {
                 }
                 else {
                     topGrid.Height = 0;
-                    topGrid.Visibility = System.Windows.Visibility.Hidden;
+                    topGrid.Visibility = System.Windows.Visibility.Visible;
 
                     isEditMode = false;
                 }
@@ -140,9 +171,11 @@ namespace FluidUI {
             get { return noteSheet.Voicebank; }
             set {
                 noteSheet.Voicebank = value;
+                otoRead = new OtoReader();
                 otoRead.OpenFile(noteSheet.Voicebank + "\\oto.ini");
 
                 foreach (Note note in noteSheet.notes) {
+                    note.VbPath = noteSheet.Voicebank + "\\oto.ini";
                     note.VoiceProperties = otoRead.GetVoicePropFromSampleName(note.DispName);
                     System.Windows.Forms.MessageBox.Show("Test");
                 }
@@ -158,6 +191,8 @@ namespace FluidUI {
             get { return noteSheet.Resampler; }
             set { noteSheet.Resampler = value; }
         }
+
+        public bool isNoteEditing { get; set; }
 
         public enum Snapping {
             Quarter, Eighth, Sixteenth, Thirty_Second, None,
@@ -256,7 +291,16 @@ namespace FluidUI {
             // sync tempo
             noteSheet.Bpm = internalBpm;
 
-            // set up zooming/scaling
+            // set up selection box;
+            selectionBox = new Rectangle();
+            selectionBox.Fill = new SolidColorBrush(Colors.DodgerBlue);
+            selectionBox.Opacity = 0.6;
+            selectionBox.MouseMove += bkgCanvas_MouseMove;
+            selectionBox.MouseUp += bkgCanvas_MouseUp;
+
+            // show tuning panel
+            topGrid.Height = 170;
+            topGrid.Visibility = System.Windows.Visibility.Visible;
         }
 
         // deselects the right-clicked note when the menu is closed
@@ -271,12 +315,36 @@ namespace FluidUI {
         /// <param name="location">The refrence point for locating the note. The note 
         /// will be further positioned to line up to the nearest lane. </param>
         /// <param name="length">The display length of the note. </param>
-        /// <param name="index">the index to insert the note at, or -1 to
-        /// add to the end of the list. </param>
-        public RollElement AddNote(Point location, int length, int index) {
+        /// <param name="index">the index to insert the note at. </param>
+        public RollElement AddNote(Point location, int length, int index, Note srcNote) {
             RollElement displayNote = new RollElement();
             Note logicalNote;
-            
+
+            // align the note with the others if needed
+            foreach (RollElement element in bkgCanvas.Children) {
+                if (Canvas.GetLeft(element) < location.X && Canvas.GetLeft(element) + element.Width > location.X) {
+                    location.X = Canvas.GetLeft(element) + element.Width;
+                    break;
+                }
+            }
+
+            // add this note's distance (from the beginning of the roll) to the list,
+            // used to keep the notes aligned
+            noteDists.Add((int)location.X);
+
+            // auto-set index based on position
+            if (index == -1) {
+                try { index = genNoteIndex((int)location.X); }
+                catch (Exception) {
+                    // get rid of screwy elements
+                    for (int i = 0; i < bkgCanvas.Children.Count; i++) {
+                        try { if (((RollElement)bkgCanvas.Children[i]).ActualHeight == 0) bkgCanvas.Children.RemoveAt(i); }
+                        catch (IndexOutOfRangeException) { break; }
+                    }
+                    index = bkgCanvas.Children.Count - 1;
+                }
+            }
+
             // configure the RollElement
             displayNote.Width = length;
             displayNote.Height = 24;
@@ -288,6 +356,7 @@ namespace FluidUI {
             displayNote.MouseLeave += displayNote_MouseLeave;
             displayNote.ElementMouseDown += displayNote_ElementMouseDown;
             displayNote.ElementMouseUp += DisplayNote_ElementMouseUp;
+            displayNote.ElementEditingStateChanged += DisplayNote_ElementEditingStateChanged;
             displayNote.ZoomFactor = hZoomFactor;
 
             // add it to the canvas
@@ -295,30 +364,86 @@ namespace FluidUI {
             Canvas.SetLeft(displayNote, location.X);
             Canvas.SetTop(displayNote, location.Y);
 
+            // create new logical note if srcNote is null
+            if (srcNote == null) logicalNote = displayNote.ElementNote;
+            else {
+                logicalNote = srcNote;
+                displayNote.NoteName = logicalNote.DispName;
+            }
+
             // setup logical note based off of the element
-            logicalNote = displayNote.ElementNote;
             logicalNote.NotePitch = generatePitchString((int)location.Y);
             logicalNote.VoiceProperties = otoRead.GetVoicePropFromSampleName(logicalNote.DispName);
             logicalNote.GenerateDefaultEnvelope();
-
+            logicalNote.ScreenPosY = location.Y;
+            logicalNote.PitchCode = "0";
+           
+            // set rest length 
+            try {
+                logicalNote.RestLength = ((int)Canvas.GetLeft(bkgCanvas.Children[index]) -
+                    ((int)Canvas.GetLeft(bkgCanvas.Children[index - 1]) +
+                    (int)((RollElement)bkgCanvas.Children[index - 1]).Width)) / (int)dblNoteSnapping * (int)dblNoteSnapping;
+            }
+            catch (Exception) { }
+           
             // add it to the NoteSheet
-            noteSheet.notes.Insert(index, logicalNote);
+            noteSheet.notes.Insert(index, logicalNote);          
+
+            // used alongside noteDists for alignment purposes
+            totalNotesLength += (int)((RollElement)bkgCanvas.Children[noteSheet.notes.Count - 1]).Width;
+
+            // move notes to the right if needed
+            foreach (RollElement element in bkgCanvas.Children) {
+                if (Canvas.GetLeft(element) >= location.X && element != displayNote) {
+                    element.NoteIndex++;
+                    Canvas.SetLeft(element, Canvas.GetLeft(element) + (int)tempNote.Width);
+                }
+            }
+
+            // setup pitch:
+            addPorta(logicalNote, displayNote, 12, true);
+
+            // grow the sheet if needed
+            if (totalNotesLength + 500 > bkgCanvas.Width) {
+                bkgCanvas.Width += 600;
+                timeBar.Width += 600;
+                timeBarSlider.Width += 600;
+                envelopePanel.envPanel.Width += 600;
+            }
+
             return displayNote;
         }
 
-        private void DisplayNote_ElementMouseUp(RollElement sender) {
-                // setup and display right-click menu
-                rightClickMenu.WorkingNoteIndex = sender.NoteIndex;
-                rightClickMenu.WorkingNote = noteSheet.notes[sender.NoteIndex];
-                Canvas.SetLeft(rightClickMenu, Mouse.GetPosition(overlayCanvas).X);
-                Canvas.SetTop(rightClickMenu, Mouse.GetPosition(overlayCanvas).Y);
-                rightClickMenu.Visibility = Visibility.Visible;
-            
+        // used by MainWindow to determine when to use keyboard shortcuts
+        private void DisplayNote_ElementEditingStateChanged(bool state) {
+            isNoteEditing = state;
         }
 
-        void displayNote_ElementMouseDown(RollElement sender) {
-     
+        private void DisplayNote_ElementMouseUp(RollElement sender) {
+            // setup and display right-click menu
+            rightClickMenu.WorkingNoteIndex = sender.NoteIndex;
+            rightClickMenu.WorkingNote = noteSheet.notes[sender.NoteIndex];
+
+            Canvas.SetLeft(rightClickMenu, Mouse.GetPosition(overlayCanvas).X);
+            Canvas.SetTop(rightClickMenu, Mouse.GetPosition(overlayCanvas).Y);
+
+            // make sure the panel is fully viewable vertically
+            if (Canvas.GetTop(rightClickMenu) - scroller.ContentVerticalOffset +
+                rightClickMenu.Height > scroller.ActualHeight)
+                Canvas.SetTop(rightClickMenu, scroller.ContentVerticalOffset +
+                    (scroller.ActualHeight - rightClickMenu.Height) - 50);
+
+            rightClickMenu.Visibility = Visibility.Visible;         
+        }
+
+        void displayNote_ElementMouseDown(RollElement sender) {   
             if (sender.IsMouseOverResize) {
+                // deselect any selected notes 
+                clearSelection();
+
+                // add the current state to Undo
+                addToUndo();
+
                 // init resize, done by bkgCanvas_MouseMove
                 isSizingNote = true; 
                 currentNoteIndex = sender.NoteIndex; 
@@ -326,14 +451,15 @@ namespace FluidUI {
                 // used in the resize job:
                 mouseDownNoteSize = (int)sender.Width; 
                 MouseDownLoc = (int)Mouse.GetPosition(bkgCanvas).X - (int)sender.Width;
-
-                // set the cursor to a resize arrow
-                Cursor = Cursors.SizeWE;
             }
             // move the note if the mouse isn't on the resizer or right-clicking
             else {
                 // init move, done by bkgCanvas_MouseMove
                 isMovingNote = true;
+                sender.IsSelected = true;
+                if (!isSelecting) tempSelect = true;
+                isSelection = true;
+                MouseDownLoc = (int)Mouse.GetPosition(bkgCanvas).X;
                 currentNoteIndex = sender.NoteIndex;
             }
         }
@@ -350,15 +476,41 @@ namespace FluidUI {
             dataDisp.Text = "Mouse entered note " + ((RollElement)sender).NoteIndex;
         }
 
+        private void addPorta(Note nt, RollElement dispnt, int length, bool tempnotevisible) {
+            int ntindex = bkgCanvas.Children.IndexOf(dispnt);
+            if (tempnotevisible) ntindex--;
+
+            if (ntindex > 0) {
+                // clear current pitch code
+                nt.PitchCode = "";
+
+                // get the difference between the 2 notes
+                int diff = (int)((Canvas.GetTop(bkgCanvas.Children[ntindex - 1])
+                    - Canvas.GetTop(dispnt)) / 24) * -100;
+
+                // makes steps down to the note pitch 
+                for (int i = 0; i < length; i++) {
+                    if (diff > 0) nt.PitchCode += (diff - ((diff / length) * i)).ToString() + " ";
+                    else nt.PitchCode += (diff - ((diff / length) * i)).ToString() + " ";
+                }
+
+                nt.PitchCode = nt.PitchCode.Trim();
+            }
+        }
+
         public void ZoomIn() {
             hZoomFactor += 0.2;
             bkgCanvas.Background.Transform = new ScaleTransform(hZoomFactor, 1);
+
+            paintTimeBarTicks();
             handleZoom();
         }
 
         public void ZoomOut() {
             hZoomFactor -= 0.2;
             bkgCanvas.Background.Transform = new ScaleTransform(hZoomFactor, 1);
+
+            paintTimeBarTicks();
             handleZoom();
         }
 
@@ -400,20 +552,39 @@ namespace FluidUI {
             // update noteDists
             updateNoteDists();
 
-            // fix the created error in the NoteIndex properites 
-            for (int i = 0; i < bkgCanvas.Children.Count; i++) {
-                ((RollElement)bkgCanvas.Children[i]).NoteIndex = i;
-            } 
+            // update undo list
+            addToUndo();
 
             // debug info
             dataDisp.Text = "Removed note " + sender.NoteIndex.ToString() + ", \r\nnumber of display notes: " +
                 bkgCanvas.Children.Count.ToString() + "\r\nnumber of logical notes: " + noteSheet.notes.Count.ToString();
         }
 
-        private void updateNoteDists() {
+        private void updateNoteDists() {   
+            // clear the current list
             noteDists.Clear();
+
+            // add each note's distance to the list and sort it
             foreach (RollElement element in bkgCanvas.Children) {
-                if (element.Opacity != 0.5 && element.ActualHeight != 0) noteDists.Add((int)Canvas.GetLeft(element));
+                if (element.Opacity != 0.5 && element.ActualHeight != 0) 
+                    noteDists.Add((int)Canvas.GetLeft(element));
+            }
+            noteDists.Sort();
+
+            // use the now-sorted list to fix the note indexes
+            foreach (RollElement element in bkgCanvas.Children) {
+                element.NoteIndex = genNoteIndex((int)Canvas.GetLeft(element));
+            }
+        }
+
+        public void updateRestLenghts() {
+            foreach (RollElement element in bkgCanvas.Children) {
+                if (bkgCanvas.Children.IndexOf(element) - 1 >= 0) {
+                    noteSheet.notes[element.NoteIndex].RestLength = (int)Canvas.GetLeft(element) -
+                        ((int)Canvas.GetLeft(bkgCanvas.Children[bkgCanvas.Children.IndexOf(element) - 1]) +
+                        (int)((RollElement)bkgCanvas.Children[bkgCanvas.Children.IndexOf(element) - 1]).Width); 
+                }
+                else { noteSheet.notes[element.NoteIndex].RestLength = (int)Canvas.GetLeft(element); }
             }
         }
 
@@ -438,7 +609,7 @@ namespace FluidUI {
             rnd.ShowRenderWindow = true;
             rnd.NoteRendered += rnd_NoteRendered;
             rnd.restNotePath = RestPath;
-            rnd.UseMultiThread = false;
+            rnd.UseMultiThread = true;
             rnd.Render();
 
             // start wavmod (which plays the file too)
@@ -596,12 +767,15 @@ namespace FluidUI {
             // used to make the ticks in 2 sizes
             bool isMajorTick = true;
 
+            // distance between ticks
+            int tickDist = (int)(60 * hZoomFactor);
+
             // reset the time bar
             timeBar.Width = bkgCanvas.Width;
             timeBar.Children.Clear();
             timeBarSlider.Width = timeBar.Width;
 
-            for (int i = 0; i <= bkgCanvas.Width; i += 60) {
+            for (int i = 0; i <= bkgCanvas.Width; i += tickDist) {
                 // reset the tick
                 tick = new Rectangle();
 
@@ -621,7 +795,7 @@ namespace FluidUI {
                 }
 
                 // position the tick
-                tick.Margin = new Thickness(0, 0, 60 - tick.Width, 0);
+                tick.Margin = new Thickness(0, 0, tickDist - tick.Width, 0);
                 tick.VerticalAlignment = System.Windows.VerticalAlignment.Top;
 
                 // add the tick, and alternate between big and small ticks
@@ -645,12 +819,34 @@ namespace FluidUI {
 
             // highlight whichever key has a matching pitch name
             foreach (Label noteLabel in pianoPanel.Children) {
-                if (((string)noteLabel.Content).IndexOf(currentMousePitch) != -1) noteLabel.Background = CurrentPianoKeyColor;
+                if (((string)noteLabel.Content).IndexOf(currentMousePitch) != -1)
+                    noteLabel.Background = CurrentPianoKeyColor;
             }
         }
 
         private void bkgCanvas_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (!mouseOverNote && Mouse.LeftButton == MouseButtonState.Pressed) {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl | Key.RightCtrl) && Mouse.LeftButton == MouseButtonState.Pressed) {
+                // de-select all notes if ctrl+shift isn't being used
+                if (!Keyboard.IsKeyDown(Key.LeftShift | Key.RightShift))
+                    foreach (RollElement element in bkgCanvas.Children) element.IsSelected = false; 
+
+                // record mouse down location
+                mouseDownSelLoc.X = Mouse.GetPosition(bkgCanvas).X;
+                mouseDownSelLoc.Y = Mouse.GetPosition(bkgCanvas).Y;
+
+                // set canvas location
+                Canvas.SetLeft(selectionBox, mouseDownSelLoc.X);
+                Canvas.SetTop(selectionBox, mouseDownSelLoc.Y);
+                selectionBox.Height = 1;
+                selectionBox.Width = 1;
+
+                overlayCanvas.Children.Add(selectionBox);
+                isSelecting = true;
+            }
+            
+            if (!mouseOverNote && Mouse.LeftButton == MouseButtonState.Pressed &&
+                !Keyboard.IsKeyDown(Key.LeftCtrl | Key.RightCtrl)) {
+                // get mouse location on X
                 MouseDownLoc = (int)Mouse.GetPosition(bkgCanvas).X;
 
                 // setup placeholder note
@@ -678,12 +874,12 @@ namespace FluidUI {
             // enable scroll mode on middle mouse
             if (Mouse.MiddleButton == MouseButtonState.Pressed) {
                 mouseDownScrollLoc = Mouse.GetPosition(scroller);
-                isInitalScroll = true;
+                isScrolling = true;
+                bkgCanvas.Cursor = Cursors.SizeAll;
             }
 
             // hide the right-click menu
-            //rightClickMenu.Visibility = Visibility.Hidden;
-
+            rightClickMenu.Visibility = Visibility.Hidden;
             // sort the note distance list here
             noteDists.Sort();
         }
@@ -699,6 +895,106 @@ namespace FluidUI {
                 index++;
             }
             return 0;
+        }
+
+        /// <summary>
+        /// Clears all selected notes and sets isSelection to false.
+        /// </summary>
+        private void clearSelection() {
+            if (isSelection) {
+                foreach (RollElement element in bkgCanvas.Children) element.IsSelected = false;
+                isSelection = tempSelect = false;
+            }
+        }
+
+        /// <summary>
+        /// Adds a step to the Undo system.
+        /// </summary>
+        private void addToUndo() {
+            if (hasUndone) {
+                undoSheets.RemoveAt(0);
+                undoIndex = 0;
+                hasUndone = false;
+            }
+
+            undoElements.Insert(0, new List<RollElement>(bkgCanvas.Children.Count));
+            undoSheets.Insert(0, new Sheet());
+            undoDists.Insert(0, new List<int>(noteDists.Count));
+
+            undoSheets[0].Bpm = internalBpm;
+            undoSheets[0].Name = noteSheet.Name;
+            undoSheets[0].rendParams = noteSheet.rendParams;
+            undoSheets[0].Resampler = noteSheet.Resampler;
+            undoSheets[0].Voicebank = noteSheet.Voicebank;
+
+            // this needs to be done to prevent the notes in undoSheets from changing
+            foreach (Note n in noteSheet.notes) {
+                // create a new note and copy the properties of n to it 
+                Note newNote = new Note();
+                newNote.Args = n.Args;
+                newNote.DispName = n.DispName;
+                newNote.Envelope = n.Envelope;
+                newNote.FileName = n.FileName;
+                newNote.Length = n.Length;
+                newNote.Location = n.Location;
+                newNote.Modulation = n.Modulation;
+                newNote.NotePitch = n.NotePitch;
+                newNote.Overlap = n.Overlap;
+                newNote.PitchCode = n.PitchCode;
+                newNote.RestLength = n.RestLength;
+                newNote.ScreenPosY = n.ScreenPosY;
+                newNote.UseDefaultVb = n.UseDefaultVb;
+                newNote.UUnitLength = n.UUnitLength;
+                newNote.VbPath = n.VbPath;
+                newNote.Velocity = n.Velocity;
+                newNote.VoiceProperties = n.VoiceProperties;
+                newNote.Volume = n.Volume;
+                // add the note
+                undoSheets[0].notes.Add(newNote);
+            }
+
+            for (int i = 0; i < undoSheets.Count; i++) {
+                try { if (undoSheets[i] == undoSheets[i - 1]) undoSheets.RemoveAt(i); }
+                catch (Exception) { }
+            }
+
+            if (undoSheets.Count > undoLimit) undoSheets.RemoveAt(undoLimit);
+        }
+
+        public void Undo() {
+            // check if undoIndex is within range, then up it and undo
+            if (undoIndex < undoLimit && undoIndex + 1 < undoSheets.Count) {
+                undoIndex++;
+                Undo(undoIndex);
+            }
+        }
+
+        public void Redo() {
+            // check if undoIndex is within range, then recuce it and undo
+            if (undoIndex > 0 && undoIndex - 1 < undoSheets.Count) {
+                undoIndex--;
+                Undo(undoIndex);
+            }
+        }
+
+        public void Undo(int uindex) {
+            int index = 0; 
+
+            // clear everything
+            noteSheet.notes.Clear();
+            bkgCanvas.Children.Clear();
+            noteDists.Clear();
+
+            totalNotesLength = 0;
+
+            // add each note back onto the roll
+            foreach (Note n in undoSheets[uindex].notes) {
+                dataDisp.Text += "\r\n" + n.RestLength.ToString();
+                AddNote(new Point(totalNotesLength + n.RestLength, n.ScreenPosY), (int)(n.UUnitLength / 4 * hZoomFactor), index, n);
+                index++;
+            }
+
+            hasUndone = true;
         }
 
         /// <summary>
@@ -721,54 +1017,15 @@ namespace FluidUI {
                 RollElement currentDN;
 
                 // set up note position
-                mouseLoc.X = MouseDownLoc / (int)dblNoteSnapping * (int)dblNoteSnapping;              
+                mouseLoc.X = MouseDownLoc / (int)dblNoteSnapping * (int)dblNoteSnapping;
                 mouseLoc.Y = (int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24;
 
-                // add this note's distance (from the beginning of the roll) to the list,
-                // used to keep the notes aligned
-                noteDists.Add((int)mouseLoc.X);
-
                 // call AddNote
-                try { currentDN = AddNote(mouseLoc, (int)tempNote.Width, genNoteIndex((int)mouseLoc.X)); }
-                catch (Exception) {
-                    // get rid of screwy elements
-                    for (int i = 0; i < bkgCanvas.Children.Count; i++) {
-                        try { if (((RollElement)bkgCanvas.Children[i]).ActualHeight == 0) bkgCanvas.Children.RemoveAt(i); }
-                        catch (IndexOutOfRangeException) { break; }
-                    }
-                    currentDN = AddNote(mouseLoc, (int)tempNote.Width, bkgCanvas.Children.Count - 1);
-                }
-
-                // used alongside noteDists for alignment purposes
-                totalNotesLength += (int)((RollElement)bkgCanvas.Children[noteSheet.notes.Count - 1]).Width;
+                currentDN = AddNote(mouseLoc, (int)tempNote.Width, -1, null); 
 
                 // debug info
                 dataDisp.Text = "totalNotesLength=\r\n" + totalNotesLength;
                 dataDisp.Text += "\r\nmouseLoc.X=\r\n" + mouseLoc.X;
-
-                // move notes to the right if needed
-                foreach (RollElement element in bkgCanvas.Children) {
-                    if (Canvas.GetLeft(element) >= mouseLoc.X && element != currentDN) {
-                        element.NoteIndex++;
-                        Canvas.SetLeft(element, Canvas.GetLeft(element) + (int)tempNote.Width);
-                    }
-                }
-
-                // grow the sheet if needed
-                if (totalNotesLength + 500 > bkgCanvas.Width) {
-                    bkgCanvas.Width += 600;
-                    timeBar.Width += 600;
-                    timeBarSlider.Width += 600;
-                    envelopePanel.envPanel.Width += 600;
-                }  
-            }
-
-            // move an existing note
-            if (isMovingNote) {
-                RollElement current = getActiveElement(currentNoteIndex);
-                Canvas.SetTop(current, (int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24);
-                noteSheet.notes[currentNoteIndex].NotePitch =
-                    generatePitchString((int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24);
             }
              
             // size an existing note
@@ -800,16 +1057,67 @@ namespace FluidUI {
                 }
             }
 
+            // remove old selections
+            if (!isMovingNote && !isScrolling || tempSelect) clearSelection();
+
+            // selecting multiple notes
+            if (isSelecting) {
+                isSelecting = false;
+                foreach (RollElement dispNote in bkgCanvas.Children) {
+                    // select all notes that are inside selectionBox - top left ref point
+                    if (Canvas.GetLeft(dispNote) >= Canvas.GetLeft(selectionBox) && 
+                        Canvas.GetLeft(dispNote) <= Canvas.GetLeft(selectionBox) + selectionBox.Width &&
+                        Canvas.GetTop(dispNote) >= Canvas.GetTop(selectionBox) && 
+                        Canvas.GetTop(dispNote) <= Canvas.GetTop(selectionBox) + selectionBox.Height ) {
+                        
+                        dispNote.IsSelected = true;
+                    }
+                    // bottom right point
+                    if (Canvas.GetLeft(dispNote) + dispNote.Width >= Canvas.GetLeft(selectionBox) &&
+                        Canvas.GetLeft(dispNote) + dispNote.Width <= Canvas.GetLeft(selectionBox) + selectionBox.Width &&
+                        Canvas.GetTop(dispNote) + dispNote.Height >= Canvas.GetTop(selectionBox) &&
+                        Canvas.GetTop(dispNote) + dispNote.Height <= Canvas.GetTop(selectionBox) + selectionBox.Height) {
+
+                        dispNote.IsSelected = true;
+                    }
+                    isSelection = true;
+                    overlayCanvas.Children.Remove(selectionBox);
+                }
+            }
+
             // remove placeholder note 
             bkgCanvas.Children.Remove(tempNote);
+
+            // update Undo list 
+            if (isSizingNote || isCreatingNote || isMovingNote) {
+                addToUndo();
+                envelopePanel.UpdateView(noteSheet, internalBpm);
+            }
+
+            // update noteDists and restLengths
+            if (isSizingNote || isMovingNote) {
+                updateNoteDists();
+                updateRestLenghts();
+            }
+
+            // update pitch
+            if (isMovingNote) {
+                addPorta(noteSheet.notes[getActiveElement(currentNoteIndex).NoteIndex],
+                         getActiveElement(currentNoteIndex), 24, false);
+            }
+
+            if (tempSelect) clearSelection();
 
             // stop any note action being done now
             isSizingNote = false;
             isCreatingNote = false;
             isMovingNote = false;
-
+            isSelecting = false;
+            isScrolling = false;
+            tempSelect = false;
+ 
             // reset cursor
-            Cursor = Cursors.Arrow;
+            bkgCanvas.Cursor = Cursors.Arrow;
         }
 
         private void bkgCanvas_MouseMove(object sender, MouseEventArgs e) {
@@ -831,7 +1139,78 @@ namespace FluidUI {
             // make it so the note moves as your mouse does
             if (isMovingNote) {
                 Canvas.SetTop(tempNote, (int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24);
-                dataDisp.Text = ((int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24).ToString();
+                //dataDisp.Text = ((int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24).ToString();
+
+                if (isSelection) {
+                    bool hasHmoved = false;
+                    double baseNoteLoc = Canvas.GetTop(getActiveElement(currentNoteIndex));
+                    int moveVal = (int)((Mouse.GetPosition(bkgCanvas).Y -
+                        Canvas.GetTop(getActiveElement(currentNoteIndex))) / 24 - 0.5);
+                    int noteAdj = ((int)Mouse.GetPosition(bkgCanvas).X - MouseDownLoc);// / (int)dblNoteSnapping * (int)dblNoteSnapping;
+                    dataDisp.Text = moveVal.ToString();
+
+                    foreach (RollElement element in bkgCanvas.Children) {
+                        if (element.IsSelected) {
+                            // move each note vertically
+                            Canvas.SetTop(element, Canvas.GetTop(element) + moveVal * 24);
+                            noteSheet.notes[element.NoteIndex].NotePitch =
+                                generatePitchString((int)Canvas.GetTop(element) + moveVal * 24);
+                            noteSheet.notes[element.NoteIndex].ScreenPosY = Canvas.GetTop(element);
+
+                            // used for resetting the MouseDownLoc value
+                            if (Canvas.GetLeft(element) != (int)Canvas.GetLeft(element) + noteAdj /
+                                (int)dblNoteSnapping * (int)dblNoteSnapping) hasHmoved = true;
+
+                            // move each note horizontally
+                            Canvas.SetLeft(element, (int)Canvas.GetLeft(element) + noteAdj /
+                                (int)dblNoteSnapping * (int)dblNoteSnapping);
+
+                            // move following notes ahead if needed
+                            try {
+                                if ((Canvas.GetLeft(element) + element.Width >
+                                    Canvas.GetLeft(bkgCanvas.Children[element.NoteIndex + 1])))
+                                    if (!element.IsSelected) Canvas.SetLeft(bkgCanvas.Children[element.NoteIndex + 1],
+                                        Canvas.GetLeft(element) + element.Width);
+                            }
+                            catch (Exception) { }
+                        }
+                    }
+                    // update mouse location as neeeded
+                    if (hasHmoved) MouseDownLoc = (int)Mouse.GetPosition(bkgCanvas).X;
+                }
+                else {
+                    int noteAdj = ((int)Mouse.GetPosition(bkgCanvas).X - MouseDownLoc);
+                    bool hasHmoved = false;
+
+                    // move current note vertically
+                    RollElement current = getActiveElement(currentNoteIndex);
+                    Canvas.SetTop(current, (int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24);
+
+                    // set pitch string accordingly 
+                    noteSheet.notes[currentNoteIndex].NotePitch =
+                        generatePitchString((int)Mouse.GetPosition(bkgCanvas).Y / 24 * 24);
+                    noteSheet.notes[currentNoteIndex].ScreenPosY = Canvas.GetTop(current);
+
+                    // used for resetting the MouseDownLoc value
+                    if (Canvas.GetLeft(current) != (int)Canvas.GetLeft(current) + noteAdj /
+                        (int)dblNoteSnapping * (int)dblNoteSnapping) hasHmoved = true;
+
+                    // move current note horizontally
+                    Canvas.SetLeft(current, (int)Canvas.GetLeft(current) + noteAdj / 
+                        (int)dblNoteSnapping * (int)dblNoteSnapping);
+
+                    // move following notes ahead if needed
+                    try {
+                        if (Canvas.GetLeft(current) + current.Width >
+                            Canvas.GetLeft(bkgCanvas.Children[current.NoteIndex + 1]))
+                            Canvas.SetLeft(bkgCanvas.Children[current.NoteIndex + 1],
+                                Canvas.GetLeft(current) + current.Width);
+                    }
+                    catch (Exception) { }
+
+                    // update mouse location if needed
+                    if (hasHmoved) MouseDownLoc = (int)Mouse.GetPosition(bkgCanvas).X;
+                }
             }
 
             // size the note while the mouse is moving
@@ -855,8 +1234,27 @@ namespace FluidUI {
                     "\r\nDisplay note length=" + getActiveElement(currentNoteIndex).Width;
             }
 
+            if (isSelecting) {
+                // get current mouse position
+                Point p2 = new Point(Mouse.GetPosition(bkgCanvas).X, Mouse.GetPosition(bkgCanvas).Y);
+
+                // set X location of selectionBox
+                if (p2.X < mouseDownSelLoc.X) {
+                    Canvas.SetLeft(selectionBox, p2.X);
+                    selectionBox.Width = mouseDownSelLoc.X - p2.X;
+                }
+                else selectionBox.Width = p2.X - mouseDownSelLoc.X;
+
+                // set Y location 
+                if (p2.Y < mouseDownSelLoc.Y) {
+                    Canvas.SetTop(selectionBox, p2.Y);
+                    selectionBox.Height = mouseDownSelLoc.Y - p2.Y;
+                }
+                else selectionBox.Height = p2.Y - mouseDownSelLoc.Y;
+            }
+
             // middle mouse button scrolling
-            if (Mouse.MiddleButton == MouseButtonState.Pressed) {
+            if (isScrolling && Mouse.MiddleButton == MouseButtonState.Pressed) {
                 //dataDisp.Text = scroller.HorizontalOffset + (mouseDownScrollLoc.X - Mouse.GetPosition(scroller).X).ToString();
                 
                 scroller.ScrollToHorizontalOffset(scroller.HorizontalOffset + (mouseDownScrollLoc.X - Mouse.GetPosition(scroller).X));
@@ -864,6 +1262,12 @@ namespace FluidUI {
                 //rightClickMenu.Visibility = System.Windows.Visibility.Hidden;
 
                 mouseDownScrollLoc = Mouse.GetPosition(scroller);
+            }
+
+            // Safely stop the selection job if the mouse isn't down (the mouse left the canvas down...)
+            if (Mouse.LeftButton != MouseButtonState.Pressed) {
+                isSelecting = false;
+                overlayCanvas.Children.Remove(selectionBox);
             }
 
             // start the highlighting function
@@ -883,8 +1287,12 @@ namespace FluidUI {
                 (int)dblNoteSnapping));
         }
 
-        private void bkgCanvas_SizeChanged(object sender, SizeChangedEventArgs e) {
-            
+        private void bkgCanvas_SizeChanged(object sender, SizeChangedEventArgs e) { }
+
+        private void bkgCanvas_MouseLeave(object sender, MouseEventArgs e) { }
+
+        private void overlayCanvas_MouseDown(object sender, MouseButtonEventArgs e) {
+
         }
     }
 }

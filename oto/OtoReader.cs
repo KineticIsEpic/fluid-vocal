@@ -40,7 +40,7 @@ namespace OTOmate {
                 int index = 0; // Used for seperating lines
                 int lastIndex = 0; // Also used for seperating lines
                 int run = 0; // Who knows what this does
-                int run2 = 0; // I'm run2
+                int run2 = 0; // ''
 
                 // Read text file
                 sr = new StreamReader(fileLoc);

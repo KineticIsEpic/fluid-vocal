@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("FluidUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("KineticIsEpic")]
 [assembly: AssemblyProduct("FluidUI")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
+[assembly: AssemblyCopyright("© 2015-2017 KineticIsEpic")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

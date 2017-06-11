@@ -18,3 +18,10 @@ H:\FVSS\oto\bin\Debug\oto.pdb
 H:\FVSS\oto\obj\Debug\oto.csprojResolveAssemblyReference.cache
 H:\FVSS\oto\obj\Debug\oto.dll
 H:\FVSS\oto\obj\Debug\oto.pdb
+F:\FVSS\oto\bin\Debug\oto.dll.CodeAnalysisLog.xml
+F:\FVSS\oto\bin\Debug\oto.dll.lastcodeanalysissucceeded
+O:\FVSS\oto\obj\Debug\oto.csprojResolveAssemblyReference.cache
+O:\FVSS\oto\obj\Debug\oto.dll
+O:\FVSS\oto\obj\Debug\oto.pdb
+O:\FVSS\oto\bin\Debug\oto.dll
+O:\FVSS\oto\bin\Debug\oto.pdb

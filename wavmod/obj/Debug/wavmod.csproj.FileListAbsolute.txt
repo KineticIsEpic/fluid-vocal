@@ -35,3 +35,14 @@ F:\FVSS\wavmod\bin\Debug\oto.pdb
 F:\FVSS\wavmod\obj\Debug\wavmod.csprojResolveAssemblyReference.cache
 F:\FVSS\wavmod\obj\Debug\wavmod.dll
 F:\FVSS\wavmod\obj\Debug\wavmod.pdb
+F:\FVSS\wavmod\bin\Debug\wavmod.dll.CodeAnalysisLog.xml
+F:\FVSS\wavmod\bin\Debug\wavmod.dll.lastcodeanalysissucceeded
+O:\FVSS\wavmod\bin\Debug\wavmod.dll
+O:\FVSS\wavmod\bin\Debug\wavmod.pdb
+O:\FVSS\wavmod\bin\Debug\FluidRender.dll
+O:\FVSS\wavmod\bin\Debug\oto.dll
+O:\FVSS\wavmod\bin\Debug\FluidRender.pdb
+O:\FVSS\wavmod\bin\Debug\oto.pdb
+O:\FVSS\wavmod\obj\Debug\wavmod.csprojResolveAssemblyReference.cache
+O:\FVSS\wavmod\obj\Debug\wavmod.dll
+O:\FVSS\wavmod\obj\Debug\wavmod.pdb

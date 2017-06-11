@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-H:\FVSS\FluidUI\obj\Debug\
+O:\FVSS\FluidUI\obj\Debug\
 FluidUI
 none
 false
 DEBUG;TRACE
-H:\FVSS\FluidUI\App.xaml
+O:\FVSS\FluidUI\App.xaml
 14-1440939371
 
 22-183695543
-1963032814
+21-1768791669
 AboutControl.xaml;FirstTimeSetup.xaml;FluidMenu.xaml;IconButton.xaml;MainWindow.xaml;NewRoll.xaml;NewUI.xaml;NoteMenu.xaml;NoteRoll.xaml;Roll.xaml;RollElement.xaml;SbLib.xaml;EditorPanel.xaml;EnvUI.xaml;
 
 True

@@ -22,6 +22,9 @@ namespace OTOmate {
         public string EndString { get; set; }
         public string PreutteranceString { get; set; }
         public string OverlapString { get; set; }
+        
+        public double Adj_Preutterance { get; set; }
+        public double Adj_Overlap { get; set; }
 
         public string SamplePath {
             get {

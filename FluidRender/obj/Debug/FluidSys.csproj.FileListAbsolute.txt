@@ -20,7 +20,6 @@ O:\fluid-vocal-master\FluidRender\obj\Debug\FluidRender.dll
 O:\fluid-vocal-master\FluidRender\obj\Debug\FluidRender.pdb
 F:\FVSS\FluidRender\bin\Debug\FluidRender.dll
 F:\FVSS\FluidRender\bin\Debug\FluidRender.pdb
-F:\FVSS\FluidRender\bin\Debug\NAudio.dll
 F:\FVSS\FluidRender\bin\Debug\oto.dll
 F:\FVSS\FluidRender\bin\Debug\oto.pdb
 F:\FVSS\FluidRender\obj\Debug\FluidSys.csprojResolveAssemblyReference.cache
@@ -37,3 +36,16 @@ H:\FVSS\FluidRender\obj\Debug\FluidSys.InputForm.resources
 H:\FVSS\FluidRender\obj\Debug\FluidSys.csproj.GenerateResource.Cache
 H:\FVSS\FluidRender\obj\Debug\FluidRender.dll
 H:\FVSS\FluidRender\obj\Debug\FluidRender.pdb
+F:\FVSS\FluidRender\bin\Debug\NAudio.dll
+F:\FVSS\FluidRender\bin\Debug\FluidRender.dll.CodeAnalysisLog.xml
+F:\FVSS\FluidRender\bin\Debug\FluidRender.dll.lastcodeanalysissucceeded
+O:\FVSS\FluidRender\bin\Debug\FluidRender.dll
+O:\FVSS\FluidRender\bin\Debug\FluidRender.pdb
+O:\FVSS\FluidRender\bin\Debug\NAudio.dll
+O:\FVSS\FluidRender\bin\Debug\oto.dll
+O:\FVSS\FluidRender\bin\Debug\oto.pdb
+O:\FVSS\FluidRender\obj\Debug\FluidSys.csprojResolveAssemblyReference.cache
+O:\FVSS\FluidRender\obj\Debug\FluidSys.InputForm.resources
+O:\FVSS\FluidRender\obj\Debug\FluidSys.csproj.GenerateResource.Cache
+O:\FVSS\FluidRender\obj\Debug\FluidRender.dll
+O:\FVSS\FluidRender\obj\Debug\FluidRender.pdb

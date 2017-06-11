@@ -13,7 +13,7 @@ namespace FluidCmd {
     class Program {
         [STAThread]
         static void Main(string[] args) {
-            Console.Out.WriteLine("Fluid Vocal Synthesis System, testing build OVER 9000 BOI");
+            Console.Out.WriteLine("Fluid Vocal Synthesis System, testing build. ");
             Console.Out.WriteLine("Copyright (c) 2017 KineticIsEpic. ");
 
             FluidUI.MainWindow mw = new FluidUI.MainWindow();

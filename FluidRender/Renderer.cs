@@ -68,7 +68,7 @@ namespace FluidSys {
             foreach (var item in sheet.notes) {
                 Process p = new Process();
 
-                // HOW CADENCII (presumably legacy Utau) resampler arguments work:
+                // How CADENCII (presumably legacy Utau) resampler arguments work:
                 // - Everything up to the Modulation command as normal
                 // - The next line is <fistpith>Q<bpm>, ex. 0.00Q120
                 // - after that, each pitch value in format X.XX, each in its own argument. 
@@ -77,7 +77,8 @@ namespace FluidSys {
                 string args;
 
                 // Compensate for trimming
-                int length = item.Length + ((int)(item.VoiceProperties.Preutterance + 25) / 50 * 50 + 50);
+                int length = item.Length + ((int)(item.VoiceProperties.Preutterance +
+                    item.VoiceProperties.Overlap));
                 int consonant = (int)item.VoiceProperties.Consonant;
 
                 // Create file names that sort properly alphabetically 
@@ -86,7 +87,16 @@ namespace FluidSys {
 
                 // Get voicebank path
                 string vbpath = item.VbPath; 
-                if (item.UseDefaultVb) vbpath = sheet.Voicebank; 
+                if (item.UseDefaultVb) vbpath = sheet.Voicebank;
+
+                // get pitches
+                string[] pitches = new string[(int)(96 * ((double)item.UUnitLength / 480))];
+                if (string.IsNullOrEmpty(item.PitchCode)) pitches[0] = "0.00";
+                else pitches = splitPitchCode(item.PitchCode);
+
+                // make string from pitches
+                string pitchstr = "";
+                foreach (string str in pitches) pitchstr += str;
 
                 if (item.DispName == "r") {
                     // Makeshift rest system, to be replaced with WavMOD
@@ -107,8 +117,8 @@ namespace FluidSys {
                         + item.VoiceProperties.EndString + " " //end
                         + item.Volume.ToString() + " " //vol
                         + item.Modulation.ToString() + " " //mod
-                        + "0Q" + sheet.Bpm.ToString() + " " //tempo thing
-                        + item.PitchCode; 
+                        /*+ pitches[0] */+ "!" + sheet.Bpm.ToString() + " " //tempo thing
+                        + pitchstr;
                 }
 
                 // Setup process properties
@@ -141,11 +151,47 @@ namespace FluidSys {
                 currentThreads++;
 
                 // Wait on last render
+                //TODO: send an event when it's done instead of freezing the thread
                 if (run + 1 >= sheet.notes.Count || currentThreads > RenderThreads && UseMultiThread) {
                     p.WaitForExit();
                     currentThreads = 0;
                 }
             }
+        }
+
+        // split each number in the pitch code into its own line in an arry
+        private string[] splitPitchCode(string pitchCode) {
+            string[] retstr = new string[pitchCode.Length / 2]; //TODO more efficient length
+            int index = 0;
+            int lastIndex = 0;
+            int run = 0;
+
+            foreach (var item in pitchCode) {
+                if (item == ' ') {
+                    index = pitchCode.IndexOf(item, lastIndex + 1);
+                    retstr[run] = pitchCode.Substring(lastIndex, index - lastIndex);
+
+                    // converts the pitch to base 64 for resampler - positive numbers
+                    if (int.Parse(retstr[run]) > 0) {
+                        retstr[run] = UnitConverter.Encode(int.Parse(retstr[run]), UnitConverter.Base64); 
+                    }
+                    
+                    // handles the negative numbers: utau understands negative pitch 
+                    // as 4095 + <-pitch>
+                    else {
+                        int val = int.Parse(retstr[run]);
+                        retstr[run] = UnitConverter.Encode(4095 + int.Parse(retstr[run]), UnitConverter.Base64);
+                    }
+
+                    // make sure each code has 2 chars
+                    if (retstr[run].Length != 2) retstr[run].Insert(0, "A");
+
+                    lastIndex = index;
+                    run++;
+                } 
+            }
+
+            return retstr;
         }
 
         private void genTempDir() {

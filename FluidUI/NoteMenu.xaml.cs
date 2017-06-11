@@ -48,8 +48,8 @@ namespace FluidUI {
             }
             set {
                 if (value) {
-                    dockItem.Visibility = System.Windows.Visibility.Hidden;
-                    closeItem.Visibility = System.Windows.Visibility.Hidden;
+                    //dockItem.Visibility = System.Windows.Visibility.Hidden;
+                    //closeItem.Visibility = System.Windows.Visibility.Hidden;
                 }
             }
         }
@@ -226,6 +226,22 @@ namespace FluidUI {
 
         private void useGlobalSmpBox_Click(object sender, RoutedEventArgs e) {
             intNote.UseDefaultVb = !intNote.UseDefaultVb; 
+        }
+
+        private void label_MouseDown_1(object sender, MouseButtonEventArgs e) {
+            label_Copy.Foreground = new SolidColorBrush(Colors.Gray);
+            label.Foreground = new SolidColorBrush(Colors.White);
+
+            env.Visibility = Visibility.Visible;
+            PitchTxtBox.Visibility = Visibility.Hidden;
+        }
+
+        private void label_Copy_MouseDown(object sender, MouseButtonEventArgs e) {
+            label_Copy.Foreground = new SolidColorBrush(Colors.White);
+            label.Foreground = new SolidColorBrush(Colors.Gray);
+
+            env.Visibility = Visibility.Hidden;
+            PitchTxtBox.Visibility = Visibility.Visible;
         }
     }
 }

@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:FluidUI" x:Class="FluidUI.MainWindow"
-        Title="Project name here - FVSS" Height="715.725" Width="1249">
+        Title="Project name here - FVSS" Height="715.725" Width="1249" KeyDown="Window_KeyDown">
     <Grid x:Name="mainGrid" Background="Black">
         <local:NoteRoll x:Name="noteRoll" Margin="0,52,0,0" Height="Auto" Width="Auto" Visibility="Visible" RenderTransformOrigin="1,1"/>
         <Grid Height="52" VerticalAlignment="Top" Background="#FF232323" Margin="-12,0">
@@ -36,6 +36,7 @@
             <local:IconButton x:Name="snapBtn" HorizontalAlignment="Left" Height="28" Margin="430,10,0,0" VerticalAlignment="Top" Width="28" MouseDown="snappingLabel_MouseDown"/>
             <Label x:Name="zoomoutbtn" Content="Out" HorizontalAlignment="Left" Margin="567,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="zoomoutbtn_MouseDown"/>
             <Label x:Name="zoominbtn" Content="In" HorizontalAlignment="Left" Margin="620,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="zoominbtn_MouseDown"/>
+            <Label x:Name="undoLabel" Content="Undo" HorizontalAlignment="Left" Margin="910,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-4.974,0.923" Background="#FF49494D" Width="49" HorizontalContentAlignment="Center" Height="28" Foreground="White" MouseDown="undoLabel_MouseDown"/>
 
         </Grid>
         <Label Content="FluidUI" Background="#00000000" Foreground="Black" HorizontalAlignment="Left" Width="60" Height="14" VerticalAlignment="Bottom" FontSize="8" Padding="0,0,0,4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Courier New" FontStyle="Italic"/>
